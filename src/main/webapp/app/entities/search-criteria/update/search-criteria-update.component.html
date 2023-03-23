@@ -1,0 +1,122 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-search-criteria-heading"
+        data-cy="SearchCriteriaCreateUpdateHeading"
+        jhiTranslate="furryMatchApp.searchCriteria.home.createOrEditLabel"
+      >
+        Create or edit a Search Criteria
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="furryMatchApp.searchCriteria.filterType" for="field_filterType">Filter Type</label>
+          <input
+            type="text"
+            class="form-control"
+            name="filterType"
+            id="field_filterType"
+            data-cy="filterType"
+            formControlName="filterType"
+          />
+          <div *ngIf="editForm.get('filterType')!.invalid && (editForm.get('filterType')!.dirty || editForm.get('filterType')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('filterType')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="furryMatchApp.searchCriteria.breed" for="field_breed">Breed</label>
+          <input type="text" class="form-control" name="breed" id="field_breed" data-cy="breed" formControlName="breed" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="furryMatchApp.searchCriteria.tradePups" for="field_tradePups">Trade Pups</label>
+          <input type="text" class="form-control" name="tradePups" id="field_tradePups" data-cy="tradePups" formControlName="tradePups" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="furryMatchApp.searchCriteria.sex" for="field_sex">Sex</label>
+          <select class="form-control" name="sex" formControlName="sex" id="field_sex" data-cy="sex">
+            <option [ngValue]="null">{{ 'furryMatchApp.Sex.null' | translate }}</option>
+            <option *ngFor="let sex of sexValues" [value]="sex">{{ 'furryMatchApp.Sex.' + sex | translate }}</option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="furryMatchApp.searchCriteria.pedigree" for="field_pedigree">Pedigree</label>
+          <input type="text" class="form-control" name="pedigree" id="field_pedigree" data-cy="pedigree" formControlName="pedigree" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="furryMatchApp.searchCriteria.tradeMoney" for="field_tradeMoney">Trade Money</label>
+          <input
+            type="text"
+            class="form-control"
+            name="tradeMoney"
+            id="field_tradeMoney"
+            data-cy="tradeMoney"
+            formControlName="tradeMoney"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="furryMatchApp.searchCriteria.provice" for="field_provice">Provice</label>
+          <input type="text" class="form-control" name="provice" id="field_provice" data-cy="provice" formControlName="provice" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="furryMatchApp.searchCriteria.canton" for="field_canton">Canton</label>
+          <input type="text" class="form-control" name="canton" id="field_canton" data-cy="canton" formControlName="canton" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="furryMatchApp.searchCriteria.district" for="field_district">District</label>
+          <input type="text" class="form-control" name="district" id="field_district" data-cy="district" formControlName="district" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="furryMatchApp.searchCriteria.objective" for="field_objective">Objective</label>
+          <input type="text" class="form-control" name="objective" id="field_objective" data-cy="objective" formControlName="objective" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="furryMatchApp.searchCriteria.pet" for="field_pet">Pet</label>
+          <select class="form-control" id="field_pet" data-cy="pet" name="pet" formControlName="pet" [compareWith]="comparePet">
+            <option [ngValue]="null"></option>
+            <option [ngValue]="petOption" *ngFor="let petOption of petsSharedCollection">{{ petOption.id }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

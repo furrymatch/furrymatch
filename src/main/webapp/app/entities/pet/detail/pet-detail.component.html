@@ -1,0 +1,72 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="pet">
+      <h2 data-cy="petDetailsHeading"><span jhiTranslate="furryMatchApp.pet.detail.title">Pet</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ pet.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="furryMatchApp.pet.name">Name</span></dt>
+        <dd>
+          <span>{{ pet.name }}</span>
+        </dd>
+        <dt><span jhiTranslate="furryMatchApp.pet.petType">Pet Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'furryMatchApp.PetType.' + pet.petType }}">{{ pet.petType }}</span>
+        </dd>
+        <dt><span jhiTranslate="furryMatchApp.pet.description">Description</span></dt>
+        <dd>
+          <span>{{ pet.description }}</span>
+        </dd>
+        <dt><span jhiTranslate="furryMatchApp.pet.sex">Sex</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'furryMatchApp.Sex.' + pet.sex }}">{{ pet.sex }}</span>
+        </dd>
+        <dt><span jhiTranslate="furryMatchApp.pet.tradeMoney">Trade Money</span></dt>
+        <dd>
+          <span>{{ pet.tradeMoney }}</span>
+        </dd>
+        <dt><span jhiTranslate="furryMatchApp.pet.tradePups">Trade Pups</span></dt>
+        <dd>
+          <span>{{ pet.tradePups }}</span>
+        </dd>
+        <dt><span jhiTranslate="furryMatchApp.pet.pedigree">Pedigree</span></dt>
+        <dd>
+          <span>{{ pet.pedigree }}</span>
+        </dd>
+        <dt><span jhiTranslate="furryMatchApp.pet.desireAmmount">Desire Ammount</span></dt>
+        <dd>
+          <span>{{ pet.desireAmmount }}</span>
+        </dd>
+        <dt><span jhiTranslate="furryMatchApp.pet.owner">Owner</span></dt>
+        <dd>
+          <div *ngIf="pet.owner">
+            <a [routerLink]="['/owner', pet.owner.id, 'view']">{{ pet.owner.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="furryMatchApp.pet.breed">Breed</span></dt>
+        <dd>
+          <div *ngIf="pet.breed">
+            <a [routerLink]="['/breed', pet.breed.id, 'view']">{{ pet.breed.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/pet', pet.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>
