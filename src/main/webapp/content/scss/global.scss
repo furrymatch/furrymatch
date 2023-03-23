@@ -168,6 +168,10 @@ button {
   width: 295px !important;
   border-radius: 15px !important;
   text-align: center;
+  border: 1px solid;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 .img-logo-blue {
