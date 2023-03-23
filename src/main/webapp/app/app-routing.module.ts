@@ -12,7 +12,7 @@ import { LandingPageComponent } from './landing/landing-page/landing-page.compon
 const routes: Routes = [
   {
     path: 'home',
-    component: LandingPageComponent, // establece el componente de landing-page como la ruta predeterminada
+    component: LandingPageComponent,
   },
   {
     path: 'admin',

@@ -72,10 +72,10 @@
 .text-cuenta,
 .text-link {
   font: var(--typo-global);
+  margin: 5px !important;
 }
 
 .text-link {
-  margin-top: var(--margin-min);
   font-weight: bold;
   color: var(--clr-orange);
 }
@@ -87,7 +87,7 @@
 }
 
 .cnt-ingresa {
-  margin-top: var(--margin-min);
+  //margin-top: var(--margin-min);
   display: flex;
   justify-content: center;
   align-items: baseline;
@@ -100,6 +100,7 @@
 
 .btn-blue {
   margin-top: var(--margin-md);
+  margin-bottom: var(--margin-md-small);
   padding: 8px 25px;
   background-color: var(--clr-blue);
   font: var(--typo-button);
