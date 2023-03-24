@@ -7,7 +7,7 @@
 
         <div class="profile-pic">
           <div class="profile-pic-div">
-            <img src="../content/images/upload-pic.png" id="photo" />
+            <img src="../content/images/upload-pic.png" />
             <input type="file" id="file" />
             <label for="file" id="uploadBtn">Subí una foto</label>
             <input type="text" class="form-control inp-txt" name="photo" id="field_photo" data-cy="photo" formControlName="photo" />
@@ -46,9 +46,10 @@
                   <input
                     type="text"
                     class="form-control inp-txt"
-                    name="userPassword"
-                    data-cy="userPassword"
-                    formControlName="userPassword"
+                    name="confirmPassword"
+                    id="confirmPassword"
+                    data-cy="confirmPassword"
+                    formControlName="confirmPassword"
                     placeholder="Confirmar contraseña"
                   />
                 </div>

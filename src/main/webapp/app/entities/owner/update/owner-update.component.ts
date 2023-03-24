@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -22,7 +22,8 @@ export class OwnerUpdateComponent implements OnInit {
   constructor(
     protected ownerService: OwnerService,
     protected ownerFormService: OwnerFormService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
+    private elementRef: ElementRef
   ) {}
 
   ngOnInit(): void {
@@ -39,6 +40,20 @@ export class OwnerUpdateComponent implements OnInit {
   }
 
   save(): void {
+    const userPassword = this.editForm.get('userPassword')?.value;
+    const confirmPassword = this.elementRef.nativeElement.querySelector('#confirmPassword').value;
+
+    if (userPassword !== confirmPassword) {
+      alert('Las contraseñas no coinciden');
+      return;
+    }
+
+    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if (userPassword && !regex.test(userPassword)) {
+      alert('La contraseña debe tener al menos 8 caracteres con números y letras.');
+      return;
+    }
+
     this.isSaving = true;
     const owner = this.ownerFormService.getOwner(this.editForm);
     if (owner.id !== null) {
