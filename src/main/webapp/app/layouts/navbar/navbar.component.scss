@@ -1,13 +1,9 @@
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
-
 /* ==========================================================================
 Navbar
 ========================================================================== */
 
 .navbar-version {
   font-size: 0.65em;
-  color: $navbar-dark-color;
 }
 
 .profile-image {
@@ -31,6 +27,5 @@ Logo styles
   width: 45px;
   display: inline-block;
   vertical-align: middle;
-  background: url('../../../content/images/logo-jhipster.png') no-repeat center center;
   background-size: contain;
 }
