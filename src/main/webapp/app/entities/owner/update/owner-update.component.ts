@@ -11,6 +11,7 @@ import { OwnerService } from '../service/owner.service';
 @Component({
   selector: 'jhi-owner-update',
   templateUrl: './owner-update.component.html',
+  styleUrls: ['./owner-update.component.css'],
 })
 export class OwnerUpdateComponent implements OnInit {
   isSaving = false;
