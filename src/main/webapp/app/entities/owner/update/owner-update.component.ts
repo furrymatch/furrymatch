@@ -7,11 +7,13 @@ import { finalize } from 'rxjs/operators';
 import { OwnerFormService, OwnerFormGroup } from './owner-form.service';
 import { IOwner } from '../owner.model';
 import { OwnerService } from '../service/owner.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'jhi-owner-update',
   templateUrl: './owner-update.component.html',
   styleUrls: ['./owner-update.component.css'],
+  providers: [OwnerService],
 })
 export class OwnerUpdateComponent implements OnInit {
   isSaving = false;
@@ -26,6 +28,8 @@ export class OwnerUpdateComponent implements OnInit {
     private elementRef: ElementRef
   ) {}
 
+  files: File[] = [];
+
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ owner }) => {
       this.owner = owner;
@@ -39,26 +43,45 @@ export class OwnerUpdateComponent implements OnInit {
     window.history.back();
   }
 
+  onSelect(event?: any) {
+    console.log(event);
+    this.files.push(...event.addedFiles);
+  }
+
+  onRemove(event?: any) {
+    console.log(event);
+    this.files.splice(this.files.indexOf(event), 1);
+  }
+
+  photo: FormControl<IOwner['photo']> = new FormControl<IOwner['photo']>(null);
+
+  onUpload() {
+    //Escape empty array
+    if (!this.files[0]) alert('Debés primero arrastrar o seleccionar una imagen');
+
+    //Upload to Cloudinary
+    const file_data = this.files[0];
+    const data = new FormData();
+    data.append('file', file_data);
+    data.append('upload_preset', 'furry_match');
+    data.append('cloud_name', 'alocortesu');
+
+    this.ownerService.uploadImage(data).subscribe(response => {
+      if (response) {
+        const secureUrl = response.secure_url;
+        this.photo.setValue(secureUrl);
+      }
+    });
+  }
+
   save(): void {
-    const userPassword = this.editForm.get('userPassword')?.value;
-    const confirmPassword = this.elementRef.nativeElement.querySelector('#confirmPassword').value;
-
-    if (userPassword !== confirmPassword) {
-      alert('Las contraseñas no coinciden');
-      return;
-    }
-
-    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    if (userPassword && !regex.test(userPassword)) {
-      alert('La contraseña debe tener al menos 8 caracteres con números y letras.');
-      return;
-    }
-
     this.isSaving = true;
     const owner = this.ownerFormService.getOwner(this.editForm);
     if (owner.id !== null) {
+      owner.photo = this.photo.value;
       this.subscribeToSaveResponse(this.ownerService.update(owner));
     } else {
+      owner.photo = this.photo.value;
       this.subscribeToSaveResponse(this.ownerService.create(owner));
     }
   }

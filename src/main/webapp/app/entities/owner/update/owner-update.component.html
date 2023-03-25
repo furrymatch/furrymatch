@@ -7,53 +7,27 @@
 
         <div class="profile-pic">
           <div class="profile-pic-div">
-            <img src="../content/images/upload-pic.png" />
-            <input type="file" id="file" />
-            <label for="file" id="uploadBtn">Subí una foto</label>
-            <input type="text" class="form-control inp-txt" name="photo" id="field_photo" data-cy="photo" formControlName="photo" />
+            <ngx-dropzone (change)="onSelect($event)">
+              <ngx-dropzone-label>Arrastrá o seleccioná<br />una foto</ngx-dropzone-label>
+              <ngx-dropzone-image-preview
+                class="dropzoneImg"
+                ngProjectAs="ngx-dropzone-preview"
+                *ngFor="let f of files"
+                [file]="f"
+                [removable]="true"
+                (removed)="onRemove(f)"
+              >
+                <ngx-dropzone-label>({{ f.type }})</ngx-dropzone-label>
+              </ngx-dropzone-image-preview>
+            </ngx-dropzone>
+            <!--            <input type="text" class="form-control inp-txt" name="photo" id="field_photo" data-cy="photo" formControlName="photo" />-->
           </div>
+          <button (click)="onUpload()" class="btn btn-blue">Subir</button>
         </div>
 
         <div class="login-wrapper">
           <div class="wrapper-sec">
             <div class="cnt-inputs">
-              <div class="cnt-pass">
-                <div>
-                  <input
-                    type="text"
-                    class="form-control inp-txt"
-                    name="email"
-                    id="field_email"
-                    data-cy="email"
-                    formControlName="email"
-                    placeholder="Correo electrónico"
-                  />
-                </div>
-
-                <div>
-                  <input
-                    type="text"
-                    class="form-control inp-txt"
-                    name="userPassword"
-                    id="field_userPassword"
-                    data-cy="userPassword"
-                    formControlName="userPassword"
-                    placeholder="Contraseña"
-                  />
-                </div>
-
-                <div>
-                  <input
-                    type="text"
-                    class="form-control inp-txt"
-                    name="confirmPassword"
-                    id="confirmPassword"
-                    data-cy="confirmPassword"
-                    formControlName="confirmPassword"
-                    placeholder="Confirmar contraseña"
-                  />
-                </div>
-              </div>
               <div class="cnt-row1">
                 <div>
                   <input
