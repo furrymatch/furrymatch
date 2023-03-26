@@ -1,6 +1,6 @@
 
 application {
-  config {
+ config {
     baseName FurryMatch,
     applicationType monolith,
     packageName furrymatch,
@@ -33,12 +33,10 @@ entity Owner {
     phoneNumber Long required,
     photo String,
     identityNumber String required,
-    adress String required,
+    address String required,
     province String required,
     canton String required,
     district String required,
-    email String required,
-    userPassword String required,
     otp String,
     createdAt LocalDate,
     updatedAt LocalDate,
@@ -101,6 +99,9 @@ entity Chat {
     stateChat String,
 }
 
+relationship OneToOne{
+Owner{user} to User
+}
 relationship OneToMany{
 Owner{pet} to Pet{owner}
 }

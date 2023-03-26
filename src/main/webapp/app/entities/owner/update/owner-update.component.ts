@@ -1,30 +1,35 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 import { OwnerFormService, OwnerFormGroup } from './owner-form.service';
 import { IOwner } from '../owner.model';
 import { OwnerService } from '../service/owner.service';
+import { IUser } from 'app/entities/user/user.model';
+import { UserService } from 'app/entities/user/user.service';
 
 @Component({
   selector: 'jhi-owner-update',
   templateUrl: './owner-update.component.html',
-  styleUrls: ['./owner-update.component.css'],
 })
 export class OwnerUpdateComponent implements OnInit {
   isSaving = false;
   owner: IOwner | null = null;
+
+  usersSharedCollection: IUser[] = [];
 
   editForm: OwnerFormGroup = this.ownerFormService.createOwnerFormGroup();
 
   constructor(
     protected ownerService: OwnerService,
     protected ownerFormService: OwnerFormService,
-    protected activatedRoute: ActivatedRoute,
-    private elementRef: ElementRef
+    protected userService: UserService,
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  compareUser = (o1: IUser | null, o2: IUser | null): boolean => this.userService.compareUser(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ owner }) => {
@@ -32,6 +37,8 @@ export class OwnerUpdateComponent implements OnInit {
       if (owner) {
         this.updateForm(owner);
       }
+
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -40,20 +47,6 @@ export class OwnerUpdateComponent implements OnInit {
   }
 
   save(): void {
-    const userPassword = this.editForm.get('userPassword')?.value;
-    const confirmPassword = this.elementRef.nativeElement.querySelector('#confirmPassword').value;
-
-    if (userPassword !== confirmPassword) {
-      alert('Las contraseñas no coinciden');
-      return;
-    }
-
-    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    if (userPassword && !regex.test(userPassword)) {
-      alert('La contraseña debe tener al menos 8 caracteres con números y letras.');
-      return;
-    }
-
     this.isSaving = true;
     const owner = this.ownerFormService.getOwner(this.editForm);
     if (owner.id !== null) {
@@ -85,5 +78,15 @@ export class OwnerUpdateComponent implements OnInit {
   protected updateForm(owner: IOwner): void {
     this.owner = owner;
     this.ownerFormService.resetForm(this.editForm, owner);
+
+    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing<IUser>(this.usersSharedCollection, owner.user);
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.userService
+      .query()
+      .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
+      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing<IUser>(users, this.owner?.user)))
+      .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
   }
 }

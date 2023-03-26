@@ -10,6 +10,9 @@ import { OwnerFormService } from './owner-form.service';
 import { OwnerService } from '../service/owner.service';
 import { IOwner } from '../owner.model';
 
+import { IUser } from 'app/entities/user/user.model';
+import { UserService } from 'app/entities/user/user.service';
+
 import { OwnerUpdateComponent } from './owner-update.component';
 
 describe('Owner Management Update Component', () => {
@@ -18,6 +21,7 @@ describe('Owner Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let ownerFormService: OwnerFormService;
   let ownerService: OwnerService;
+  let userService: UserService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -40,17 +44,43 @@ describe('Owner Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     ownerFormService = TestBed.inject(OwnerFormService);
     ownerService = TestBed.inject(OwnerService);
+    userService = TestBed.inject(UserService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('Should update editForm', () => {
+    it('Should call User query and add missing value', () => {
       const owner: IOwner = { id: 456 };
+      const user: IUser = { id: 16720 };
+      owner.user = user;
+
+      const userCollection: IUser[] = [{ id: 82687 }];
+      jest.spyOn(userService, 'query').mockReturnValue(of(new HttpResponse({ body: userCollection })));
+      const additionalUsers = [user];
+      const expectedCollection: IUser[] = [...additionalUsers, ...userCollection];
+      jest.spyOn(userService, 'addUserToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ owner });
       comp.ngOnInit();
 
+      expect(userService.query).toHaveBeenCalled();
+      expect(userService.addUserToCollectionIfMissing).toHaveBeenCalledWith(
+        userCollection,
+        ...additionalUsers.map(expect.objectContaining)
+      );
+      expect(comp.usersSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should update editForm', () => {
+      const owner: IOwner = { id: 456 };
+      const user: IUser = { id: 74773 };
+      owner.user = user;
+
+      activatedRoute.data = of({ owner });
+      comp.ngOnInit();
+
+      expect(comp.usersSharedCollection).toContain(user);
       expect(comp.owner).toEqual(owner);
     });
   });
@@ -120,6 +150,18 @@ describe('Owner Management Update Component', () => {
       expect(ownerService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Compare relationships', () => {
+    describe('compareUser', () => {
+      it('Should forward to userService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(userService, 'compareUser');
+        comp.compareUser(entity, entity2);
+        expect(userService.compareUser).toHaveBeenCalledWith(entity, entity2);
+      });
     });
   });
 });

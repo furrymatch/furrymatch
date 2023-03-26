@@ -27,15 +27,14 @@ describe('Owner Form Service', () => {
             phoneNumber: expect.any(Object),
             photo: expect.any(Object),
             identityNumber: expect.any(Object),
-            adress: expect.any(Object),
+            address: expect.any(Object),
             province: expect.any(Object),
             canton: expect.any(Object),
             district: expect.any(Object),
-            email: expect.any(Object),
-            userPassword: expect.any(Object),
             otp: expect.any(Object),
             createdAt: expect.any(Object),
             updatedAt: expect.any(Object),
+            user: expect.any(Object),
           })
         );
       });
@@ -53,15 +52,14 @@ describe('Owner Form Service', () => {
             phoneNumber: expect.any(Object),
             photo: expect.any(Object),
             identityNumber: expect.any(Object),
-            adress: expect.any(Object),
+            address: expect.any(Object),
             province: expect.any(Object),
             canton: expect.any(Object),
             district: expect.any(Object),
-            email: expect.any(Object),
-            userPassword: expect.any(Object),
             otp: expect.any(Object),
             createdAt: expect.any(Object),
             updatedAt: expect.any(Object),
+            user: expect.any(Object),
           })
         );
       });

@@ -53,8 +53,8 @@ public class Owner implements Serializable {
     private String identityNumber;
 
     @NotNull
-    @Column(name = "adress", nullable = false)
-    private String adress;
+    @Column(name = "address", nullable = false)
+    private String address;
 
     @NotNull
     @Column(name = "province", nullable = false)
@@ -68,14 +68,6 @@ public class Owner implements Serializable {
     @Column(name = "district", nullable = false)
     private String district;
 
-    @NotNull
-    @Column(name = "email", nullable = false)
-    private String email;
-
-    @NotNull
-    @Column(name = "user_password", nullable = false)
-    private String userPassword;
-
     @Column(name = "otp")
     private String otp;
 
@@ -84,6 +76,10 @@ public class Owner implements Serializable {
 
     @Column(name = "updated_at")
     private LocalDate updatedAt;
+
+    @OneToOne
+    @JoinColumn(unique = true)
+    private User user;
 
     @OneToMany(mappedBy = "owner")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -196,17 +192,17 @@ public class Owner implements Serializable {
         this.identityNumber = identityNumber;
     }
 
-    public String getAdress() {
-        return this.adress;
+    public String getAddress() {
+        return this.address;
     }
 
-    public Owner adress(String adress) {
-        this.setAdress(adress);
+    public Owner address(String address) {
+        this.setAddress(address);
         return this;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getProvince() {
@@ -248,32 +244,6 @@ public class Owner implements Serializable {
         this.district = district;
     }
 
-    public String getEmail() {
-        return this.email;
-    }
-
-    public Owner email(String email) {
-        this.setEmail(email);
-        return this;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getUserPassword() {
-        return this.userPassword;
-    }
-
-    public Owner userPassword(String userPassword) {
-        this.setUserPassword(userPassword);
-        return this;
-    }
-
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
-
     public String getOtp() {
         return this.otp;
     }
@@ -311,6 +281,19 @@ public class Owner implements Serializable {
 
     public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Owner user(User user) {
+        this.setUser(user);
+        return this;
     }
 
     public Set<Pet> getPets() {
@@ -375,12 +358,10 @@ public class Owner implements Serializable {
             ", phoneNumber=" + getPhoneNumber() +
             ", photo='" + getPhoto() + "'" +
             ", identityNumber='" + getIdentityNumber() + "'" +
-            ", adress='" + getAdress() + "'" +
+            ", address='" + getAddress() + "'" +
             ", province='" + getProvince() + "'" +
             ", canton='" + getCanton() + "'" +
             ", district='" + getDistrict() + "'" +
-            ", email='" + getEmail() + "'" +
-            ", userPassword='" + getUserPassword() + "'" +
             ", otp='" + getOtp() + "'" +
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +
