@@ -42,9 +42,9 @@
         <dd>
           <span>{{ owner.identityNumber }}</span>
         </dd>
-        <dt><span jhiTranslate="furryMatchApp.owner.adress">Adress</span></dt>
+        <dt><span jhiTranslate="furryMatchApp.owner.address">Address</span></dt>
         <dd>
-          <span>{{ owner.adress }}</span>
+          <span>{{ owner.address }}</span>
         </dd>
         <dt><span jhiTranslate="furryMatchApp.owner.province">Province</span></dt>
         <dd>
@@ -58,14 +58,6 @@
         <dd>
           <span>{{ owner.district }}</span>
         </dd>
-        <dt><span jhiTranslate="furryMatchApp.owner.email">Email</span></dt>
-        <dd>
-          <span>{{ owner.email }}</span>
-        </dd>
-        <dt><span jhiTranslate="furryMatchApp.owner.userPassword">User Password</span></dt>
-        <dd>
-          <span>{{ owner.userPassword }}</span>
-        </dd>
         <dt><span jhiTranslate="furryMatchApp.owner.otp">Otp</span></dt>
         <dd>
           <span>{{ owner.otp }}</span>
@@ -77,6 +69,10 @@
         <dt><span jhiTranslate="furryMatchApp.owner.updatedAt">Updated At</span></dt>
         <dd>
           <span>{{ owner.updatedAt | formatMediumDate }}</span>
+        </dd>
+        <dt><span jhiTranslate="furryMatchApp.owner.user">User</span></dt>
+        <dd>
+          <span>{{ owner.user?.id }}</span>
         </dd>
       </dl>
 

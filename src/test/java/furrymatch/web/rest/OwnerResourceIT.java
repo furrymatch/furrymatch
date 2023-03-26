@@ -53,8 +53,8 @@ class OwnerResourceIT {
     private static final String DEFAULT_IDENTITY_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_IDENTITY_NUMBER = "BBBBBBBBBB";
 
-    private static final String DEFAULT_ADRESS = "AAAAAAAAAA";
-    private static final String UPDATED_ADRESS = "BBBBBBBBBB";
+    private static final String DEFAULT_ADDRESS = "AAAAAAAAAA";
+    private static final String UPDATED_ADDRESS = "BBBBBBBBBB";
 
     private static final String DEFAULT_PROVINCE = "AAAAAAAAAA";
     private static final String UPDATED_PROVINCE = "BBBBBBBBBB";
@@ -64,12 +64,6 @@ class OwnerResourceIT {
 
     private static final String DEFAULT_DISTRICT = "AAAAAAAAAA";
     private static final String UPDATED_DISTRICT = "BBBBBBBBBB";
-
-    private static final String DEFAULT_EMAIL = "AAAAAAAAAA";
-    private static final String UPDATED_EMAIL = "BBBBBBBBBB";
-
-    private static final String DEFAULT_USER_PASSWORD = "AAAAAAAAAA";
-    private static final String UPDATED_USER_PASSWORD = "BBBBBBBBBB";
 
     private static final String DEFAULT_OTP = "AAAAAAAAAA";
     private static final String UPDATED_OTP = "BBBBBBBBBB";
@@ -112,12 +106,10 @@ class OwnerResourceIT {
             .phoneNumber(DEFAULT_PHONE_NUMBER)
             .photo(DEFAULT_PHOTO)
             .identityNumber(DEFAULT_IDENTITY_NUMBER)
-            .adress(DEFAULT_ADRESS)
+            .address(DEFAULT_ADDRESS)
             .province(DEFAULT_PROVINCE)
             .canton(DEFAULT_CANTON)
             .district(DEFAULT_DISTRICT)
-            .email(DEFAULT_EMAIL)
-            .userPassword(DEFAULT_USER_PASSWORD)
             .otp(DEFAULT_OTP)
             .createdAt(DEFAULT_CREATED_AT)
             .updatedAt(DEFAULT_UPDATED_AT);
@@ -139,12 +131,10 @@ class OwnerResourceIT {
             .phoneNumber(UPDATED_PHONE_NUMBER)
             .photo(UPDATED_PHOTO)
             .identityNumber(UPDATED_IDENTITY_NUMBER)
-            .adress(UPDATED_ADRESS)
+            .address(UPDATED_ADDRESS)
             .province(UPDATED_PROVINCE)
             .canton(UPDATED_CANTON)
             .district(UPDATED_DISTRICT)
-            .email(UPDATED_EMAIL)
-            .userPassword(UPDATED_USER_PASSWORD)
             .otp(UPDATED_OTP)
             .createdAt(UPDATED_CREATED_AT)
             .updatedAt(UPDATED_UPDATED_AT);
@@ -178,12 +168,10 @@ class OwnerResourceIT {
         assertThat(testOwner.getPhoneNumber()).isEqualTo(DEFAULT_PHONE_NUMBER);
         assertThat(testOwner.getPhoto()).isEqualTo(DEFAULT_PHOTO);
         assertThat(testOwner.getIdentityNumber()).isEqualTo(DEFAULT_IDENTITY_NUMBER);
-        assertThat(testOwner.getAdress()).isEqualTo(DEFAULT_ADRESS);
+        assertThat(testOwner.getAddress()).isEqualTo(DEFAULT_ADDRESS);
         assertThat(testOwner.getProvince()).isEqualTo(DEFAULT_PROVINCE);
         assertThat(testOwner.getCanton()).isEqualTo(DEFAULT_CANTON);
         assertThat(testOwner.getDistrict()).isEqualTo(DEFAULT_DISTRICT);
-        assertThat(testOwner.getEmail()).isEqualTo(DEFAULT_EMAIL);
-        assertThat(testOwner.getUserPassword()).isEqualTo(DEFAULT_USER_PASSWORD);
         assertThat(testOwner.getOtp()).isEqualTo(DEFAULT_OTP);
         assertThat(testOwner.getCreatedAt()).isEqualTo(DEFAULT_CREATED_AT);
         assertThat(testOwner.getUpdatedAt()).isEqualTo(DEFAULT_UPDATED_AT);
@@ -306,10 +294,10 @@ class OwnerResourceIT {
 
     @Test
     @Transactional
-    void checkAdressIsRequired() throws Exception {
+    void checkAddressIsRequired() throws Exception {
         int databaseSizeBeforeTest = ownerRepository.findAll().size();
         // set the field null
-        owner.setAdress(null);
+        owner.setAddress(null);
 
         // Create the Owner, which fails.
 
@@ -382,44 +370,6 @@ class OwnerResourceIT {
 
     @Test
     @Transactional
-    void checkEmailIsRequired() throws Exception {
-        int databaseSizeBeforeTest = ownerRepository.findAll().size();
-        // set the field null
-        owner.setEmail(null);
-
-        // Create the Owner, which fails.
-
-        restOwnerMockMvc
-            .perform(
-                post(ENTITY_API_URL).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(owner))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<Owner> ownerList = ownerRepository.findAll();
-        assertThat(ownerList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    void checkUserPasswordIsRequired() throws Exception {
-        int databaseSizeBeforeTest = ownerRepository.findAll().size();
-        // set the field null
-        owner.setUserPassword(null);
-
-        // Create the Owner, which fails.
-
-        restOwnerMockMvc
-            .perform(
-                post(ENTITY_API_URL).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(owner))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<Owner> ownerList = ownerRepository.findAll();
-        assertThat(ownerList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllOwners() throws Exception {
         // Initialize the database
         ownerRepository.saveAndFlush(owner);
@@ -437,12 +387,10 @@ class OwnerResourceIT {
             .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem(DEFAULT_PHONE_NUMBER.intValue())))
             .andExpect(jsonPath("$.[*].photo").value(hasItem(DEFAULT_PHOTO)))
             .andExpect(jsonPath("$.[*].identityNumber").value(hasItem(DEFAULT_IDENTITY_NUMBER)))
-            .andExpect(jsonPath("$.[*].adress").value(hasItem(DEFAULT_ADRESS)))
+            .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
             .andExpect(jsonPath("$.[*].province").value(hasItem(DEFAULT_PROVINCE)))
             .andExpect(jsonPath("$.[*].canton").value(hasItem(DEFAULT_CANTON)))
             .andExpect(jsonPath("$.[*].district").value(hasItem(DEFAULT_DISTRICT)))
-            .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
-            .andExpect(jsonPath("$.[*].userPassword").value(hasItem(DEFAULT_USER_PASSWORD)))
             .andExpect(jsonPath("$.[*].otp").value(hasItem(DEFAULT_OTP)))
             .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())))
             .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())));
@@ -467,12 +415,10 @@ class OwnerResourceIT {
             .andExpect(jsonPath("$.phoneNumber").value(DEFAULT_PHONE_NUMBER.intValue()))
             .andExpect(jsonPath("$.photo").value(DEFAULT_PHOTO))
             .andExpect(jsonPath("$.identityNumber").value(DEFAULT_IDENTITY_NUMBER))
-            .andExpect(jsonPath("$.adress").value(DEFAULT_ADRESS))
+            .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS))
             .andExpect(jsonPath("$.province").value(DEFAULT_PROVINCE))
             .andExpect(jsonPath("$.canton").value(DEFAULT_CANTON))
             .andExpect(jsonPath("$.district").value(DEFAULT_DISTRICT))
-            .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
-            .andExpect(jsonPath("$.userPassword").value(DEFAULT_USER_PASSWORD))
             .andExpect(jsonPath("$.otp").value(DEFAULT_OTP))
             .andExpect(jsonPath("$.createdAt").value(DEFAULT_CREATED_AT.toString()))
             .andExpect(jsonPath("$.updatedAt").value(DEFAULT_UPDATED_AT.toString()));
@@ -505,12 +451,10 @@ class OwnerResourceIT {
             .phoneNumber(UPDATED_PHONE_NUMBER)
             .photo(UPDATED_PHOTO)
             .identityNumber(UPDATED_IDENTITY_NUMBER)
-            .adress(UPDATED_ADRESS)
+            .address(UPDATED_ADDRESS)
             .province(UPDATED_PROVINCE)
             .canton(UPDATED_CANTON)
             .district(UPDATED_DISTRICT)
-            .email(UPDATED_EMAIL)
-            .userPassword(UPDATED_USER_PASSWORD)
             .otp(UPDATED_OTP)
             .createdAt(UPDATED_CREATED_AT)
             .updatedAt(UPDATED_UPDATED_AT);
@@ -535,12 +479,10 @@ class OwnerResourceIT {
         assertThat(testOwner.getPhoneNumber()).isEqualTo(UPDATED_PHONE_NUMBER);
         assertThat(testOwner.getPhoto()).isEqualTo(UPDATED_PHOTO);
         assertThat(testOwner.getIdentityNumber()).isEqualTo(UPDATED_IDENTITY_NUMBER);
-        assertThat(testOwner.getAdress()).isEqualTo(UPDATED_ADRESS);
+        assertThat(testOwner.getAddress()).isEqualTo(UPDATED_ADDRESS);
         assertThat(testOwner.getProvince()).isEqualTo(UPDATED_PROVINCE);
         assertThat(testOwner.getCanton()).isEqualTo(UPDATED_CANTON);
         assertThat(testOwner.getDistrict()).isEqualTo(UPDATED_DISTRICT);
-        assertThat(testOwner.getEmail()).isEqualTo(UPDATED_EMAIL);
-        assertThat(testOwner.getUserPassword()).isEqualTo(UPDATED_USER_PASSWORD);
         assertThat(testOwner.getOtp()).isEqualTo(UPDATED_OTP);
         assertThat(testOwner.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
         assertThat(testOwner.getUpdatedAt()).isEqualTo(UPDATED_UPDATED_AT);
@@ -623,8 +565,7 @@ class OwnerResourceIT {
             .firstLastName(UPDATED_FIRST_LAST_NAME)
             .secondLastName(UPDATED_SECOND_LAST_NAME)
             .phoneNumber(UPDATED_PHONE_NUMBER)
-            .province(UPDATED_PROVINCE)
-            .createdAt(UPDATED_CREATED_AT);
+            .province(UPDATED_PROVINCE);
 
         restOwnerMockMvc
             .perform(
@@ -646,14 +587,12 @@ class OwnerResourceIT {
         assertThat(testOwner.getPhoneNumber()).isEqualTo(UPDATED_PHONE_NUMBER);
         assertThat(testOwner.getPhoto()).isEqualTo(DEFAULT_PHOTO);
         assertThat(testOwner.getIdentityNumber()).isEqualTo(DEFAULT_IDENTITY_NUMBER);
-        assertThat(testOwner.getAdress()).isEqualTo(DEFAULT_ADRESS);
+        assertThat(testOwner.getAddress()).isEqualTo(DEFAULT_ADDRESS);
         assertThat(testOwner.getProvince()).isEqualTo(UPDATED_PROVINCE);
         assertThat(testOwner.getCanton()).isEqualTo(DEFAULT_CANTON);
         assertThat(testOwner.getDistrict()).isEqualTo(DEFAULT_DISTRICT);
-        assertThat(testOwner.getEmail()).isEqualTo(DEFAULT_EMAIL);
-        assertThat(testOwner.getUserPassword()).isEqualTo(DEFAULT_USER_PASSWORD);
         assertThat(testOwner.getOtp()).isEqualTo(DEFAULT_OTP);
-        assertThat(testOwner.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
+        assertThat(testOwner.getCreatedAt()).isEqualTo(DEFAULT_CREATED_AT);
         assertThat(testOwner.getUpdatedAt()).isEqualTo(DEFAULT_UPDATED_AT);
     }
 
@@ -677,12 +616,10 @@ class OwnerResourceIT {
             .phoneNumber(UPDATED_PHONE_NUMBER)
             .photo(UPDATED_PHOTO)
             .identityNumber(UPDATED_IDENTITY_NUMBER)
-            .adress(UPDATED_ADRESS)
+            .address(UPDATED_ADDRESS)
             .province(UPDATED_PROVINCE)
             .canton(UPDATED_CANTON)
             .district(UPDATED_DISTRICT)
-            .email(UPDATED_EMAIL)
-            .userPassword(UPDATED_USER_PASSWORD)
             .otp(UPDATED_OTP)
             .createdAt(UPDATED_CREATED_AT)
             .updatedAt(UPDATED_UPDATED_AT);
@@ -707,12 +644,10 @@ class OwnerResourceIT {
         assertThat(testOwner.getPhoneNumber()).isEqualTo(UPDATED_PHONE_NUMBER);
         assertThat(testOwner.getPhoto()).isEqualTo(UPDATED_PHOTO);
         assertThat(testOwner.getIdentityNumber()).isEqualTo(UPDATED_IDENTITY_NUMBER);
-        assertThat(testOwner.getAdress()).isEqualTo(UPDATED_ADRESS);
+        assertThat(testOwner.getAddress()).isEqualTo(UPDATED_ADDRESS);
         assertThat(testOwner.getProvince()).isEqualTo(UPDATED_PROVINCE);
         assertThat(testOwner.getCanton()).isEqualTo(UPDATED_CANTON);
         assertThat(testOwner.getDistrict()).isEqualTo(UPDATED_DISTRICT);
-        assertThat(testOwner.getEmail()).isEqualTo(UPDATED_EMAIL);
-        assertThat(testOwner.getUserPassword()).isEqualTo(UPDATED_USER_PASSWORD);
         assertThat(testOwner.getOtp()).isEqualTo(UPDATED_OTP);
         assertThat(testOwner.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
         assertThat(testOwner.getUpdatedAt()).isEqualTo(UPDATED_UPDATED_AT);

@@ -64,7 +64,23 @@ export class RegisterComponent implements AfterViewInit {
     } else {
       const { login, email } = this.registerForm.getRawValue();
       this.registerService
-        .save({ login, email, password, langKey: this.translateService.currentLang })
+        .save({
+          login,
+          email,
+          password,
+          langKey: this.translateService.currentLang,
+          firstName: 'Coralia',
+          secondName: 'Maria',
+          firstLastName: 'Aeguedas',
+          secondLastName: 'Feijoo',
+          phoneNumber: 89820192,
+          photo: 'www.',
+          identityNumber: '90109129',
+          address: 'Address',
+          province: 'San Jose',
+          canton: 'San Jose',
+          district: 'La Ruruca',
+        })
         .subscribe({ next: () => (this.success = true), error: response => this.processError(response) });
     }
   }
