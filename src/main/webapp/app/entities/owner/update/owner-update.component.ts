@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef, NgIterable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -20,22 +20,75 @@ export class OwnerUpdateComponent implements OnInit {
   owner: IOwner | null = null;
 
   editForm: OwnerFormGroup = this.ownerFormService.createOwnerFormGroup();
+  files: File[] = [];
+
+  selectedProvinceId: number | null = null;
+  selectedCantonId: number | null = null;
+  provinces: any;
+  cantones: any;
+  districts: any;
 
   constructor(
     protected ownerService: OwnerService,
     protected ownerFormService: OwnerFormService,
-    protected activatedRoute: ActivatedRoute,
-    private elementRef: ElementRef
+    protected activatedRoute: ActivatedRoute
   ) {}
 
-  files: File[] = [];
-
   ngOnInit(): void {
+    this.ownerService.getProvinces().subscribe((response: any) => {
+      const provincesArray = Object.entries(response).map(([id, name]) => ({ id, name }));
+      this.provinces = provincesArray;
+    });
+
     this.activatedRoute.data.subscribe(({ owner }) => {
       this.owner = owner;
       if (owner) {
         this.updateForm(owner);
       }
+    });
+  }
+
+  selected = '';
+
+  update(e: any) {
+    this.selected = e.target.value;
+  }
+
+  updateProvince(e: any) {
+    const selectedProvinceId = parseInt(e.target.value);
+    if (selectedProvinceId) {
+      this.selectedProvinceId = selectedProvinceId;
+      this.getCantones(selectedProvinceId);
+    } else {
+      this.selectedProvinceId = null;
+      this.selectedCantonId = null;
+      this.cantones = null;
+      this.districts = null;
+    }
+  }
+
+  updateCanton(e: any) {
+    const selectedCantonId = parseInt(e.target.value);
+    if (selectedCantonId) {
+      this.selectedCantonId = selectedCantonId;
+      this.getDistricts(this.selectedProvinceId, selectedCantonId);
+    } else {
+      this.selectedCantonId = null;
+      this.districts = null;
+    }
+  }
+
+  getCantones(provinceId: number) {
+    this.ownerService.getCantones(provinceId).subscribe((response: any) => {
+      const cantonesArray = Object.entries(response).map(([id, name]) => ({ id: parseInt(id), name }));
+      this.cantones = cantonesArray;
+    });
+  }
+
+  getDistricts(provinceId: number | null, cantonId: number) {
+    this.ownerService.getDistricts(provinceId, cantonId).subscribe((response: any) => {
+      const districtsArray = Object.entries(response).map(([id, name]) => ({ id: parseInt(id), name }));
+      this.districts = districtsArray;
     });
   }
 
@@ -56,10 +109,8 @@ export class OwnerUpdateComponent implements OnInit {
   photo: FormControl<IOwner['photo']> = new FormControl<IOwner['photo']>(null);
 
   onUpload() {
-    //Escape empty array
     if (!this.files[0]) alert('Debés primero arrastrar o seleccionar una imagen');
 
-    //Upload to Cloudinary
     const file_data = this.files[0];
     const data = new FormData();
     data.append('file', file_data);

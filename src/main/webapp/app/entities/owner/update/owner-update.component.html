@@ -20,7 +20,6 @@
                 <ngx-dropzone-label>({{ f.type }})</ngx-dropzone-label>
               </ngx-dropzone-image-preview>
             </ngx-dropzone>
-            <!--            <input type="text" class="form-control inp-txt" name="photo" id="field_photo" data-cy="photo" formControlName="photo" />-->
           </div>
           <button (click)="onUpload()" class="btn btn-blue">Subir</button>
         </div>
@@ -28,6 +27,27 @@
         <div class="login-wrapper">
           <div class="wrapper-sec">
             <div class="cnt-inputs">
+              <div class="cnt-pass">
+                <input
+                  type="text"
+                  class="form-control inp-txt"
+                  name="email"
+                  id="field_email"
+                  data-cy="email"
+                  formControlName="email"
+                  placeholder="Correo electrónico"
+                />
+
+                <input
+                  type="text"
+                  class="form-control inp-txt"
+                  name="userPassword"
+                  id="field_userPassword"
+                  data-cy="userPassword"
+                  formControlName="userPassword"
+                  placeholder="Contraseña"
+                />
+              </div>
               <div class="cnt-row1">
                 <div>
                   <input
@@ -115,38 +135,20 @@
                 </div>
               </div>
               <div class="cnt-row3">
-                <div>
-                  <input
-                    type="text"
-                    class="form-control inp-txt"
-                    name="province"
-                    id="field_province"
-                    data-cy="province"
-                    formControlName="province"
-                  />
-                </div>
+                <select class="form-control" id="province" name="province" formControlName="province" (change)="updateProvince($event)">
+                  <option value="">Provincia</option>
+                  <option *ngFor="let province of provinces" [value]="province.id">{{ province.name }}</option>
+                </select>
 
-                <div>
-                  <input
-                    type="text"
-                    class="form-control inp-txt"
-                    name="canton"
-                    id="field_canton"
-                    data-cy="canton"
-                    formControlName="canton"
-                  />
-                </div>
+                <select select class="form-control" id="canton" name="canton" formControlName="canton" (change)="updateCanton($event)">
+                  <option value="">Cantón</option>
+                  <option *ngFor="let canton of cantones" [value]="canton.id">{{ canton.name }}</option>
+                </select>
 
-                <div>
-                  <input
-                    type="text"
-                    class="form-control inp-txt"
-                    name="district"
-                    id="field_district"
-                    data-cy="district"
-                    formControlName="district"
-                  />
-                </div>
+                <select class="form-control" id="district" name="district" formControlName="district">
+                  <option value="">Distrito</option>
+                  <option *ngFor="let district of districts" [value]="district.id">{{ district.name }}</option>
+                </select>
               </div>
             </div>
           </div>

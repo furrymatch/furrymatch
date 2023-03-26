@@ -36,6 +36,19 @@ export class OwnerService {
     let data = vals;
     return this._http.post('https://api.cloudinary.com/v1_1/alocortesu/image/upload', data);
   }
+
+  getProvinces() {
+    return this.http.get('https://ubicaciones.paginasweb.cr/provincias.json');
+  }
+
+  getCantones(provinceId: number) {
+    return this.http.get(`https://ubicaciones.paginasweb.cr/provincia/${provinceId}/cantones.json`);
+  }
+
+  getDistricts(provinceId: number | null, cantonId: number) {
+    return this.http.get(`https://ubicaciones.paginasweb.cr/provincia/${provinceId}/canton/${cantonId}/distritos.json`);
+  }
+
   create(owner: NewOwner): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(owner);
     return this.http.post<RestOwner>(this.resourceUrl, copy, { observe: 'response' }).pipe(map(res => this.convertResponseFromServer(res)));
