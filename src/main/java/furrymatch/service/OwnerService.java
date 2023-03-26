@@ -80,8 +80,8 @@ public class OwnerService {
                 if (owner.getIdentityNumber() != null) {
                     existingOwner.setIdentityNumber(owner.getIdentityNumber());
                 }
-                if (owner.getAdress() != null) {
-                    existingOwner.setAdress(owner.getAdress());
+                if (owner.getAddress() != null) {
+                    existingOwner.setAddress(owner.getAddress());
                 }
                 if (owner.getProvince() != null) {
                     existingOwner.setProvince(owner.getProvince());
@@ -91,12 +91,6 @@ public class OwnerService {
                 }
                 if (owner.getDistrict() != null) {
                     existingOwner.setDistrict(owner.getDistrict());
-                }
-                if (owner.getEmail() != null) {
-                    existingOwner.setEmail(owner.getEmail());
-                }
-                if (owner.getUserPassword() != null) {
-                    existingOwner.setUserPassword(owner.getUserPassword());
                 }
                 if (owner.getOtp() != null) {
                     existingOwner.setOtp(owner.getOtp());

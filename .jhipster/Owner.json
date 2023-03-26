@@ -39,7 +39,7 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "adress",
+      "fieldName": "address",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
     },
@@ -55,16 +55,6 @@
     },
     {
       "fieldName": "district",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "email",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "userPassword",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
     },
@@ -87,6 +77,12 @@
   "pagination": "pagination",
   "readOnly": false,
   "relationships": [
+    {
+      "otherEntityName": "user",
+      "ownerSide": true,
+      "relationshipName": "user",
+      "relationshipType": "one-to-one"
+    },
     {
       "otherEntityName": "pet",
       "otherEntityRelationshipName": "owner",

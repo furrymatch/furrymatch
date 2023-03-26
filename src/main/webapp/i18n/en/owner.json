@@ -25,15 +25,14 @@
       "phoneNumber": "Phone Number",
       "photo": "Photo",
       "identityNumber": "Identity Number",
-      "adress": "Adress",
+      "address": "Address",
       "province": "Province",
       "canton": "Canton",
       "district": "District",
-      "email": "Email",
-      "userPassword": "User Password",
       "otp": "Otp",
       "createdAt": "Created At",
       "updatedAt": "Updated At",
+      "user": "User",
       "pet": "Pet"
     }
   }

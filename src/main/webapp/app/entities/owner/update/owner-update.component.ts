@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef, NgIterable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 import { OwnerFormService, OwnerFormGroup } from './owner-form.service';
 import { IOwner } from '../owner.model';
@@ -19,6 +19,8 @@ export class OwnerUpdateComponent implements OnInit {
   isSaving = false;
   owner: IOwner | null = null;
 
+  usersSharedCollection: IUser[] = [];
+
   editForm: OwnerFormGroup = this.ownerFormService.createOwnerFormGroup();
   files: File[] = [];
 
@@ -31,8 +33,11 @@ export class OwnerUpdateComponent implements OnInit {
   constructor(
     protected ownerService: OwnerService,
     protected ownerFormService: OwnerFormService,
+    protected userService: UserService,
     protected activatedRoute: ActivatedRoute
   ) {}
+
+  compareUser = (o1: IUser | null, o2: IUser | null): boolean => this.userService.compareUser(o1, o2);
 
   ngOnInit(): void {
     this.ownerService.getProvinces().subscribe((response: any) => {
@@ -45,6 +50,8 @@ export class OwnerUpdateComponent implements OnInit {
       if (owner) {
         this.updateForm(owner);
       }
+
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -159,5 +166,15 @@ export class OwnerUpdateComponent implements OnInit {
   protected updateForm(owner: IOwner): void {
     this.owner = owner;
     this.ownerFormService.resetForm(this.editForm, owner);
+
+    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing<IUser>(this.usersSharedCollection, owner.user);
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.userService
+      .query()
+      .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
+      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing<IUser>(users, this.owner?.user)))
+      .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
   }
 }

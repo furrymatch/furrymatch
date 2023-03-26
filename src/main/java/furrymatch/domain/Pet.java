@@ -73,7 +73,7 @@ public class Pet implements Serializable {
     private Set<Likee> secondLikees = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "pets" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "user", "pets" }, allowSetters = true)
     private Owner owner;
 
     @ManyToOne

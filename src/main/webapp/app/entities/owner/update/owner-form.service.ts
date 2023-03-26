@@ -25,15 +25,14 @@ type OwnerFormGroupContent = {
   phoneNumber: FormControl<IOwner['phoneNumber']>;
   photo: FormControl<IOwner['photo']>;
   identityNumber: FormControl<IOwner['identityNumber']>;
-  adress: FormControl<IOwner['adress']>;
+  address: FormControl<IOwner['address']>;
   province: FormControl<IOwner['province']>;
   canton: FormControl<IOwner['canton']>;
   district: FormControl<IOwner['district']>;
-  email: FormControl<IOwner['email']>;
-  userPassword: FormControl<IOwner['userPassword']>;
   otp: FormControl<IOwner['otp']>;
   createdAt: FormControl<IOwner['createdAt']>;
   updatedAt: FormControl<IOwner['updatedAt']>;
+  user: FormControl<IOwner['user']>;
 };
 
 export type OwnerFormGroup = FormGroup<OwnerFormGroupContent>;
@@ -70,7 +69,7 @@ export class OwnerFormService {
       identityNumber: new FormControl(ownerRawValue.identityNumber, {
         validators: [Validators.required],
       }),
-      adress: new FormControl(ownerRawValue.adress, {
+      address: new FormControl(ownerRawValue.address, {
         validators: [Validators.required],
       }),
       province: new FormControl(ownerRawValue.province, {
@@ -82,15 +81,10 @@ export class OwnerFormService {
       district: new FormControl(ownerRawValue.district, {
         validators: [Validators.required],
       }),
-      email: new FormControl(ownerRawValue.email, {
-        validators: [Validators.required],
-      }),
-      userPassword: new FormControl(ownerRawValue.userPassword, {
-        validators: [Validators.required],
-      }),
       otp: new FormControl(ownerRawValue.otp),
       createdAt: new FormControl(ownerRawValue.createdAt),
       updatedAt: new FormControl(ownerRawValue.updatedAt),
+      user: new FormControl(ownerRawValue.user),
     });
   }
 
