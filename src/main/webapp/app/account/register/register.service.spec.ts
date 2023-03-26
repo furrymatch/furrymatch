@@ -31,7 +31,34 @@ describe('RegisterService Service', () => {
       const email = 'test@test.com';
       const password = 'pass';
       const langKey = 'FR';
-      const registration = new Registration(login, email, password, langKey);
+      const firstName = '';
+      const secondName = '';
+      const firstLastName = '';
+      const secondLastName = '';
+      const phoneNumber = 8989989;
+      const photo = '';
+      const identityNumber = '';
+      const address = '';
+      const province = '';
+      const canton = '';
+      const district = '';
+      const registration = new Registration(
+        login,
+        email,
+        password,
+        langKey,
+        firstName,
+        secondName,
+        firstLastName,
+        secondLastName,
+        phoneNumber,
+        photo,
+        identityNumber,
+        address,
+        province,
+        canton,
+        district
+      );
 
       // WHEN
       service.save(registration).subscribe();
@@ -42,7 +69,22 @@ describe('RegisterService Service', () => {
       });
 
       // THEN
-      expect(testRequest.request.body).toEqual({ email, langKey, login, password });
+      expect(testRequest.request.body).toEqual({
+        email,
+        langKey,
+        login,
+        password,
+        firstName,
+        secondName,
+        firstLastName,
+        secondLastName,
+        phoneNumber,
+        identityNumber,
+        address,
+        province,
+        canton,
+        district,
+      });
     });
   });
 });
