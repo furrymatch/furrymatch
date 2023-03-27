@@ -1,6 +1,7 @@
 import { Component, ViewChild, OnInit, AfterViewInit, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 
 import { LoginService } from 'app/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
@@ -46,7 +47,18 @@ export class LoginComponent implements OnInit, AfterViewInit {
           this.router.navigate(['']);
         }
       },
-      error: () => (this.authenticationError = true),
+      error: () => {
+        // @ts-ignore
+        Swal.fire({
+          title: 'Error',
+          text: 'Correo o contraseña incorrecta.',
+          type: 'error',
+          icon: 'error',
+          confirmButtonColor: '#3381f6',
+          confirmButtonText: 'Cerrar',
+        });
+        this.authenticationError = true;
+      },
     });
   }
 }
