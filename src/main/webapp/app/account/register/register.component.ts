@@ -9,16 +9,26 @@ import { RegisterService } from './register.service';
 @Component({
   selector: 'jhi-register',
   templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css'],
+  providers: [RegisterService],
 })
 export class RegisterComponent implements AfterViewInit {
   @ViewChild('login', { static: false })
   login?: ElementRef;
+
+  files: File[] = [];
 
   doNotMatch = false;
   error = false;
   errorEmailExists = false;
   errorUserExists = false;
   success = false;
+
+  selectedProvinceId: number | null = null;
+  selectedCantonId: number | null = null;
+  provinces: any;
+  cantones: any;
+  districts: any;
 
   registerForm = new FormGroup({
     login: new FormControl('', {
@@ -42,6 +52,34 @@ export class RegisterComponent implements AfterViewInit {
       nonNullable: true,
       validators: [Validators.required, Validators.minLength(4), Validators.maxLength(50)],
     }),
+    firstName: new FormControl('', {
+      nonNullable: true,
+    }),
+    secondName: new FormControl('', {}),
+    firstLastName: new FormControl('', {
+      nonNullable: true,
+    }),
+    secondLastName: new FormControl('', {
+      nonNullable: true,
+    }),
+    phoneNumber: new FormControl('', {
+      nonNullable: true,
+    }),
+    identityNumber: new FormControl('', {
+      nonNullable: true,
+    }),
+    address: new FormControl('', {
+      nonNullable: true,
+    }),
+    province: new FormControl('', {
+      nonNullable: true,
+    }),
+    canton: new FormControl('', {
+      nonNullable: true,
+    }),
+    district: new FormControl('', {
+      nonNullable: true,
+    }),
   });
 
   constructor(private translateService: TranslateService, private registerService: RegisterService) {}
@@ -52,13 +90,99 @@ export class RegisterComponent implements AfterViewInit {
     }
   }
 
+  ngOnInit(): void {
+    this.registerService.getProvinces().subscribe((response: any) => {
+      const provincesArray = Object.entries(response).map(([id, name]) => ({ id, name }));
+      this.provinces = provincesArray;
+      console.log(provincesArray);
+    });
+  }
+
+  selected = '';
+
+  update(e: any) {
+    this.selected = e.target.value;
+  }
+
+  updateProvince(e: any) {
+    const selectedProvinceId = parseInt(e.target.value);
+    if (selectedProvinceId) {
+      this.selectedProvinceId = selectedProvinceId;
+      this.getCantones(selectedProvinceId);
+    } else {
+      this.selectedProvinceId = null;
+      this.selectedCantonId = null;
+      this.cantones = null;
+      this.districts = null;
+    }
+  }
+
+  updateCanton(e: any) {
+    const selectedCantonId = parseInt(e.target.value);
+    if (selectedCantonId) {
+      this.selectedCantonId = selectedCantonId;
+      this.getDistricts(this.selectedProvinceId, selectedCantonId);
+    } else {
+      this.selectedCantonId = null;
+      this.districts = null;
+    }
+  }
+
+  getCantones(provinceId: number) {
+    this.registerService.getCantones(provinceId).subscribe((response: any) => {
+      const cantonesArray = Object.entries(response).map(([id, name]) => ({ id: parseInt(id), name }));
+      this.cantones = cantonesArray;
+    });
+  }
+
+  getDistricts(provinceId: number | null, cantonId: number) {
+    this.registerService.getDistricts(provinceId, cantonId).subscribe((response: any) => {
+      const districtsArray = Object.entries(response).map(([id, name]) => ({ id: parseInt(id), name }));
+      this.districts = districtsArray;
+    });
+  }
+
+  onSelect(event?: any) {
+    console.log(event);
+    this.files.push(...event.addedFiles);
+  }
+
+  onRemove(event?: any) {
+    console.log(event);
+    this.files.splice(this.files.indexOf(event), 1);
+  }
+
+  onUpload() {
+    if (!this.files[0]) alert('Debés primero arrastrar o seleccionar una imagen');
+
+    const file_data = this.files[0];
+    const data = new FormData();
+    data.append('file', file_data);
+    data.append('upload_preset', 'furry_match');
+    data.append('cloud_name', 'alocortesu');
+
+    this.registerService.uploadImage(data).subscribe(response => {
+      if (response) {
+        const secureUrl = response.secure_url;
+        this.photo.setValue(secureUrl);
+        console.log(this.photo.value);
+      }
+    });
+  }
+
+  photo: FormControl = new FormControl('');
+
   register(): void {
     this.doNotMatch = false;
     this.error = false;
     this.errorEmailExists = false;
     this.errorUserExists = false;
 
+    const photoValue = this.photo.value;
     const { password, confirmPassword } = this.registerForm.getRawValue();
+    // const { firstName, secondName, firstLastName, secondLastName, phoneNumber, identityNumber, address } = this.registerForm.controls;
+    const { firstName, secondName, firstLastName, secondLastName, phoneNumber, identityNumber, address, province, canton, district } =
+      this.registerForm.controls;
     if (password !== confirmPassword) {
       this.doNotMatch = true;
     } else {
@@ -69,17 +193,17 @@ export class RegisterComponent implements AfterViewInit {
           email,
           password,
           langKey: this.translateService.currentLang,
-          firstName: 'Coralia',
-          secondName: 'Maria',
-          firstLastName: 'Aeguedas',
-          secondLastName: 'Feijoo',
-          phoneNumber: 89820192,
-          photo: 'www.',
-          identityNumber: '90109129',
-          address: 'Address',
-          province: 'San Jose',
-          canton: 'San Jose',
-          district: 'La Ruruca',
+          firstName: firstName.value,
+          secondName: secondName.value ? secondName.value : '',
+          firstLastName: firstLastName.value,
+          secondLastName: secondLastName.value,
+          phoneNumber: parseInt(phoneNumber.value, 10),
+          photo: photoValue,
+          identityNumber: identityNumber.value,
+          address: address.value,
+          province: province.value,
+          canton: canton.value,
+          district: district.value,
         })
         .subscribe({ next: () => (this.success = true), error: response => this.processError(response) });
     }
