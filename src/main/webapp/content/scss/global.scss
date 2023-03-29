@@ -29,6 +29,10 @@
 }
 
 /* INPUT STYLES */
+input.ng-invalid {
+  border-color: var(--clr-orange) !important;
+}
+
 .inp-txt {
   box-sizing: border-box;
   height: 58px !important;
@@ -40,7 +44,7 @@
   color: var(--clr-black) !important;
   padding: 6px 12px 6px 20px !important;
   margin-top: 6px;
-  margin-bottom: var(--margin-md-small);
+  margin-bottom: var(--margin-min);
   line-height: 1.5 !important;
 }
 
@@ -52,6 +56,9 @@
 
 .inp-txt:focus {
   background-color: transparent !important;
+  display: flex;
+  justify-content: left;
+  padding-left: 20px;
 }
 
 /* LABEL STYLES */
@@ -84,6 +91,10 @@ select {
   padding-left: 20px;
   background-color: transparent;
   margin-top: 6px;
+}
+
+select.ng-invalid {
+  border-color: var(--clr-orange) !important;
 }
 
 .inp-txt:focus,
@@ -178,6 +189,10 @@ input[type='checkbox']:checked:after {
   display: block;
 }
 
+.alert-txt {
+  color: var(--clr-orange) !important;
+}
+
 /* BUTTON STYLES */
 button {
   height: 58px !important;
@@ -196,9 +211,9 @@ button {
 }
 
 .cnt-txt {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
 }
 
 html,
