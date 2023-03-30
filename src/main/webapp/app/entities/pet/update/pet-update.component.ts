@@ -69,7 +69,8 @@ export class PetUpdateComponent implements OnInit {
   }
 
   onUpload() {
-    if (!this.files[0])
+    if (!this.files[0]) {
+      // @ts-ignore
       Swal.fire({
         title: 'Error',
         text: 'Debés primero arrastrar o seleccionar una imagen.',
@@ -78,6 +79,7 @@ export class PetUpdateComponent implements OnInit {
         confirmButtonColor: '#3381f6',
         confirmButtonText: 'Cerrar',
       });
+    }
 
     const file_data = this.files[0];
     const data = new FormData();
@@ -92,7 +94,6 @@ export class PetUpdateComponent implements OnInit {
         Swal.fire({
           title: 'Fotografía agregada',
           text: 'Continuá registrando tus datos.',
-          type: 'success',
           icon: 'success',
           confirmButtonColor: '#3381f6',
           confirmButtonText: 'Cerrar',

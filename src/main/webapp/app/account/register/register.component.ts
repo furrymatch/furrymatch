@@ -155,15 +155,15 @@ export class RegisterComponent implements AfterViewInit {
   }
 
   onUpload() {
-    if (!this.files[0])
+    if (!this.files[0]) {
       Swal.fire({
         title: 'Error',
         text: 'Debés primero arrastrar o seleccionar una imagen.',
-        type: 'error',
         icon: 'error',
         confirmButtonColor: '#3381f6',
         confirmButtonText: 'Cerrar',
       });
+    }
 
     const file_data = this.files[0];
     const data = new FormData();
@@ -178,7 +178,6 @@ export class RegisterComponent implements AfterViewInit {
         Swal.fire({
           title: 'Fotografía agregada',
           text: 'Continuá registrando tus datos.',
-          type: 'success',
           icon: 'success',
           confirmButtonColor: '#3381f6',
           confirmButtonText: 'Cerrar',
@@ -235,7 +234,6 @@ export class RegisterComponent implements AfterViewInit {
             Swal.fire({
               title: 'Registro exitoso',
               text: 'Ya sos parte de FurryMatch',
-              type: 'success',
               icon: 'success',
               confirmButtonColor: '#3381f6',
               confirmButtonText: 'Cerrar',
@@ -252,7 +250,6 @@ export class RegisterComponent implements AfterViewInit {
       Swal.fire({
         title: 'Error',
         text: 'El nombre de usuario ya existe. Por favor elegí otro.',
-        type: 'error',
         icon: 'error',
         confirmButtonColor: '#3381f6',
         confirmButtonText: 'Cerrar',
@@ -262,7 +259,6 @@ export class RegisterComponent implements AfterViewInit {
       Swal.fire({
         title: 'Error',
         text: 'Correo electrónico ya registrado. Por favor intentá con otro.',
-        type: 'error',
         icon: 'error',
         confirmButtonColor: '#3381f6',
         confirmButtonText: 'Cerrar',
@@ -272,7 +268,6 @@ export class RegisterComponent implements AfterViewInit {
       Swal.fire({
         title: 'Error',
         text: 'Registro fallido, intentalo más tarde.',
-        type: 'error',
         icon: 'error',
         confirmButtonColor: '#3381f6',
         confirmButtonText: 'Cerrar',
