@@ -49,7 +49,7 @@ export class OwnerUpdateComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const owner = this.ownerFormService.getOwner(this.editForm);
-    if (owner.id !== null) {
+    if (owner.user_id !== null) {
       this.subscribeToSaveResponse(this.ownerService.update(owner));
     } else {
       this.subscribeToSaveResponse(this.ownerService.create(owner));

@@ -10,7 +10,7 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { IOwner, NewOwner } from '../owner.model';
 
-export type PartialUpdateOwner = Partial<IOwner> & Pick<IOwner, 'id'>;
+export type PartialUpdateOwner = Partial<IOwner> & Pick<IOwner, 'user_id'>;
 
 type RestOf<T extends IOwner | NewOwner> = Omit<T, 'createdAt' | 'updatedAt'> & {
   createdAt?: string | null;
@@ -68,15 +68,15 @@ export class OwnerService {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  getOwnerIdentifier(owner: Pick<IOwner, 'id'>): number {
-    return owner.id;
+  getOwnerIdentifier(owner: Pick<IOwner, 'user_id'>): number {
+    return owner.user_id;
   }
 
-  compareOwner(o1: Pick<IOwner, 'id'> | null, o2: Pick<IOwner, 'id'> | null): boolean {
+  compareOwner(o1: Pick<IOwner, 'user_id'> | null, o2: Pick<IOwner, 'user_id'> | null): boolean {
     return o1 && o2 ? this.getOwnerIdentifier(o1) === this.getOwnerIdentifier(o2) : o1 === o2;
   }
 
-  addOwnerToCollectionIfMissing<Type extends Pick<IOwner, 'id'>>(
+  addOwnerToCollectionIfMissing<Type extends Pick<IOwner, 'user_id'>>(
     ownerCollection: Type[],
     ...ownersToCheck: (Type | null | undefined)[]
   ): Type[] {

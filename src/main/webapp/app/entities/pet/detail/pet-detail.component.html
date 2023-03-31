@@ -49,7 +49,7 @@
         <dt><span jhiTranslate="furryMatchApp.pet.owner">Owner</span></dt>
         <dd>
           <div *ngIf="pet.owner">
-            <a [routerLink]="['/owner', pet.owner.id, 'view']">{{ pet.owner.id }}</a>
+            <a [routerLink]="['/owner', pet.owner.user_id, 'view']">{{ pet.owner.user_id }}</a>
           </div>
         </dd>
         <dt><span jhiTranslate="furryMatchApp.pet.breed">Breed</span></dt>

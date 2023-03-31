@@ -2,7 +2,7 @@ import dayjs from 'dayjs/esm';
 import { IUser } from 'app/entities/user/user.model';
 
 export interface IOwner {
-  id: number;
+  user_id: number;
   firstName?: string | null;
   secondName?: string | null;
   firstLastName?: string | null;
@@ -20,4 +20,4 @@ export interface IOwner {
   user?: Pick<IUser, 'id'> | null;
 }
 
-export type NewOwner = Omit<IOwner, 'id'> & { id: null };
+export type NewOwner = Omit<IOwner, 'user_id'> & { user_id: null };

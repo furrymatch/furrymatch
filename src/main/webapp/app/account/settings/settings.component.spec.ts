@@ -16,14 +16,26 @@ describe('SettingsComponent', () => {
   let fixture: ComponentFixture<SettingsComponent>;
   let mockAccountService: AccountService;
   const account: Account = {
+    id: 0,
+    user_id: 0,
     firstName: 'John',
-    lastName: 'Doe',
+    lastName: 'Marcos',
     activated: true,
     email: 'john.doe@mail.com',
     langKey: 'en',
     login: 'john',
     authorities: [],
     imageUrl: '',
+    secondName: '',
+    firstLastName: '',
+    secondLastName: '',
+    phoneNumber: 8989989,
+    photo: '',
+    identityNumber: '',
+    address: '',
+    province: '',
+    canton: '',
+    district: '',
   };
 
   beforeEach(waitForAsync(() => {
