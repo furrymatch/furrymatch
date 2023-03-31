@@ -22,9 +22,13 @@ public class Owner implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "user_id")
+    private Long user_id;
+
+    @OneToOne
+    @JoinColumn(unique = true)
+    @MapsId
+    private User user;
 
     @NotNull
     @Column(name = "first_name", nullable = false)
@@ -77,10 +81,6 @@ public class Owner implements Serializable {
     @Column(name = "updated_at")
     private LocalDate updatedAt;
 
-    @OneToOne
-    @JoinColumn(unique = true)
-    private User user;
-
     @OneToMany(mappedBy = "owner")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "photos", "firstLikees", "secondLikees", "owner", "breed", "searchCriteria" }, allowSetters = true)
@@ -89,7 +89,7 @@ public class Owner implements Serializable {
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
-        return this.id;
+        return this.user_id;
     }
 
     public Owner id(Long id) {
@@ -98,7 +98,7 @@ public class Owner implements Serializable {
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.user_id = id;
     }
 
     public String getFirstName() {
@@ -337,7 +337,7 @@ public class Owner implements Serializable {
         if (!(o instanceof Owner)) {
             return false;
         }
-        return id != null && id.equals(((Owner) o).id);
+        return user_id != null && user_id.equals(((Owner) o).user_id);
     }
 
     @Override
@@ -350,7 +350,7 @@ public class Owner implements Serializable {
     @Override
     public String toString() {
         return "Owner{" +
-            "id=" + getId() +
+            "user_id=" + getId() +
             ", firstName='" + getFirstName() + "'" +
             ", secondName='" + getSecondName() + "'" +
             ", firstLastName='" + getFirstLastName() + "'" +

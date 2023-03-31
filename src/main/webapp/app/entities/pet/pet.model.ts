@@ -13,7 +13,7 @@ export interface IPet {
   tradePups?: boolean | null;
   pedigree?: boolean | null;
   desireAmmount?: number | null;
-  owner?: Pick<IOwner, 'id'> | null;
+  owner?: Pick<IOwner, 'user_id'> | null;
   breed?: Pick<IBreed, 'id'> | null;
 }
 

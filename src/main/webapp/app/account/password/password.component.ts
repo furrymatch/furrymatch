@@ -5,12 +5,16 @@ import { Observable } from 'rxjs';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { PasswordService } from './password.service';
+// @ts-ignore
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 @Component({
   selector: 'jhi-password',
   templateUrl: './password.component.html',
+  styleUrls: ['../register/register.component.css'],
 })
 export class PasswordComponent implements OnInit {
+  errorMessage: any;
   doNotMatch = false;
   error = false;
   success = false;
@@ -43,8 +47,33 @@ export class PasswordComponent implements OnInit {
       this.doNotMatch = true;
     } else {
       this.passwordService.save(newPassword, currentPassword).subscribe({
-        next: () => (this.success = true),
-        error: () => (this.error = true),
+        next: () => {
+          Swal.fire({
+            title: 'Cambio exitoso',
+            text: 'Se cambió exitosamente la contraseña.',
+            type: 'success',
+            icon: 'success',
+            confirmButtonColor: '#3381f6',
+            confirmButtonText: 'Cerrar',
+          }),
+            (this.success = true);
+        },
+        error: () => {
+          if (this.doNotMatch) {
+            this.errorMessage = 'The password and its confirmation do not match!';
+          } else if (this.error) {
+            this.errorMessage = 'The password could not be changed.';
+          }
+          console.log(this.errorMessage);
+          Swal.fire({
+            title: 'Error',
+            text: this.errorMessage,
+            type: 'error',
+            icon: 'error',
+            confirmButtonColor: '#3381f6',
+            confirmButtonText: 'Cerrar',
+          });
+        },
       });
     }
   }

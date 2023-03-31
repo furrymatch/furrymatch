@@ -72,7 +72,7 @@
   transition: background-color ease-in 300ms;
 }
 
-.btn-blue:hover {
+.btn-blue:hover:enabled {
   background-color: var(--clr-orange);
 }
 
@@ -126,4 +126,15 @@ input.ng-touched.ng-invalid {
   padding-top: var(--margin-md);
   padding-bottom: var(--margin-md);
   border-radius: 15px !important;
+}
+
+.delete-text {
+  color: #3381f6;
+  margin-top: 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.widthWarning {
+  width: 295px !important;
 }

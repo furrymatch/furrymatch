@@ -1,4 +1,4 @@
-<form *ngIf="owner" name="deleteForm" (ngSubmit)="confirmDelete(owner.id!)">
+<form *ngIf="owner" name="deleteForm" (ngSubmit)="confirmDelete(owner.user_id!)">
   <div class="modal-header">
     <h4 class="modal-title" data-cy="ownerDeleteDialogHeading" jhiTranslate="entity.delete.title">Confirm delete operation</h4>
 
@@ -7,8 +7,8 @@
 
   <div class="modal-body">
     <jhi-alert-error></jhi-alert-error>
-    <p id="jhi-delete-owner-heading" jhiTranslate="furryMatchApp.owner.delete.question" [translateValues]="{ id: owner.id }">
-      Are you sure you want to delete Owner {{ owner.id }}?
+    <p id="jhi-delete-owner-heading" jhiTranslate="furryMatchApp.owner.delete.question" [translateValues]="{ id: owner.user_id }">
+      Are you sure you want to delete Owner {{ owner.user_id }}?
     </p>
   </div>
 
