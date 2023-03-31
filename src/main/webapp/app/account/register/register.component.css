@@ -137,4 +137,5 @@ input.ng-touched.ng-invalid {
 
 .widthWarning {
   width: 295px !important;
+  margin-top: -12px;
 }
