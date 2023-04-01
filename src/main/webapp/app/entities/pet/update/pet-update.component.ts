@@ -2,24 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
-import {finalize, map, takeUntil, tap} from 'rxjs/operators';
+import { finalize, map, takeUntil, tap } from 'rxjs/operators';
 
 import { PetFormService, PetFormGroup } from './pet-form.service';
 import { IPet } from '../pet.model';
-import { PetService} from '../service/pet.service';
-import { PhotoService} from "../../photo/service/photo.service";
+import { PetService } from '../service/pet.service';
+import { PhotoService } from '../../photo/service/photo.service';
 import { IOwner } from 'app/entities/owner/owner.model';
 import { OwnerService } from 'app/entities/owner/service/owner.service';
 import { IBreed } from 'app/entities/breed/breed.model';
 import { BreedService } from 'app/entities/breed/service/breed.service';
 import { PetType } from 'app/entities/enumerations/pet-type.model';
 import { Sex } from 'app/entities/enumerations/sex.model';
-
-import {IPhoto, NewPhoto} from "../../photo/photo.model";
-import {FormArray } from "@angular/forms";
-import dayjs from 'dayjs';
-import { FormControl } from '@angular/forms';
+import { IPhoto, NewPhoto } from '../../photo/photo.model';
 import Swal from 'sweetalert2';
+import { FormArray } from '@angular/forms';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'jhi-pet-update',
@@ -43,7 +41,6 @@ export class PetUpdateComponent implements OnInit {
   petFiles: File[] = [];
   petPhotos: string[][] = Array(5).fill([]);
 
-
   filteredBreedsSharedCollection: IBreed[] = [];
   destroy$: Subject<void> = new Subject();
 
@@ -66,17 +63,20 @@ export class PetUpdateComponent implements OnInit {
       if (pet) {
         this.updateForm(pet);
       }
+
       this.loadRelationshipsOptions();
     });
 
-    this.editForm.get('petType')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((petType) => {
-      if (petType !== undefined) {
-        this.updateFilteredBreeds(petType);
-      }
-    });
+    this.editForm
+      .get('petType')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe(petType => {
+        if (petType !== undefined) {
+          this.updateFilteredBreeds(petType);
+        }
+      });
 
     this.loadPets();
-
   }
 
   loadPets(): void {
@@ -108,7 +108,7 @@ export class PetUpdateComponent implements OnInit {
     if (!this.petFiles.length) {
       Swal.fire({
         title: 'Error',
-        text: 'Debés primero arrastrar o seleccionar una imagen.'
+        text: 'Debés primero arrastrar o seleccionar una imagen.',
         icon: 'error',
         confirmButtonColor: '#3381f6',
         confirmButtonText: 'Cerrar',
@@ -116,7 +116,7 @@ export class PetUpdateComponent implements OnInit {
       return;
     }
 
-    this.petFiles.forEach((file_data) => {
+    this.petFiles.forEach(file_data => {
       const data = new FormData();
       data.append('file', file_data);
       data.append('upload_preset', 'furry_match');
@@ -130,20 +130,18 @@ export class PetUpdateComponent implements OnInit {
           Swal.fire({
             title: 'Fotografía agregada',
             text: 'Continuá registrando tus datos.',
-            type: 'success',
             icon: 'success',
             confirmButtonColor: '#3381f6',
             confirmButtonText: 'Cerrar',
           });
         }
       });
-      console.log("Fotos en onUpload "+this.petFiles);
+      console.log('Fotos en onUpload ' + this.petFiles);
     });
 
     // Vacía el array de archivos después de subir las fotos
     this.petFiles = [];
   }
-
 
   previousState(): void {
     window.history.back();
@@ -152,7 +150,7 @@ export class PetUpdateComponent implements OnInit {
   updateFilteredBreeds(petType: PetType | null): void {
     if (petType) {
       console.log('El valor de petType no está vacío:', petType);
-      this.filteredBreedsSharedCollection = this.breedsSharedCollection.filter((breed) => breed.breedType === petType);
+      this.filteredBreedsSharedCollection = this.breedsSharedCollection.filter(breed => breed.breedType === petType);
     } else {
       console.log('El valor de petType está vacío');
       this.filteredBreedsSharedCollection = [];
@@ -239,8 +237,14 @@ export class PetUpdateComponent implements OnInit {
       .pipe(tap((breeds: IBreed[]) => console.log('API response:', breeds))) // Agrega esta línea
       .pipe(map((breeds: IBreed[]) => this.breedService.addBreedToCollectionIfMissing<IBreed>(breeds, this.pet?.breed)))
       .subscribe((breeds: IBreed[]) => (this.breedsSharedCollection = breeds));
-    console.log('Dog breeds:', this.breedsSharedCollection.filter((breed) => breed.breedType === 'Perro'));
-    console.log('Cat breeds:', this.breedsSharedCollection.filter((breed) => breed.breedType === 'Gato'));
+    console.log(
+      'Dog breeds:',
+      this.breedsSharedCollection.filter(breed => breed.breedType === 'Perro')
+    );
+    console.log(
+      'Cat breeds:',
+      this.breedsSharedCollection.filter(breed => breed.breedType === 'Gato')
+    );
     console.log('Breeds loaded:', this.breedsSharedCollection);
   }
 }
