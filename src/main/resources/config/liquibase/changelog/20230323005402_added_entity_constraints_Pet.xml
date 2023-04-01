@@ -11,7 +11,7 @@
         <addForeignKeyConstraint baseColumnNames="owner_id"
                                  baseTableName="pet"
                                  constraintName="fk_pet__owner_id"
-                                 referencedColumnNames="id"
+                                 referencedColumnNames="user_id"
                                  referencedTableName="owner"/>
 
         <addForeignKeyConstraint baseColumnNames="breed_id"

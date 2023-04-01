@@ -3,7 +3,7 @@ import dayjs from 'dayjs/esm';
 import { IOwner, NewOwner } from './owner.model';
 
 export const sampleWithRequiredData: IOwner = {
-  id: 70414,
+  user_id: 70414,
   firstName: 'Manley',
   firstLastName: 'syndicate',
   secondLastName: 'Markets compressing',
@@ -16,7 +16,7 @@ export const sampleWithRequiredData: IOwner = {
 };
 
 export const sampleWithPartialData: IOwner = {
-  id: 2445,
+  user_id: 2445,
   firstName: 'Ernest',
   firstLastName: 'Stravenue Granite world-class',
   secondLastName: 'Computers',
@@ -29,7 +29,7 @@ export const sampleWithPartialData: IOwner = {
 };
 
 export const sampleWithFullData: IOwner = {
-  id: 70225,
+  user_id: 70225,
   firstName: 'Tiana',
   secondName: 'deliverables Investor maroon',
   firstLastName: 'cohesive',
@@ -56,7 +56,7 @@ export const sampleWithNewData: NewOwner = {
   province: 'Loan bleeding-edge',
   canton: 'programming',
   district: 'International eyeballs transmit',
-  id: null,
+  user_id: null,
 };
 
 Object.freeze(sampleWithNewData);

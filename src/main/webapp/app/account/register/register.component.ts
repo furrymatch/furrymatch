@@ -2,12 +2,10 @@ import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import swal from 'sweetalert2';
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/config/error.constants';
 import { RegisterService } from './register.service';
-// @ts-ignore
-import Swal from 'sweetalert2/dist/sweetalert2.js';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'jhi-register',
@@ -45,15 +43,15 @@ export class RegisterComponent implements AfterViewInit {
     }),
     email: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email],
+      validators: [Validators.required, Validators.email, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$')],
     }),
     password: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.minLength(4), Validators.maxLength(50)],
+      validators: [Validators.required, Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')],
     }),
     confirmPassword: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.minLength(4), Validators.maxLength(50)],
+      validators: [Validators.required, Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')],
     }),
     firstName: new FormControl('', {
       nonNullable: true,
@@ -97,7 +95,6 @@ export class RegisterComponent implements AfterViewInit {
     this.registerService.getProvinces().subscribe((response: any) => {
       const provincesArray = Object.entries(response).map(([id, name]) => ({ id, name }));
       this.provinces = provincesArray;
-      console.log(provincesArray);
     });
   }
 
@@ -156,15 +153,15 @@ export class RegisterComponent implements AfterViewInit {
   }
 
   onUpload() {
-    if (!this.files[0])
+    if (!this.files[0]) {
       Swal.fire({
         title: 'Error',
         text: 'Debés primero arrastrar o seleccionar una imagen.',
-        type: 'error',
         icon: 'error',
         confirmButtonColor: '#3381f6',
         confirmButtonText: 'Cerrar',
       });
+    }
 
     const file_data = this.files[0];
     const data = new FormData();
@@ -179,7 +176,6 @@ export class RegisterComponent implements AfterViewInit {
         Swal.fire({
           title: 'Fotografía agregada',
           text: 'Continuá registrando tus datos.',
-          type: 'success',
           icon: 'success',
           confirmButtonColor: '#3381f6',
           confirmButtonText: 'Cerrar',
@@ -236,7 +232,6 @@ export class RegisterComponent implements AfterViewInit {
             Swal.fire({
               title: 'Registro exitoso',
               text: 'Ya sos parte de FurryMatch',
-              type: 'success',
               icon: 'success',
               confirmButtonColor: '#3381f6',
               confirmButtonText: 'Cerrar',
@@ -253,7 +248,6 @@ export class RegisterComponent implements AfterViewInit {
       Swal.fire({
         title: 'Error',
         text: 'El nombre de usuario ya existe. Por favor elegí otro.',
-        type: 'error',
         icon: 'error',
         confirmButtonColor: '#3381f6',
         confirmButtonText: 'Cerrar',
@@ -263,7 +257,6 @@ export class RegisterComponent implements AfterViewInit {
       Swal.fire({
         title: 'Error',
         text: 'Correo electrónico ya registrado. Por favor intentá con otro.',
-        type: 'error',
         icon: 'error',
         confirmButtonColor: '#3381f6',
         confirmButtonText: 'Cerrar',
@@ -273,7 +266,6 @@ export class RegisterComponent implements AfterViewInit {
       Swal.fire({
         title: 'Error',
         text: 'Registro fallido, intentalo más tarde.',
-        type: 'error',
         icon: 'error',
         confirmButtonColor: '#3381f6',
         confirmButtonText: 'Cerrar',

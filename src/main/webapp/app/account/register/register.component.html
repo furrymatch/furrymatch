@@ -54,16 +54,8 @@
                     Tu correo electrónico es requerido
                   </small>
 
-                  <small class="form-text text-danger alert-txt" *ngIf="registerForm.get('email')?.errors?.invalid">
+                  <small class="form-text text-danger alert-txt" *ngIf="registerForm.get('email')?.errors?.pattern">
                     Tu correo electrónico es inválido
-                  </small>
-
-                  <small class="form-text text-danger alert-txt" *ngIf="registerForm.get('email')?.errors?.minlength">
-                    Tu correo electrónico debe tener más de 5 caracteres
-                  </small>
-
-                  <small class="form-text text-danger alert-txt" *ngIf="registerForm.get('email')?.errors?.maxlength">
-                    Tu correo electrónico no puede tener más de 50 caracteres
                   </small>
                 </div>
               </div>
@@ -86,12 +78,8 @@
                     Tu contraseña es requerida.
                   </small>
 
-                  <small class="form-text text-danger alert-txt" *ngIf="registerForm.get('password')?.errors?.minlength">
-                    Tu contraseña debe tener más de 4 caracteres
-                  </small>
-
-                  <small class="form-text text-danger alert-txt" *ngIf="registerForm.get('password')?.errors?.maxlength">
-                    Tu contraseña no puede ser mayor a 50 caracteres
+                  <small class="form-text text-danger alert-txt" *ngIf="registerForm.get('password')?.errors?.pattern">
+                    Debe de ser de al menos 8 caracteres y tener 1 mayúscula, 1 minúscula, 1 número y 1 caracter especial
                   </small>
                 </div>
               </div>
@@ -116,12 +104,8 @@
                     Tu confirmación de contraseña es requerida
                   </small>
 
-                  <small class="form-text text-danger alert-txt" *ngIf="registerForm.get('confirmPassword')?.errors?.minlength">
-                    Tu confirmación de contraseña debe tener al menos 4 caracteres
-                  </small>
-
-                  <small class="form-text text-danger alert-txt" *ngIf="registerForm.get('confirmPassword')?.errors?.maxlength">
-                    Tu confirmación de contraseña debe ser mayor a 50 caracteres
+                  <small class="form-text text-danger alert-txt" *ngIf="registerForm.get('confirmPassword')?.errors?.pattern">
+                    Debe de ser de al menos 8 caracteres y tener 1 mayúscula, 1 minúscula, 1 número y 1 caracter especial
                   </small>
                 </div>
               </div>

@@ -6,7 +6,7 @@ import { IOwner, NewOwner } from '../owner.model';
 /**
  * A partial Type with required key is used as form input.
  */
-type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>> & { id: T['id'] };
+type PartialWithRequiredKeyOf<T extends { user_id: unknown }> = Partial<Omit<T, 'user_id'>> & { user_id: T['user_id'] };
 
 /**
  * Type for createFormGroup and resetForm argument.
@@ -14,10 +14,10 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type OwnerFormGroupInput = IOwner | PartialWithRequiredKeyOf<NewOwner>;
 
-type OwnerFormDefaults = Pick<NewOwner, 'id'>;
+type OwnerFormDefaults = Pick<NewOwner, 'user_id'>;
 
 type OwnerFormGroupContent = {
-  id: FormControl<IOwner['id'] | NewOwner['id']>;
+  user_id: FormControl<IOwner['user_id'] | NewOwner['user_id']>;
   firstName: FormControl<IOwner['firstName']>;
   secondName: FormControl<IOwner['secondName']>;
   firstLastName: FormControl<IOwner['firstLastName']>;
@@ -39,14 +39,14 @@ export type OwnerFormGroup = FormGroup<OwnerFormGroupContent>;
 
 @Injectable({ providedIn: 'root' })
 export class OwnerFormService {
-  createOwnerFormGroup(owner: OwnerFormGroupInput = { id: null }): OwnerFormGroup {
+  createOwnerFormGroup(owner: OwnerFormGroupInput = { user_id: null }): OwnerFormGroup {
     const ownerRawValue = {
       ...this.getFormDefaults(),
       ...owner,
     };
     return new FormGroup<OwnerFormGroupContent>({
-      id: new FormControl(
-        { value: ownerRawValue.id, disabled: true },
+      user_id: new FormControl(
+        { value: ownerRawValue.user_id, disabled: true },
         {
           nonNullable: true,
           validators: [Validators.required],
@@ -97,14 +97,14 @@ export class OwnerFormService {
     form.reset(
       {
         ...ownerRawValue,
-        id: { value: ownerRawValue.id, disabled: true },
+        id: { value: ownerRawValue.user_id, disabled: true },
       } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */
     );
   }
 
   private getFormDefaults(): OwnerFormDefaults {
     return {
-      id: null,
+      user_id: null,
     };
   }
 }

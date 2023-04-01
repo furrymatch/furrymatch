@@ -134,7 +134,7 @@
       <tbody>
         <tr *ngFor="let owner of owners; trackBy: trackId" data-cy="entityTable">
           <td>
-            <a [routerLink]="['/owner', owner.id, 'view']">{{ owner.id }}</a>
+            <a [routerLink]="['/owner', owner.user_id, 'view']">{{ owner.user_id }}</a>
           </td>
           <td>{{ owner.firstName }}</td>
           <td>{{ owner.secondName }}</td>
@@ -155,12 +155,22 @@
           </td>
           <td class="text-end">
             <div class="btn-group">
-              <button type="submit" [routerLink]="['/owner', owner.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+              <button
+                type="submit"
+                [routerLink]="['/owner', owner.user_id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
                 <fa-icon icon="eye"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
               </button>
 
-              <button type="submit" [routerLink]="['/owner', owner.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+              <button
+                type="submit"
+                [routerLink]="['/owner', owner.user_id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
               </button>

@@ -19,7 +19,7 @@ describe('Owner Form Service', () => {
 
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
-            id: expect.any(Object),
+            user_id: expect.any(Object),
             firstName: expect.any(Object),
             secondName: expect.any(Object),
             firstLastName: expect.any(Object),
@@ -44,7 +44,7 @@ describe('Owner Form Service', () => {
 
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
-            id: expect.any(Object),
+            user_id: expect.any(Object),
             firstName: expect.any(Object),
             secondName: expect.any(Object),
             firstLastName: expect.any(Object),
@@ -95,20 +95,20 @@ describe('Owner Form Service', () => {
     describe('resetForm', () => {
       it('passing IOwner should not enable id FormControl', () => {
         const formGroup = service.createOwnerFormGroup();
-        expect(formGroup.controls.id.disabled).toBe(true);
+        expect(formGroup.controls.user_id.disabled).toBe(true);
 
         service.resetForm(formGroup, sampleWithRequiredData);
 
-        expect(formGroup.controls.id.disabled).toBe(true);
+        expect(formGroup.controls.user_id.disabled).toBe(true);
       });
 
       it('passing NewOwner should disable id FormControl', () => {
         const formGroup = service.createOwnerFormGroup(sampleWithRequiredData);
-        expect(formGroup.controls.id.disabled).toBe(true);
+        expect(formGroup.controls.user_id.disabled).toBe(true);
 
-        service.resetForm(formGroup, { id: null });
+        service.resetForm(formGroup, { user_id: null });
 
-        expect(formGroup.controls.id.disabled).toBe(true);
+        expect(formGroup.controls.user_id.disabled).toBe(true);
       });
     });
   });

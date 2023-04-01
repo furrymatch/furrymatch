@@ -156,7 +156,6 @@ public class UserService {
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
-        this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
 
         //Create and save the Owner entity
@@ -174,6 +173,7 @@ public class UserService {
         owner.setCanton(canton);
         owner.setDistrict(district);
         ownerRepository.save(owner);
+        this.clearUserCaches(newUser);
         return newUser;
     }
 
@@ -279,7 +279,24 @@ public class UserService {
      * @param langKey   language key.
      * @param imageUrl  image URL of user.
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
+    public void updateUser(
+        String firstName,
+        String lastName,
+        String email,
+        String langKey,
+        String imageUrl,
+        String password,
+        String secondName,
+        String firstLastName,
+        String secondLastName,
+        Long phoneNumber,
+        String photo,
+        String identityNumber,
+        String address,
+        String province,
+        String canton,
+        String district
+    ) {
         SecurityUtils
             .getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)

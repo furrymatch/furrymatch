@@ -81,7 +81,9 @@ public class OwnerResource {
     @PutMapping("/owners/{id}")
     public ResponseEntity<Owner> updateOwner(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody Owner owner)
         throws URISyntaxException {
-        log.debug("REST request to update Owner : {}, {}", id, owner);
+        owner.setId(id);
+        log.debug("REST request update Owner : {}, {}", id, owner);
+        System.out.println(owner);
         if (owner.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }

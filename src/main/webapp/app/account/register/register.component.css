@@ -1,7 +1,8 @@
 .title {
   font: var(--typo-header);
   color: var(--clr-orange);
-  margin-top: var(--margin-big);
+  margin-top: var(--margin-md);
+  padding: 0 35px;
 }
 
 .cnt-princ {
@@ -72,7 +73,7 @@
   transition: background-color ease-in 300ms;
 }
 
-.btn-blue:hover {
+.btn-blue:hover:enabled {
   background-color: var(--clr-orange);
 }
 
@@ -126,4 +127,38 @@ input.ng-touched.ng-invalid {
   padding-top: var(--margin-md);
   padding-bottom: var(--margin-md);
   border-radius: 15px !important;
+}
+
+.delete-text {
+  color: #3381f6;
+  margin-top: 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.widthWarning {
+  width: 295px !important;
+  margin-top: -12px;
+}
+
+.objective-title {
+  margin: 15px 0;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 150%;
+  text-align: center;
+  color: #3381f6;
+}
+
+.objective-text {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  text-align: center;
+  color: #000000;
+}
+
+.img-objective {
+  width: 350px;
+  height: 350px;
 }

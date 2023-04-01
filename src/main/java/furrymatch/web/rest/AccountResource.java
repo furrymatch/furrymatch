@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -73,6 +74,7 @@ public class AccountResource {
         if (isPasswordLengthInvalid(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
+        System.out.println(managedUserVM);
         User user = userService.registerUser(
             managedUserVM,
             managedUserVM.getPassword(),
@@ -134,16 +136,16 @@ public class AccountResource {
     /**
      * {@code POST  /account} : update the current user information.
      *
-     * @param userDTO the current user information.
+     * @param managedUserVM the current user information.
      * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user login wasn't found.
      */
     @PostMapping("/account")
-    public void saveAccount(@Valid @RequestBody AdminUserDTO userDTO) {
+    public void saveAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
         String userLogin = SecurityUtils
             .getCurrentUserLogin()
             .orElseThrow(() -> new AccountResourceException("Current user login not found"));
-        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
         }
@@ -152,11 +154,22 @@ public class AccountResource {
             throw new AccountResourceException("User could not be found");
         }
         userService.updateUser(
-            userDTO.getFirstName(),
-            userDTO.getLastName(),
-            userDTO.getEmail(),
-            userDTO.getLangKey(),
-            userDTO.getImageUrl()
+            managedUserVM.getFirstName(),
+            managedUserVM.getLastName(),
+            managedUserVM.getEmail(),
+            managedUserVM.getLangKey(),
+            managedUserVM.getImageUrl(),
+            managedUserVM.getPassword(),
+            managedUserVM.getSecondName(),
+            managedUserVM.getFirstLastName(),
+            managedUserVM.getSecondLastName(),
+            managedUserVM.getPhoneNumber(),
+            managedUserVM.getPhoto(),
+            managedUserVM.getIdentityNumber(),
+            managedUserVM.getAddress(),
+            managedUserVM.getProvince(),
+            managedUserVM.getCanton(),
+            managedUserVM.getDistrict()
         );
     }
 
@@ -229,14 +242,33 @@ public class AccountResource {
      * @param mail the mail of the user.
      */
     @PostMapping(path = "/account/reset-password/init")
-    public void requestPasswordReset(@RequestBody String mail) {
+    public ResponseEntity<PasswordResetResponse> requestPasswordReset(@RequestBody String mail) {
         Optional<User> user = userService.requestPasswordReset(mail);
         if (user.isPresent()) {
             mailService.sendPasswordResetMail(user.get());
+            PasswordResetResponse response = new PasswordResetResponse("Success");
+            return ResponseEntity.ok(response);
         } else {
-            // Pretend the request has been successful to prevent checking which emails really exist
-            // but log that an invalid attempt has been made
             log.warn("Password reset requested for non existing mail");
+            PasswordResetResponse response = new PasswordResetResponse("Error");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+
+    class PasswordResetResponse {
+
+        private String status;
+
+        public PasswordResetResponse(String status) {
+            this.status = status;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
         }
     }
 

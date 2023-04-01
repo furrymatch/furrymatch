@@ -86,7 +86,7 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="owner.id">
+          <th scope="col" jhiSortBy="owner.user_id">
             <div class="d-flex">
               <span jhiTranslate="furryMatchApp.pet.owner">Owner</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
@@ -116,7 +116,7 @@
           <td>{{ pet.desireAmmount }}</td>
           <td>
             <div *ngIf="pet.owner">
-              <a [routerLink]="['/owner', pet.owner.id, 'view']">{{ pet.owner.id }}</a>
+              <a [routerLink]="['/owner', pet.owner.user_id, 'view']">{{ pet.owner.user_id }}</a>
             </div>
           </td>
           <td>

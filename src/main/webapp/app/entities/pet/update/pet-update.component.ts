@@ -14,11 +14,12 @@ import { IBreed } from 'app/entities/breed/breed.model';
 import { BreedService } from 'app/entities/breed/service/breed.service';
 import { PetType } from 'app/entities/enumerations/pet-type.model';
 import { Sex } from 'app/entities/enumerations/sex.model';
+
 import {IPhoto, NewPhoto} from "../../photo/photo.model";
-// @ts-ignore
-import Swal from 'sweetalert2/dist/sweetalert2.js';
 import {FormArray } from "@angular/forms";
 import dayjs from 'dayjs';
+import { FormControl } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'jhi-pet-update',
@@ -65,7 +66,6 @@ export class PetUpdateComponent implements OnInit {
       if (pet) {
         this.updateForm(pet);
       }
-
       this.loadRelationshipsOptions();
     });
 
@@ -91,7 +91,6 @@ export class PetUpdateComponent implements OnInit {
       Swal.fire({
         title: 'Error',
         text: 'Solo se permiten hasta 5 fotos por mascota',
-        type: 'error',
         icon: 'error',
         confirmButtonColor: '#3381f6',
         confirmButtonText: 'Cerrar',
@@ -109,8 +108,7 @@ export class PetUpdateComponent implements OnInit {
     if (!this.petFiles.length) {
       Swal.fire({
         title: 'Error',
-        text: 'Debés primero arrastrar o seleccionar una imagen.',
-        type: 'error',
+        text: 'Debés primero arrastrar o seleccionar una imagen.'
         icon: 'error',
         confirmButtonColor: '#3381f6',
         confirmButtonText: 'Cerrar',
