@@ -7,7 +7,7 @@ import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 @Component({
   selector: 'jhi-password-reset-init',
   templateUrl: './password-reset-init.component.html',
-  styleUrls: ['./password-reset-init.component.scss'],
+  styleUrls: ['./password-reset-init.component.scss', '../../register/register.component.css'],
 })
 export class PasswordResetInitComponent implements AfterViewInit {
   @ViewChild('email', { static: false })

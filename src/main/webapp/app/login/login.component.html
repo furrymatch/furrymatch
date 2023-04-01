@@ -11,28 +11,26 @@
       <div>
         <div class="card-body">
           <form class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
-            <div class="mb-3">
-              <label class="username-label" for="username"></label>
+            <div class="cnt-inputs">
+              <label class="lbl-txt">Correo electrónico</label>
               <input
                 type="text"
                 class="form-control inp-txt first-inp"
                 name="username"
                 id="username"
-                placeholder="Correo electrónico"
                 formControlName="username"
                 #username
                 data-cy="username"
               />
             </div>
 
-            <div class="mb-3">
-              <label for="password"></label>
+            <div class="cnt-inputs">
+              <label class="lbl-txt">Contraseña</label>
               <input
                 type="password"
                 class="form-control inp-txt"
                 name="password"
                 id="password"
-                placeholder="Password"
                 formControlName="password"
                 data-cy="password"
               />
@@ -50,7 +48,7 @@
     </div>
     <div class="cnt-ingresa">
       <p class="text-cuenta">¿Olvidaste tu contraseña?</p>
-      <a routerLink="/account/register" class="text-link">Hacé click aquí</a>
+      <a routerLink="/account/reset/request" class="text-link">Hacé click aquí</a>
     </div>
   </div>
 </div>

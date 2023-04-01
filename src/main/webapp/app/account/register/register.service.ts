@@ -10,7 +10,7 @@ export class RegisterService {
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
   uploadImage(vals: any): Observable<any> {
-    let data = vals;
+    const data = vals;
     return this.http.post('https://api.cloudinary.com/v1_1/alocortesu/image/upload', data);
   }
 

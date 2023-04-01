@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { PasswordService } from './password.service';
-// @ts-ignore
-import Swal from 'sweetalert2/dist/sweetalert2.js';
+// import Swal from 'sweetalert2/dist/sweetalert2.js';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'jhi-password',
@@ -23,11 +23,11 @@ export class PasswordComponent implements OnInit {
     currentPassword: new FormControl('', { nonNullable: true, validators: Validators.required }),
     newPassword: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.minLength(4), Validators.maxLength(50)],
+      validators: [Validators.required, Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')],
     }),
     confirmPassword: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.minLength(4), Validators.maxLength(50)],
+      validators: [Validators.required, Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')],
     }),
   });
 
@@ -51,7 +51,7 @@ export class PasswordComponent implements OnInit {
           Swal.fire({
             title: 'Cambio exitoso',
             text: 'Se cambió exitosamente la contraseña.',
-            type: 'success',
+            // type: 'success',
             icon: 'success',
             confirmButtonColor: '#3381f6',
             confirmButtonText: 'Cerrar',
@@ -68,7 +68,7 @@ export class PasswordComponent implements OnInit {
           Swal.fire({
             title: 'Error',
             text: this.errorMessage,
-            type: 'error',
+            // type: 'error',
             icon: 'error',
             confirmButtonColor: '#3381f6',
             confirmButtonText: 'Cerrar',
