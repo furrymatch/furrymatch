@@ -1,7 +1,12 @@
 package furrymatch.service;
 
 import furrymatch.domain.Pet;
+import furrymatch.domain.Photo;
 import furrymatch.repository.PetRepository;
+import furrymatch.repository.PhotoRepository;
+
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +26,14 @@ public class PetService {
 
     private final PetRepository petRepository;
 
-    public PetService(PetRepository petRepository) {
+    private final PhotoRepository photoRepository;
+
+    public PetService(
+        PetRepository petRepository,
+        PhotoRepository photoRepository
+    ) {
         this.petRepository = petRepository;
+        this.photoRepository = photoRepository;
     }
 
     /**
@@ -31,9 +42,27 @@ public class PetService {
      * @param pet the entity to save.
      * @return the persisted entity.
      */
-    public Pet save(Pet pet) {
+    public Pet save(
+        Pet pet,
+        List<Photo> photos
+    ) {
         log.debug("Request to save Pet : {}", pet);
-        return petRepository.save(pet);
+
+        Pet savedPet = petRepository.save(pet);
+
+        //Create and save the Photo entity
+        // Iterate through the photos and save them
+        if (photos != null) {
+            LocalDate currentDate = LocalDate.now();
+            for (Photo photo : photos) {
+                photo.setPet(savedPet);
+                if (photo.getUploadDate() == null) {
+                    photo.setUploadDate(currentDate);
+                }
+                photoRepository.save(photo);
+            }
+        }
+        return savedPet;
     }
 
     /**
@@ -42,9 +71,23 @@ public class PetService {
      * @param pet the entity to save.
      * @return the persisted entity.
      */
-    public Pet update(Pet pet) {
+    public Pet update(Pet pet, List<Photo> photos) {
         log.debug("Request to update Pet : {}", pet);
-        return petRepository.save(pet);
+        Pet updatedPed = petRepository.save(pet);
+
+        //Create and update the Photo entity
+        // Iterate through the photos and save them
+        if (photos != null) {
+            LocalDate currentDate = LocalDate.now();
+            for (Photo photo : photos) {
+                photo.setPet(updatedPed);
+                if (photo.getUploadDate() == null){
+                    photo.setUploadDate(currentDate);
+                }
+                photoRepository.save(photo);
+            }
+        }
+        return updatedPed;
     }
 
     /**

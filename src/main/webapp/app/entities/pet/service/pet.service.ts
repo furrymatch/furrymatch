@@ -6,6 +6,7 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IPet, NewPet } from '../pet.model';
+import {IPhoto} from "../../photo/photo.model";
 
 export type PartialUpdatePet = Partial<IPet> & Pick<IPet, 'id'>;
 
@@ -23,12 +24,20 @@ export class PetService {
     return this.http.post('https://api.cloudinary.com/v1_1/alocortesu/image/upload', data);
   }
 
-  create(pet: NewPet): Observable<EntityResponseType> {
-    return this.http.post<IPet>(this.resourceUrl, pet, { observe: 'response' });
+  create(pet: NewPet, photos: IPhoto[]): Observable<EntityResponseType> {
+    const formData = new FormData();
+    formData.append('pet', JSON.stringify(pet));
+    formData.append('photos', JSON.stringify(photos));
+
+    return this.http.post<IPet>(this.resourceUrl, formData, { observe: 'response' });
   }
 
-  update(pet: IPet): Observable<EntityResponseType> {
-    return this.http.put<IPet>(`${this.resourceUrl}/${this.getPetIdentifier(pet)}`, pet, { observe: 'response' });
+  update(pet: IPet, photos: IPhoto[]): Observable<EntityResponseType> {
+    const formData = new FormData();
+    formData.append('pet', JSON.stringify(pet));
+    formData.append('photos', JSON.stringify(photos));
+
+    return this.http.put<IPet>(`${this.resourceUrl}/${this.getPetIdentifier(pet)}`, formData, { observe: 'response' });
   }
 
   partialUpdate(pet: PartialUpdatePet): Observable<EntityResponseType> {

@@ -55,6 +55,10 @@
   width: 590px !important;
 }
 
+.inp-ammount {
+  border-color: white;
+}
+
 .btn-blue {
   margin-top: var(--margin-md);
   padding: 8px 25px;
@@ -72,15 +76,6 @@
   margin-top: var(--margin-md-small);
   display: flex;
   justify-content: center;
-}
-
-.profile-pic-div {
-  display: flex;
-  flex-direction: column;
-  height: 100px;
-  width: 100px;
-  border-radius: 25%;
-  cursor: pointer;
 }
 
 #uploadBtn {
@@ -125,4 +120,21 @@ mark.txt-disc-orange {
 
 .cnt-orange-row1 {
   padding: 0 100px 0 100px;
+}
+
+.profile-pic {
+  margin-top: var(--margin-md-small);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.profile-pic-div {
+  display: flex;
+  flex-direction: column;
+  height: 150px;
+  width: 750px;
+  border-radius: 25%;
+  cursor: pointer;
 }

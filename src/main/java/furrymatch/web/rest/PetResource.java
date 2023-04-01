@@ -1,6 +1,7 @@
 package furrymatch.web.rest;
 
 import furrymatch.domain.Pet;
+import furrymatch.domain.Photo;
 import furrymatch.repository.PetRepository;
 import furrymatch.service.PetService;
 import furrymatch.web.rest.errors.BadRequestAlertException;
@@ -56,12 +57,12 @@ public class PetResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/pets")
-    public ResponseEntity<Pet> createPet(@Valid @RequestBody Pet pet) throws URISyntaxException {
+    public ResponseEntity<Pet> createPet(@Valid @RequestBody Pet pet, @RequestBody List<Photo> photos) throws URISyntaxException {
         log.debug("REST request to save Pet : {}", pet);
         if (pet.getId() != null) {
             throw new BadRequestAlertException("A new pet cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Pet result = petService.save(pet);
+        Pet result = petService.save(pet, photos);
         return ResponseEntity
             .created(new URI("/api/pets/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -79,7 +80,7 @@ public class PetResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/pets/{id}")
-    public ResponseEntity<Pet> updatePet(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody Pet pet)
+    public ResponseEntity<Pet> updatePet(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody Pet pet, @RequestBody List<Photo> photos)
         throws URISyntaxException {
         log.debug("REST request to update Pet : {}, {}", id, pet);
         if (pet.getId() == null) {
@@ -93,7 +94,7 @@ public class PetResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Pet result = petService.update(pet);
+        Pet result = petService.update(pet, photos);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, pet.getId().toString()))

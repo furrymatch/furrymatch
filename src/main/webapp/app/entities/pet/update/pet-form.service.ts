@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { IPet, NewPet } from '../pet.model';
+import {IPhoto} from "../../photo/photo.model";
 
 /**
  * A partial Type with required key is used as form input.
@@ -28,6 +29,8 @@ type PetFormGroupContent = {
   desireAmmount: FormControl<IPet['desireAmmount']>;
   owner: FormControl<IPet['owner']>;
   breed: FormControl<IPet['breed']>;
+  uploadDate: FormControl<IPhoto['uploadDate']>;
+  photoUrl: FormControl<IPhoto['photoUrl']>;
 };
 
 export type PetFormGroup = FormGroup<PetFormGroupContent>;
@@ -65,6 +68,14 @@ export class PetFormService {
       desireAmmount: new FormControl(petRawValue.desireAmmount),
       owner: new FormControl(petRawValue.owner),
       breed: new FormControl(petRawValue.breed),
+      uploadDate: new FormControl(null, {
+        nonNullable: true,
+      }),
+      photoUrl: new FormControl('', {
+        validators: [Validators.required],
+      }),
+
+
     });
   }
 
