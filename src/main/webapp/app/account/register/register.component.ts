@@ -96,7 +96,6 @@ export class RegisterComponent implements AfterViewInit {
     this.registerService.getProvinces().subscribe((response: any) => {
       const provincesArray = Object.entries(response).map(([id, name]) => ({ id, name }));
       this.provinces = provincesArray;
-      console.log(provincesArray);
     });
   }
 

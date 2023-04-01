@@ -2,6 +2,7 @@
   font: var(--typo-header);
   color: var(--clr-orange);
   margin-top: var(--margin-big);
+  padding: 0 30px;
 }
 
 .cnt-princ {

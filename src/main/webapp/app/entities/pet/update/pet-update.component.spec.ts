@@ -55,10 +55,10 @@ describe('Pet Management Update Component', () => {
   describe('ngOnInit', () => {
     it('Should call Owner query and add missing value', () => {
       const pet: IPet = { id: 456 };
-      const owner: IOwner = { id: 79982 };
+      const owner: IOwner = { user_id: 79982 };
       pet.owner = owner;
 
-      const ownerCollection: IOwner[] = [{ id: 14362 }];
+      const ownerCollection: IOwner[] = [{ user_id: 14362 }];
       jest.spyOn(ownerService, 'query').mockReturnValue(of(new HttpResponse({ body: ownerCollection })));
       const additionalOwners = [owner];
       const expectedCollection: IOwner[] = [...additionalOwners, ...ownerCollection];
@@ -99,7 +99,7 @@ describe('Pet Management Update Component', () => {
 
     it('Should update editForm', () => {
       const pet: IPet = { id: 456 };
-      const owner: IOwner = { id: 68173 };
+      const owner: IOwner = { user_id: 68173 };
       pet.owner = owner;
       const breed: IBreed = { id: 49044 };
       pet.breed = breed;
@@ -184,8 +184,8 @@ describe('Pet Management Update Component', () => {
   describe('Compare relationships', () => {
     describe('compareOwner', () => {
       it('Should forward to ownerService', () => {
-        const entity = { id: 123 };
-        const entity2 = { id: 456 };
+        const entity = { user_id: 123 };
+        const entity2 = { user_id: 456 };
         jest.spyOn(ownerService, 'compareOwner');
         comp.compareOwner(entity, entity2);
         expect(ownerService.compareOwner).toHaveBeenCalledWith(entity, entity2);

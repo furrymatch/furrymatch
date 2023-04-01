@@ -53,7 +53,6 @@ export class PetUpdateComponent implements OnInit {
       if (pet) {
         this.updateForm(pet);
       }
-
       this.loadRelationshipsOptions();
     });
   }
