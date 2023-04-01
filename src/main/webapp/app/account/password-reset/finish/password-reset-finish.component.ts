@@ -7,7 +7,7 @@ import { PasswordResetFinishService } from './password-reset-finish.service';
 @Component({
   selector: 'jhi-password-reset-finish',
   templateUrl: './password-reset-finish.component.html',
-  styleUrls: ['../init/password-reset-init.component.scss'],
+  styleUrls: ['../init/password-reset-init.component.scss', '../../register/register.component.css'],
 })
 export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
   @ViewChild('newPassword', { static: false })
@@ -22,11 +22,11 @@ export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
   passwordForm = new FormGroup({
     newPassword: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.minLength(4), Validators.maxLength(50)],
+      validators: [Validators.required, Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')],
     }),
     confirmPassword: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.minLength(4), Validators.maxLength(50)],
+      validators: [Validators.required, Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')],
     }),
   });
 

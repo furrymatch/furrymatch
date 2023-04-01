@@ -14,8 +14,7 @@ import { BreedService } from 'app/entities/breed/service/breed.service';
 import { PetType } from 'app/entities/enumerations/pet-type.model';
 import { Sex } from 'app/entities/enumerations/sex.model';
 import { FormControl } from '@angular/forms';
-// @ts-ignore
-import Swal from 'sweetalert2/dist/sweetalert2.js';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'jhi-pet-update',

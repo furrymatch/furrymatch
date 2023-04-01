@@ -3,8 +3,9 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { RegisterService } from '../register/register.service';
 import { OwnerService } from '../../entities/owner/service/owner.service';
-// @ts-ignore
-import Swal from 'sweetalert2/dist/sweetalert2.js';
+
+//import Swal from 'sweetalert2/dist/sweetalert2.js';
+import Swal from 'sweetalert2';
 
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
@@ -184,7 +185,7 @@ export class SettingsComponent implements OnInit {
       Swal.fire({
         title: 'Error',
         text: 'Debés primero arrastrar o seleccionar una imagen.',
-        type: 'error',
+        // type: 'error',
         icon: 'error',
         confirmButtonColor: '#3381f6',
         confirmButtonText: 'Cerrar',
@@ -203,7 +204,7 @@ export class SettingsComponent implements OnInit {
         Swal.fire({
           title: 'Fotografía agregada',
           text: 'Continuá registrando tus datos.',
-          type: 'success',
+          // type: 'success',
           icon: 'success',
           confirmButtonColor: '#3381f6',
           confirmButtonText: 'Cerrar',
@@ -221,7 +222,7 @@ export class SettingsComponent implements OnInit {
         Swal.fire({
           title: 'Cambio exitoso',
           text: 'Se cambiaron exitosamente tus datos.',
-          type: 'success',
+          // type: 'success',
           icon: 'success',
           confirmButtonColor: '#3381f6',
           confirmButtonText: 'Cerrar',
@@ -232,7 +233,7 @@ export class SettingsComponent implements OnInit {
         Swal.fire({
           title: 'Error',
           text: 'Hubo un error cambiando tus datos; intenta nuevamente..',
-          type: 'error',
+          // type: 'error',
           icon: 'error',
           confirmButtonColor: '#3381f6',
           confirmButtonText: 'Cerrar',

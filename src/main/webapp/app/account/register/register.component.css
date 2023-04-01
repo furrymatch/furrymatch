@@ -1,8 +1,8 @@
 .title {
   font: var(--typo-header);
   color: var(--clr-orange);
-  margin-top: var(--margin-big);
-  padding: 0 30px;
+  margin-top: var(--margin-md);
+  padding: 0 35px;
 }
 
 .cnt-princ {
@@ -139,4 +139,26 @@ input.ng-touched.ng-invalid {
 .widthWarning {
   width: 295px !important;
   margin-top: -12px;
+}
+
+.objective-title {
+  margin: 15px 0;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 150%;
+  text-align: center;
+  color: #3381f6;
+}
+
+.objective-text {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  text-align: center;
+  color: #000000;
+}
+
+.img-objective {
+  width: 350px;
+  height: 350px;
 }

@@ -15,6 +15,7 @@ import { PetType } from '../../enumerations/pet-type.model';
 import { IBreed } from '../../breed/breed.model';
 import { IOwner } from '../../owner/owner.model';
 import { BreedService } from '../../breed/service/breed.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'jhi-search-criteria-update',
@@ -35,6 +36,10 @@ export class SearchCriteriaUpdateComponent implements OnInit {
   cantones: any;
   districts: any;
 
+  step: number;
+  title: string;
+  objective: any;
+
   petsSharedCollection: IPet[] = [];
 
   editForm: SearchCriteriaFormGroup = this.searchCriteriaFormService.createSearchCriteriaFormGroup();
@@ -48,7 +53,10 @@ export class SearchCriteriaUpdateComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     protected registerService: RegisterService,
     protected breedService: BreedService
-  ) {}
+  ) {
+    this.step = 1;
+    this.title = 'Mi interés es:';
+  }
 
   comparePet = (o1: IPet | null, o2: IPet | null): boolean => this.petService.comparePet(o1, o2);
   compareBreed = (o1: IBreed | null, o2: IBreed | null): boolean => this.breedService.compareBreed(o1, o2);
@@ -86,8 +94,7 @@ export class SearchCriteriaUpdateComponent implements OnInit {
     if (searchCriteria.id !== null) {
       this.subscribeToSaveResponse(this.searchCriteriaService.update(searchCriteria));
     } else {
-      console.log('entro');
-      searchCriteria.objective = '1';
+      searchCriteria.objective = this.objective;
       this.subscribeToSaveResponse(this.searchCriteriaService.create(searchCriteria));
     }
   }
@@ -101,12 +108,23 @@ export class SearchCriteriaUpdateComponent implements OnInit {
 
   protected onSaveSuccess(): void {
     // this.previousState();
-    console.log('exito');
+    Swal.fire({
+      title: 'Acción exitosa',
+      text: 'Se guardaron correctamente los filtros.',
+      icon: 'success',
+      confirmButtonColor: '#3381f6',
+      confirmButtonText: 'Cerrar',
+    });
   }
 
   protected onSaveError(): void {
-    // Api for inheritance.
-    console.log('mal');
+    Swal.fire({
+      title: 'Error',
+      text: 'Hubo un problema guardando los filtros; intenta nuevamente.',
+      icon: 'error',
+      confirmButtonColor: '#3381f6',
+      confirmButtonText: 'Cerrar',
+    });
   }
 
   protected onSaveFinalize(): void {
@@ -190,5 +208,17 @@ export class SearchCriteriaUpdateComponent implements OnInit {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  selectObjective(obj: number): void {
+    if (obj === 1) {
+      this.objective = 1;
+      this.title = 'Quiero cruzar a mi mascota y busco una con estas características y condiciones:';
+      this.step = 2;
+    } else {
+      this.objective = 2;
+      this.title = 'Busco amistades para mi mascota con estas características:';
+      this.step = 2;
+    }
   }
 }

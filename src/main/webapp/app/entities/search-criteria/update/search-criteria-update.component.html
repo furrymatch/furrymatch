@@ -4,11 +4,39 @@
       <div>
         <img src="../content/images/blue_logo.png" class="img-logo-blue" />
       </div>
-      <h1 class="title" style="margin-top: 70px">Quiero cruzar a mi mascota y busco una con estas características y condiciones:</h1>
+      <h1 class="title">{{ title }}</h1>
     </div>
     <div class="login-wrapper">
-      <div class="wrapper-sec">
-        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <div class="wrapper-sec" style="max-width: 60%">
+        <div *ngIf="step == 1" style="width: 100%; display: flex; flex-direction: row">
+          <div style="width: 50%">
+            <img
+              src="../content/images/faunaphotostudio_26866480_163831200914202_7130561879423844352_n.jpg"
+              class="img-objective"
+              (click)="selectObjective(2)"
+            />
+            <div style="display: flex; flex-direction: column">
+              <div class="objective-title">Amistad</div>
+              <div class="objective-text">
+                ¿Querés encontrarle nuevos amigos a tu peludito? Hacé click acá para comenzar a descubrir nuevas amistades.
+              </div>
+            </div>
+          </div>
+          <div style="width: 50%">
+            <img
+              src="../content/images/faunaphotostudio_26866480_163831200914202_7130561879423844352_n.jpg"
+              class="img-objective"
+              (click)="selectObjective(1)"
+            />
+            <div style="display: flex; flex-direction: column">
+              <div class="objective-title">Cruzar</div>
+              <div class="objective-text">
+                ¡La media naranja de tu pelidito te está esperando! Hace click para conocer a otros dueños/as tan amorosos como vos.
+              </div>
+            </div>
+          </div>
+        </div>
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm" *ngIf="step == 2">
           <div class="cnt-row1">
             <!-- <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
           <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
@@ -94,7 +122,7 @@
             </div>
           </div>
 
-          <div class="cnt-row3">
+          <div class="cnt-row3" *ngIf="objective == 1">
             <div class="cbox-wrapper" style="padding-left: 0px">
               <input
                 type="checkbox"
@@ -146,7 +174,7 @@
               [disabled]="editForm.invalid || isSaving"
               data-cy="entityCreateSaveButton"
             >
-              Guardar
+              Confirmar
             </button>
           </div>
         </form>

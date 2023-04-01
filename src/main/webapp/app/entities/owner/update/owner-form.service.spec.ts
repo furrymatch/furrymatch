@@ -19,7 +19,7 @@ describe('Owner Form Service', () => {
 
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
-            id: expect.any(Object),
+            user_id: expect.any(Object),
             firstName: expect.any(Object),
             secondName: expect.any(Object),
             firstLastName: expect.any(Object),
