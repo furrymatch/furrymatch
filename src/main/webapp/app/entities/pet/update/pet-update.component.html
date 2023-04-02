@@ -1,16 +1,11 @@
 <div class="cnt-princ">
   <h1 class="title">Mi mascota</h1>
   <div>
-
     <div class="profile-pic">
       <div class="profile-pic-div">
-        <ngx-dropzone
-          *ngIf="petFiles.length < maxPhotos"
-          (change)="onSelect($event)"
-          [multiple]="true"
-        >
+        <ngx-dropzone *ngIf="petFiles.length < maxPhotos" (change)="onSelect($event)" [multiple]="true">
           <!--          <input type="file" accept="image/*"/>-->
-          <ngx-dropzone-label>Arrastrá o seleccioná<br/>una foto</ngx-dropzone-label>
+          <ngx-dropzone-label>Arrastrá o seleccioná<br />una foto</ngx-dropzone-label>
 
           <ngx-dropzone-image-preview
             *ngFor="let file of petFiles; let index = index"
@@ -23,29 +18,17 @@
       <button (click)="onUpload()" class="btn btn-blue">Subir</button>
     </div>
 
-    <div class="cnt-txt" *ngIf="editForm.controls.id.value !== null">
-      <label class="lbl-txt" jhiTranslate="global.field.id" for="field_id">ID</label>
-      <input type="number" class="form-control inp-txt" name="id" id="field_id" data-cy="id" formControlName="id"
-             [readonly]="true"/>
-    </div>
-
-      <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-        <div class="login-wrapper">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <div class="login-wrapper">
         <div class="wrapper-sec">
           <div class="cnt-inputs">
-
             <div class="cnt-row1">
               <div class="cnt-txt">
                 <label class="lbl-txt">Nombre</label>
-                <input type="text" class="form-control inp-txt" name="name" id="field_name" data-cy="name"
-                       formControlName="name"/>
-                <div
-                  *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
-                  <small
-                    class="form-text text-danger"
-                    *ngIf="editForm.get('name')?.errors?.required"
-                  >
-                    Este campo es requerido.
+                <input type="text" class="form-control inp-txt" name="name" id="field_name" data-cy="name" formControlName="name" />
+                <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
+                  <small class="form-text text-danger alert-txt" *ngIf="editForm.get('name')?.errors?.required">
+                    Este campo es requerido
                   </small>
                 </div>
               </div>
@@ -62,14 +45,11 @@
                 />
                 <div
                   *ngIf="
-                      editForm.get('description')!.invalid && (editForm.get('description')!.dirty || editForm.get('description')!.touched)
-                    "
+                    editForm.get('description')!.invalid && (editForm.get('description')!.dirty || editForm.get('description')!.touched)
+                  "
                 >
-                  <small
-                    class="form-text text-danger"
-                    *ngIf="editForm.get('description')?.errors?.required"
-                  >
-                    Este campo es requerido.
+                  <small class="form-text text-danger alert-txt" *ngIf="editForm.get('description')?.errors?.required">
+                    Este campo es requerido
                   </small>
                 </div>
               </div>
@@ -77,20 +57,15 @@
             <div class="cnt-row2">
               <div class="cnt-txt">
                 <label class="lbl-txt" for="field_petType">Tipo de mascota</label>
-                <select class="form-control" name="petType" formControlName="petType" id="field_petType"
-                        data-cy="petType">
+                <select class="form-control" name="petType" formControlName="petType" id="field_petType" data-cy="petType">
                   <option [ngValue]="null">{{ 'furryMatchApp.PetType.null' | translate }}</option>
                   <option *ngFor="let petType of petTypeValues" [value]="petType">
                     {{ 'furryMatchApp.PetType.' + petType | translate }}
                   </option>
                 </select>
-                <div
-                  *ngIf="editForm.get('petType')!.invalid && (editForm.get('petType')!.dirty || editForm.get('petType')!.touched)">
-                  <small
-                    class="form-text text-danger"
-                    *ngIf="editForm.get('petType')?.errors?.required"
-                  >
-                    Este campo es requerido.
+                <div *ngIf="editForm.get('petType')!.invalid && (editForm.get('petType')!.dirty || editForm.get('petType')!.touched)">
+                  <small class="form-text text-danger alert-txt" *ngIf="editForm.get('petType')?.errors?.required">
+                    Este campo es requerido
                   </small>
                 </div>
               </div>
@@ -99,8 +74,7 @@
                 <label class="form-label">Raza</label>
                 <select class="form-control" id="field_breed" formControlName="breed">
                   <option [ngValue]="null"></option>
-                  <option *ngFor="let breed of filteredBreedsSharedCollection"
-                          [ngValue]="breed">{{ breed.breed }}</option>
+                  <option *ngFor="let breed of filteredBreedsSharedCollection" [ngValue]="breed">{{ breed.breed }}</option>
                 </select>
               </div>
 
@@ -108,15 +82,10 @@
                 <label class="form-label" for="field_sex">Sexo</label>
                 <select class="form-control" name="sex" formControlName="sex" id="field_sex" data-cy="sex">
                   <option [ngValue]="null">{{ 'furryMatchApp.Sex.null' | translate }}</option>
-                  <option *ngFor="let sex of sexValues"
-                          [value]="sex">{{ 'furryMatchApp.Sex.' + sex | translate }}</option>
+                  <option *ngFor="let sex of sexValues" [value]="sex">{{ 'furryMatchApp.Sex.' + sex | translate }}</option>
                 </select>
-                <div
-                  *ngIf="editForm.get('sex')!.invalid && (editForm.get('sex')!.dirty || editForm.get('sex')!.touched)">
-                  <small
-                    class="form-text text-danger"
-                    *ngIf="editForm.get('sex')?.errors?.required"
-                  >
+                <div *ngIf="editForm.get('sex')!.invalid && (editForm.get('sex')!.dirty || editForm.get('sex')!.touched)">
+                  <small class="form-text text-danger alert-txt" *ngIf="editForm.get('sex')?.errors?.required">
                     Este campo es requerido.
                   </small>
                 </div>
@@ -127,10 +96,8 @@
                 <div class="cnt-orange-row1">
                   <p class="txt-disc">
                     <mark class="txt-disc-orange">¿Tu objetivo es cruzar a tu mascota?&nbsp;</mark>
-                    Entonces llená estos datos adicionales, son importantes para encontrarle su pareja ideal. Si solo
-                    estás buscando
-                    amistad, no es necesario llenarlo. Recordá que podés agregarlos o modificarlos cuando querás en tu
-                    perfil personal.
+                    Entonces llená estos datos adicionales, son importantes para encontrarle su pareja ideal. Si solo estás buscando
+                    amistad, no es necesario llenarlo. Recordá que podés agregarlos o modificarlos cuando querás en tu perfil personal.
                   </p>
                 </div>
                 <div class="cnt-orange-row2">
@@ -155,8 +122,7 @@
                       data-cy="tradePups"
                       formControlName="tradePups"
                     />
-                    <label class="cbox-label" for="field_tradePups">¿Deseas negociar la repartición de las
-                      crias?</label>
+                    <label class="cbox-label" for="field_tradePups">¿Deseas negociar la repartición de las crias?</label>
                   </div>
                 </div>
                 <div class="cnt-orange-row3">
@@ -169,8 +135,7 @@
                       data-cy="tradeMoney"
                       formControlName="tradeMoney"
                     />
-                    <label class="cbox-label" for="field_tradeMoney">¿Deseas cobrar dinero por el cruce de las
-                      mascotas?</label>
+                    <label class="cbox-label" for="field_tradeMoney">¿Deseas cobrar dinero por el cruce de las mascotas?</label>
                   </div>
 
                   <div class="cbox-wrapper">
@@ -191,18 +156,11 @@
               <jhi-alert-error></jhi-alert-error>
             </div>
             <div>
-              <button
-                type="submit"
-                id="save-entity"
-                data-cy="entityCreateSaveButton"
-                [disabled]="editForm.invalid || isSaving"
-                class="btn btn-blue"
-              ><span>Confirmar</span>
-              </button>
+              <button type="submit" id="save-entity" data-cy="entityCreateSaveButton" class="btn btn-blue"><span>Confirmar</span></button>
             </div>
           </div>
         </div>
-        </div>
-      </form>
+      </div>
+    </form>
   </div>
 </div>

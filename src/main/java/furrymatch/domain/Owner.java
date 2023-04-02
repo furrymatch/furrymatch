@@ -23,10 +23,10 @@ public class Owner implements Serializable {
 
     @Id
     @Column(name = "user_id")
-    private Long user_id;
+    private Long id;
 
     @OneToOne
-    @JoinColumn(unique = true)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     @MapsId
     private User user;
 
@@ -89,7 +89,7 @@ public class Owner implements Serializable {
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
-        return this.user_id;
+        return this.id;
     }
 
     public Owner id(Long id) {
@@ -98,7 +98,7 @@ public class Owner implements Serializable {
     }
 
     public void setId(Long id) {
-        this.user_id = id;
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -337,7 +337,7 @@ public class Owner implements Serializable {
         if (!(o instanceof Owner)) {
             return false;
         }
-        return user_id != null && user_id.equals(((Owner) o).user_id);
+        return id != null && id.equals(((Owner) o).id);
     }
 
     @Override
@@ -350,7 +350,7 @@ public class Owner implements Serializable {
     @Override
     public String toString() {
         return "Owner{" +
-            "user_id=" + getId() +
+            "id=" + getId() +
             ", firstName='" + getFirstName() + "'" +
             ", secondName='" + getSecondName() + "'" +
             ", firstLastName='" + getFirstLastName() + "'" +
