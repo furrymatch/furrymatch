@@ -22,7 +22,7 @@
             "
           >
             <small
-              class="form-text text-danger"
+              class="form-text text-danger alert-txt"
               *ngIf="editForm.get('secondLastName')?.errors?.required"
               jhiTranslate="entity.validation.required"
             >
@@ -43,14 +43,14 @@
           />
           <div *ngIf="editForm.get('phoneNumber')!.invalid && (editForm.get('phoneNumber')!.dirty || editForm.get('phoneNumber')!.touched)">
             <small
-              class="form-text text-danger"
+              class="form-text text-danger alert-txt"
               *ngIf="editForm.get('phoneNumber')?.errors?.required"
               jhiTranslate="entity.validation.required"
             >
               This field is required.
             </small>
             <small
-              class="form-text text-danger"
+              class="form-text text-danger alert-txt"
               [hidden]="!editForm.get('phoneNumber')?.errors?.number"
               jhiTranslate="entity.validation.number"
             >
@@ -80,7 +80,7 @@
             "
           >
             <small
-              class="form-text text-danger"
+              class="form-text text-danger alert-txt"
               *ngIf="editForm.get('identityNumber')?.errors?.required"
               jhiTranslate="entity.validation.required"
             >
@@ -94,7 +94,7 @@
           <input type="text" class="form-control" name="address" id="field_address" data-cy="address" formControlName="address" />
           <div *ngIf="editForm.get('address')!.invalid && (editForm.get('address')!.dirty || editForm.get('address')!.touched)">
             <small
-              class="form-text text-danger"
+              class="form-text text-danger alert-txt"
               *ngIf="editForm.get('address')?.errors?.required"
               jhiTranslate="entity.validation.required"
             >
@@ -108,7 +108,7 @@
           <input type="text" class="form-control" name="province" id="field_province" data-cy="province" formControlName="province" />
           <div *ngIf="editForm.get('province')!.invalid && (editForm.get('province')!.dirty || editForm.get('province')!.touched)">
             <small
-              class="form-text text-danger"
+              class="form-text text-danger alert-txt"
               *ngIf="editForm.get('province')?.errors?.required"
               jhiTranslate="entity.validation.required"
             >
@@ -132,7 +132,7 @@
           <input type="text" class="form-control" name="district" id="field_district" data-cy="district" formControlName="district" />
           <div *ngIf="editForm.get('district')!.invalid && (editForm.get('district')!.dirty || editForm.get('district')!.touched)">
             <small
-              class="form-text text-danger"
+              class="form-text text-danger alert-txt"
               *ngIf="editForm.get('district')?.errors?.required"
               jhiTranslate="entity.validation.required"
             >

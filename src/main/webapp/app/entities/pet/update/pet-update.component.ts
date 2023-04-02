@@ -61,6 +61,7 @@ export class PetUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ pet }) => {
       this.pet = pet;
       if (pet) {
+        console.log(pet);
         this.updateForm(pet);
       }
 
@@ -170,12 +171,12 @@ export class PetUpdateComponent implements OnInit {
     this.isSaving = true;
     const pet = this.petFormService.getPet(this.editForm);
     console.log('Pet object:', pet);
-    const photos = this.createPhotosArray();
-    console.log('Photos array:', photos);
+    pet.photos = this.createPhotosArray();
+    console.log(pet.photos.length);
     if (pet.id !== null) {
-      this.subscribeToSaveResponse(this.petService.update(pet, photos));
+      this.subscribeToSaveResponse(this.petService.update(pet));
     } else {
-      this.subscribeToSaveResponse(this.petService.create(pet, photos));
+      this.subscribeToSaveResponse(this.petService.create(pet));
     }
   }
 
@@ -183,14 +184,16 @@ export class PetUpdateComponent implements OnInit {
     const photos: IPhoto[] = [];
 
     const flattenedPhotos = this.petPhotos.reduce((acc, val) => acc.concat(val), []);
+    let counter = 0;
     for (const photoUrl of flattenedPhotos) {
       const photo: IPhoto = {
-        id: 0,
+        id: counter,
         uploadDate: null,
         photoUrl: photoUrl,
         pet: null,
       };
       photos.push(photo);
+      counter++;
     }
     console.log('Photos array:', photos); // Agrega esta línea para ver el contenido de 'photos'
 
@@ -223,7 +226,7 @@ export class PetUpdateComponent implements OnInit {
     this.petFormService.resetForm(this.editForm, pet);
 
     this.ownersSharedCollection = this.ownerService.addOwnerToCollectionIfMissing<IOwner>(this.ownersSharedCollection, pet.owner);
-    this.breedsSharedCollection = this.breedService.addBreedToCollectionIfMissing<IBreed>(this.breedsSharedCollection, pet.breed);
+    this.filteredBreedsSharedCollection = this.breedService.addBreedToCollectionIfMissing<IBreed>(this.breedsSharedCollection, pet.breed);
   }
 
   protected loadRelationshipsOptions(): void {
@@ -247,6 +250,7 @@ export class PetUpdateComponent implements OnInit {
       'Cat breeds:',
       this.breedsSharedCollection.filter(breed => breed.breedType === 'Gato')
     );
+    console.log(this.pet?.breed);
     console.log('Breeds loaded:', this.breedsSharedCollection);
   }
 }
