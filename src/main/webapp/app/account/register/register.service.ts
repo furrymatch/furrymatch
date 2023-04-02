@@ -4,10 +4,16 @@ import { Observable } from 'rxjs';
 
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { Registration } from './register.model';
+import { AuthServerProvider } from 'app/core/auth/auth-session.service';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class RegisterService {
-  constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
+  constructor(
+    private http: HttpClient,
+    private applicationConfigService: ApplicationConfigService,
+    private authenticationService: AuthServerProvider
+  ) {}
 
   uploadImage(vals: any): Observable<any> {
     const data = vals;
@@ -27,6 +33,14 @@ export class RegisterService {
   }
 
   save(registration: Registration): Observable<{}> {
-    return this.http.post(this.applicationConfigService.getEndpointFor('api/register'), registration);
+    return this.http.post(this.applicationConfigService.getEndpointFor('api/register'), registration, { observe: 'response' }).pipe(
+      switchMap(() => {
+        return this.authenticationService.login({
+          username: registration.login,
+          password: registration.password,
+          rememberMe: true,
+        });
+      })
+    );
   }
 }

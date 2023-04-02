@@ -2,6 +2,8 @@ import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
+import { NgZone } from '@angular/core';
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/config/error.constants';
 import { RegisterService } from './register.service';
@@ -83,7 +85,12 @@ export class RegisterComponent implements AfterViewInit {
     }),
   });
 
-  constructor(private translateService: TranslateService, private registerService: RegisterService) {}
+  constructor(
+    private translateService: TranslateService,
+    private registerService: RegisterService,
+    private router: Router,
+    private ngZone: NgZone
+  ) {}
 
   ngAfterViewInit(): void {
     if (this.login) {
@@ -142,8 +149,9 @@ export class RegisterComponent implements AfterViewInit {
     });
   }
 
+  public imageUploaded: boolean = false;
+
   onSelect(event?: any) {
-    console.log(event);
     this.files.push(...event.addedFiles);
   }
 
@@ -173,6 +181,7 @@ export class RegisterComponent implements AfterViewInit {
       if (response) {
         const secureUrl = response.secure_url;
         this.photo.setValue(secureUrl);
+        this.imageUploaded = this.files.length > 0;
         Swal.fire({
           title: 'Fotografía agregada',
           text: 'Continuá registrando tus datos.',
@@ -195,7 +204,7 @@ export class RegisterComponent implements AfterViewInit {
   identityNumber: any;
   secondLastName: any;
 
-  register(): void {
+  async register(): Promise<void> {
     this.doNotMatch = false;
     this.error = false;
     this.errorEmailExists = false;
@@ -228,16 +237,17 @@ export class RegisterComponent implements AfterViewInit {
           district: district.value,
         })
         .subscribe({
-          next: () => (
-            Swal.fire({
-              title: 'Registro exitoso',
-              text: 'Ya sos parte de FurryMatch',
+          next: async () => {
+            this.success = true;
+            await Swal.fire({
+              title: 'Registro de usuario exitoso',
+              text: 'Ahora continua registrando a tu mascota',
               icon: 'success',
               confirmButtonColor: '#3381f6',
               confirmButtonText: 'Cerrar',
-            }),
-            (this.success = true)
-          ),
+            });
+            this.router.navigate(['/pet/new']);
+          },
           error: response => this.processError(response),
         });
     }
