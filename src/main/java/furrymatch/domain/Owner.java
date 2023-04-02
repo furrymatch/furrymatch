@@ -350,7 +350,7 @@ public class Owner implements Serializable {
     @Override
     public String toString() {
         return "Owner{" +
-            "user_id=" + getId() +
+            "id=" + getId() +
             ", firstName='" + getFirstName() + "'" +
             ", secondName='" + getSecondName() + "'" +
             ", firstLastName='" + getFirstLastName() + "'" +

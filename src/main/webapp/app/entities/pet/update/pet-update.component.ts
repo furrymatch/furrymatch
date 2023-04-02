@@ -206,10 +206,12 @@ export class PetUpdateComponent implements OnInit {
 
   protected onSaveSuccess(): void {
     this.previousState();
+    console.log('exito');
   }
 
   protected onSaveError(): void {
     // Api for inheritance.
+    console.log('error');
   }
 
   protected onSaveFinalize(): void {
