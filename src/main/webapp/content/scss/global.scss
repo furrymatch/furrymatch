@@ -79,7 +79,6 @@ input.ng-invalid {
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-
 /* LABEL STYLES */
 label,
 .lbl-txt {
@@ -222,6 +221,11 @@ button {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+}
+
+.btn-blue:disabled {
+  background-color: var(--clr-palid-orange) !important;
+  color: var(--clr-orange) !important;
 }
 
 .img-logo-blue {

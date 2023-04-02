@@ -66,6 +66,7 @@
 
 .btn-blue {
   margin-top: var(--margin-md-small);
+  margin-bottom: var(--margin-min);
   padding: 8px 25px;
   background-color: var(--clr-blue);
   font: var(--typo-button);
@@ -161,4 +162,10 @@ input.ng-touched.ng-invalid {
 .img-objective {
   width: 350px;
   height: 350px;
+}
+
+.cnt-txt-btn {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center;
 }
