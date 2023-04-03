@@ -1,7 +1,11 @@
 package furrymatch.repository;
 
 import furrymatch.domain.Pet;
+import furrymatch.domain.Photo;
+import java.util.List;
+import java.util.Set;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,4 +13,7 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface PetRepository extends JpaRepository<Pet, Long> {}
+public interface PetRepository extends JpaRepository<Pet, Long> {
+    @Query(value = "SELECT * FROM Pet WHERE owner_user_id = :ownerId", nativeQuery = true)
+    List<Pet> findAllByOwnerID(@Param("ownerId") Long ownerId);
+}

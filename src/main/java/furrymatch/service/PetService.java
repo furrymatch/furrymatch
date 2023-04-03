@@ -9,13 +9,10 @@ import furrymatch.repository.PhotoRepository;
 import furrymatch.repository.UserRepository;
 import furrymatch.security.SecurityUtils;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -185,13 +182,23 @@ public class PetService {
     /**
      * Get all the pets.
      *
-     * @param pageable the pagination information.
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<Pet> findAll(Pageable pageable) {
+    /* public Page<Pet> findAll(Pageable pageable) {
         log.debug("Request to get all Pets");
         return petRepository.findAll(pageable);
+    }*/
+    public List<Pet> findAll(Long id) {
+        log.debug("Request to get all Pets");
+        List<Pet> pets = petRepository.findAllByOwnerID(id);
+        ArrayList<Pet> newPets = new ArrayList<>();
+        pets.forEach(pet -> {
+            Set<Photo> set = new HashSet<>(photoRepository.findAllPhotosByPetID(pet.getId()));
+            pet.setPhotos(set);
+            newPets.add(pet);
+        });
+        return newPets;
     }
 
     /**

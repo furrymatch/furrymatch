@@ -90,6 +90,7 @@ export class PetComponent implements OnInit {
     this.fillComponentAttributesFromResponseHeader(response.headers);
     const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
     this.pets = dataFromBody;
+    console.log(this.pets);
   }
 
   protected fillComponentAttributesFromResponseBody(data: IPet[] | null): IPet[] {
