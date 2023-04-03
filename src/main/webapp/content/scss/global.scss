@@ -247,3 +247,36 @@ body {
   margin: 0;
   font-family: Montserrat, sans-serif;
 }
+
+.title {
+  font: var(--typo-header);
+  color: var(--clr-orange);
+  margin-top: var(--margin-md);
+  padding: 0 35px;
+}
+
+.cnt-princ {
+  text-align: center;
+}
+
+.login-wrapper {
+  margin-top: var(--margin-md);
+  display: flex;
+  justify-content: center;
+}
+
+.wrapper-sec {
+  display: flex;
+  max-width: 50%;
+  justify-content: space-around;
+}
+
+.btn-blue {
+  margin-top: var(--margin-md-small);
+  margin-bottom: var(--margin-min);
+  padding: 8px 25px;
+  background-color: var(--clr-blue);
+  font: var(--typo-button);
+  color: var(--clr-white);
+  transition: background-color ease-in 300ms;
+}

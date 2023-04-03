@@ -4,6 +4,7 @@ import furrymatch.domain.Pet;
 import furrymatch.domain.Photo;
 import furrymatch.repository.PetRepository;
 import furrymatch.service.PetService;
+import furrymatch.service.UserService;
 import furrymatch.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -42,11 +43,14 @@ public class PetResource {
 
     private final PetService petService;
 
+    private final UserService userService;
+
     private final PetRepository petRepository;
 
-    public PetResource(PetService petService, PetRepository petRepository) {
+    public PetResource(PetService petService, PetRepository petRepository, UserService userService) {
         this.petService = petService;
         this.petRepository = petRepository;
+        this.userService = userService;
     }
 
     /**
@@ -143,10 +147,12 @@ public class PetResource {
      */
     @GetMapping("/pets")
     public ResponseEntity<List<Pet>> getAllPets(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of Pets");
-        Page<Pet> page = petService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+        // log.debug("REST request to get a page of Pets");
+        // Page<Pet> page = petService.findAll(pageable);
+        Long id = userService.getUserWithAuthorities().get().getId();
+        List<Pet> page = petService.findAll(id);
+        //HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(),page);
+        return ResponseEntity.ok().body(page);
     }
 
     /**
