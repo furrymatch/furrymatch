@@ -239,6 +239,12 @@ button {
   justify-content: flex-start !important;
 }
 
+/* DL STYLES*/
+dd {
+  display: block;
+  margin-inline-start: 0 !important;
+}
+
 html,
 body {
   height: 100%;
