@@ -1,72 +1,186 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
-    <div *ngIf="pet">
-      <h2 data-cy="petDetailsHeading"><span jhiTranslate="furryMatchApp.pet.detail.title">Pet</span></h2>
+<div class="cnt-imgs">
+  <div class="cnt-big">
+    <img src="../../../content/images/faunaphotostudio_116327682_303128614232921_7520606251753666700_n.jpg" class="img-big-index" />
+  </div>
 
-      <hr />
+  <div class="cnt-galeria">
+    <div class="txt-galeria">
+      <p class="txt-titular">Galería</p>
+      <a href="#" class="txt-ver">Ver más</a>
+    </div>
+    <div class="cnt-med">
+      <img src="../../../content/images/faunaphotostudio_104088370_139872321018510_59841965359891980_n.jpg" class="img-med-index" />
+      <img src="../../../content/images/faunaphotostudio_104239892_2769181093309779_986610392622740604_n.jpg" class="img-med-index" />
+    </div>
 
-      <jhi-alert-error></jhi-alert-error>
-
-      <jhi-alert></jhi-alert>
-
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
-        <dd>
-          <span>{{ pet.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="furryMatchApp.pet.name">Name</span></dt>
-        <dd>
-          <span>{{ pet.name }}</span>
-        </dd>
-        <dt><span jhiTranslate="furryMatchApp.pet.petType">Pet Type</span></dt>
-        <dd>
-          <span jhiTranslate="{{ 'furryMatchApp.PetType.' + pet.petType }}">{{ pet.petType }}</span>
-        </dd>
-        <dt><span jhiTranslate="furryMatchApp.pet.description">Description</span></dt>
-        <dd>
-          <span>{{ pet.description }}</span>
-        </dd>
-        <dt><span jhiTranslate="furryMatchApp.pet.sex">Sex</span></dt>
-        <dd>
-          <span jhiTranslate="{{ 'furryMatchApp.Sex.' + pet.sex }}">{{ pet.sex }}</span>
-        </dd>
-        <dt><span jhiTranslate="furryMatchApp.pet.tradeMoney">Trade Money</span></dt>
-        <dd>
-          <span>{{ pet.tradeMoney }}</span>
-        </dd>
-        <dt><span jhiTranslate="furryMatchApp.pet.tradePups">Trade Pups</span></dt>
-        <dd>
-          <span>{{ pet.tradePups }}</span>
-        </dd>
-        <dt><span jhiTranslate="furryMatchApp.pet.pedigree">Pedigree</span></dt>
-        <dd>
-          <span>{{ pet.pedigree }}</span>
-        </dd>
-        <dt><span jhiTranslate="furryMatchApp.pet.desireAmmount">Desire Ammount</span></dt>
-        <dd>
-          <span>{{ pet.desireAmmount }}</span>
-        </dd>
-        <dt><span jhiTranslate="furryMatchApp.pet.owner">Owner</span></dt>
-        <dd>
-          <div *ngIf="pet.owner">
-            <a [routerLink]="['/owner', pet.owner.user_id, 'view']">{{ pet.owner.user_id }}</a>
-          </div>
-        </dd>
-        <dt><span jhiTranslate="furryMatchApp.pet.breed">Breed</span></dt>
-        <dd>
-          <div *ngIf="pet.breed">
-            <a [routerLink]="['/breed', pet.breed.id, 'view']">{{ pet.breed.id }}</a>
-          </div>
-        </dd>
-      </dl>
-
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-      </button>
-
-      <button type="button" [routerLink]="['/pet', pet.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-      </button>
+    <div class="cnt-med">
+      <img src="../../../content/images/faunaphotostudio_106175324_565611007463143_3456510031947740585_n.jpg" class="img-small-index" />
+      <img src="../../../content/images/faunaphotostudio_119608349_367737884632510_1232880779821362670_n.jpg" class="img-small-index" />
     </div>
   </div>
 </div>
+
+<!--<div class="cnt-imgs">-->
+<!--  <div class="cnt-big" *ngIf="petImages.length > 0">-->
+<!--    <advanced-image [cldImg]="convertToCloudinaryImage(petImages[0])" class="img-big-index"></advanced-image>-->
+<!--  </div>-->
+
+<!--  <div class="cnt-galeria">-->
+<!--    <div class="txt-galeria">-->
+<!--      <p class="txt-titular">Galería</p>-->
+<!--      <a href="#" class="txt-ver">Ver más</a>-->
+<!--    </div>-->
+<!--    <div class="cnt-med" *ngFor="let petImage of petImages.slice(1, 3)">-->
+<!--      <advanced-image [cldImg]="convertToCloudinaryImage(petImage)" class="img-med-index"></advanced-image>-->
+<!--    </div>-->
+
+<!--    <div class="cnt-med" *ngFor="let petImage of petImages.slice(3, 5)">-->
+<!--      <advanced-image [cldImg]="convertToCloudinaryImage(petImage)" class="img-small-index"></advanced-image>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<div *ngIf="pet">
+  <div class="cnt-info">
+    <div class="cnt-info-pet">
+      <dl>
+        <div class="cnt-name cnt-pet-space">
+          <dd>
+            <p class="info-main-title">{{ pet.name }}</p>
+          </dd>
+
+          <div class="txt-datos-pet">
+            <dd>
+              <div *ngIf="pet.breed">
+                <p class="info-input">{{ pet.breed.breed }}</p>
+              </div>
+            </dd>
+            <p class="info-input">,&nbsp;</p>
+            <p class="info-input">{{ pet.sex }}</p>
+          </div>
+        </div>
+
+        <div class="cnt-location cnt-pet-space">
+          <p class="txt-titular">Locación</p>
+          <div class="txt-datos-pet">
+            <div *ngIf="selectedCanton">
+              <p class="info-input">{{ selectedCanton.name }}</p>
+            </div>
+            <p class="info-input">,&nbsp;</p>
+            <div *ngIf="selectedProvince">
+              <p class="info-input">{{ selectedProvince.name }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cnt-about cnt-pet-space">
+          <p class="txt-titular">Sobre mi</p>
+          <p class="info-input-about">{{ pet.description }}</p>
+        </div>
+      </dl>
+    </div>
+
+    <div class="cnt-info-user-fth">
+      <div class="cnt-info-user">
+        <div class="cnt-name">
+          <p class="info-main-title">Mi dueño(a)</p>
+          <div class="txt-datos-pet">
+            <div *ngIf="pet.owner">
+              <p class="info-input-owner">{{ pet.owner['firstName'] }}</p>
+            </div>
+            <p class="info-input-owner">&nbsp;</p>
+            <div *ngIf="pet.owner">
+              <p class="info-input-owner">{{ pet.owner['firstLastName'] }}</p>
+            </div>
+          </div>
+          <div *ngIf="pet.owner">
+            <p class="info-input-owner">{{ pet.owner['phoneNumber'] }}</p>
+          </div>
+          <div *ngIf="pet.user">
+            <p class="info-input-owner">{{ pet.user['email'] }}</p>
+          </div>
+        </div>
+        <div style="border-radius: 15px; overflow: hidden">
+          <advanced-image [cldImg]="ownerImage" class="img-photo"></advanced-image>
+          <!--        <img *ngIf="pet.owner" [src]="pet.owner['photo']" class="img-photo"/>-->
+        </div>
+      </div>
+      <div>
+        <button routerLink="" class="btn-blue btn" type="submit">¡Chateá y conocé a tu match!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<div class="d-flex justify-content-center">-->
+<!--  <div class="col-8">-->
+<!--    <div *ngIf="pet">-->
+<!--      <h2 data-cy="petDetailsHeading"><span jhiTranslate="furryMatchApp.pet.detail.title">Pet</span></h2>-->
+
+<!--      <hr/>-->
+
+<!--      <jhi-alert-error></jhi-alert-error>-->
+
+<!--      <jhi-alert></jhi-alert>-->
+
+<!--      <dl class="row-md jh-entity-details">-->
+<!--        <dt><span jhiTranslate="global.field.id">ID</span></dt>-->
+<!--        <dd>-->
+<!--          <span>{{ pet.id }}</span>-->
+<!--        </dd>-->
+<!--        <dt><span jhiTranslate="furryMatchApp.pet.name">Name</span></dt>-->
+<!--        <dd>-->
+<!--          <span>{{ pet.name }}</span>-->
+<!--        </dd>-->
+<!--        <dt><span jhiTranslate="furryMatchApp.pet.petType">Pet Type</span></dt>-->
+<!--        <dd>-->
+<!--          <span jhiTranslate="{{ 'furryMatchApp.PetType.' + pet.petType }}">{{ pet.petType }}</span>-->
+<!--        </dd>-->
+<!--        <dt><span jhiTranslate="furryMatchApp.pet.description">Description</span></dt>-->
+<!--        <dd>-->
+<!--          <span>{{ pet.description }}</span>-->
+<!--        </dd>-->
+<!--        <dt><span jhiTranslate="furryMatchApp.pet.sex">Sex</span></dt>-->
+<!--        <dd>-->
+<!--          <span jhiTranslate="{{ 'furryMatchApp.Sex.' + pet.sex }}">{{ pet.sex }}</span>-->
+<!--        </dd>-->
+<!--        <dt><span jhiTranslate="furryMatchApp.pet.tradeMoney">Trade Money</span></dt>-->
+<!--        <dd>-->
+<!--          <span>{{ pet.tradeMoney }}</span>-->
+<!--        </dd>-->
+<!--        <dt><span jhiTranslate="furryMatchApp.pet.tradePups">Trade Pups</span></dt>-->
+<!--        <dd>-->
+<!--          <span>{{ pet.tradePups }}</span>-->
+<!--        </dd>-->
+<!--        <dt><span jhiTranslate="furryMatchApp.pet.pedigree">Pedigree</span></dt>-->
+<!--        <dd>-->
+<!--          <span>{{ pet.pedigree }}</span>-->
+<!--        </dd>-->
+<!--        <dt><span jhiTranslate="furryMatchApp.pet.desireAmmount">Desire Ammount</span></dt>-->
+<!--        <dd>-->
+<!--          <span>{{ pet.desireAmmount }}</span>-->
+<!--        </dd>-->
+<!--        <dt><span jhiTranslate="furryMatchApp.pet.owner">Owner</span></dt>-->
+<!--        <dd>-->
+<!--          <div *ngIf="pet.owner">-->
+<!--            <a [routerLink]="['/owner', pet.owner.user_id, 'view']">{{ pet.owner.user_id }}</a>-->
+<!--          </div>-->
+<!--        </dd>-->
+<!--        <dt><span jhiTranslate="furryMatchApp.pet.breed">Breed</span></dt>-->
+<!--        <dd>-->
+<!--          <div *ngIf="pet.breed">-->
+<!--            <a [routerLink]="['/breed', pet.breed.id, 'view']">{{ pet.breed.id }}</a>-->
+<!--          </div>-->
+<!--        </dd>-->
+<!--      </dl>-->
+
+<!--      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">-->
+<!--        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>-->
+<!--      </button>-->
+
+<!--      <button type="button" [routerLink]="['/pet', pet.id, 'edit']" class="btn btn-primary">-->
+<!--        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>-->
+<!--      </button>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
