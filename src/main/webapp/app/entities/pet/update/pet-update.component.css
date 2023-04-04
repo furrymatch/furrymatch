@@ -138,3 +138,10 @@ mark.txt-disc-orange {
   border-radius: 25%;
   cursor: pointer;
 }
+
+.delete-text {
+  color: #3381f6;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}

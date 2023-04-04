@@ -33,7 +33,7 @@ public class Breed implements Serializable {
     @Column(name = "breed_type", nullable = false)
     private String breedType;
 
-    @OneToMany(mappedBy = "breed")
+    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, mappedBy = "breed")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "photos", "firstLikees", "secondLikees", "owner", "breed", "searchCriteria" }, allowSetters = true)
     private Set<Pet> pets = new HashSet<>();

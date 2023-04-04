@@ -57,17 +57,17 @@ public class Pet implements Serializable {
     @Column(name = "desire_ammount")
     private Double desireAmmount;
 
-    @OneToMany(mappedBy = "pet")
+    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, mappedBy = "pet")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "pet" }, allowSetters = true)
     private Set<Photo> photos = new HashSet<>();
 
-    @OneToMany(mappedBy = "firstPet")
+    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, mappedBy = "firstPet")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "firstMatches", "secondMatches", "firstPet", "secondPet" }, allowSetters = true)
     private Set<Likee> firstLikees = new HashSet<>();
 
-    @OneToMany(mappedBy = "secondPet")
+    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, mappedBy = "secondPet")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "firstMatches", "secondMatches", "firstPet", "secondPet" }, allowSetters = true)
     private Set<Likee> secondLikees = new HashSet<>();
@@ -80,7 +80,7 @@ public class Pet implements Serializable {
     @JsonIgnoreProperties(value = { "pets" }, allowSetters = true)
     private Breed breed;
 
-    @OneToMany(mappedBy = "pet")
+    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, mappedBy = "pet")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "pet" }, allowSetters = true)
     private Set<SearchCriteria> searchCriteria = new HashSet<>();

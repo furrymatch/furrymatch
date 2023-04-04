@@ -31,12 +31,12 @@ public class Likee implements Serializable {
     @Column(name = "like_state", nullable = false)
     private LikeType likeState;
 
-    @OneToMany(mappedBy = "firstLiked")
+    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, mappedBy = "firstLiked")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "contract", "chats", "firstLiked", "secondLiked" }, allowSetters = true)
     private Set<Match> firstMatches = new HashSet<>();
 
-    @OneToMany(mappedBy = "secondLiked")
+    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, mappedBy = "secondLiked")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "contract", "chats", "firstLiked", "secondLiked" }, allowSetters = true)
     private Set<Match> secondMatches = new HashSet<>();

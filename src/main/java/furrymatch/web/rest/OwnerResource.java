@@ -3,6 +3,7 @@ package furrymatch.web.rest;
 import furrymatch.domain.Owner;
 import furrymatch.repository.OwnerRepository;
 import furrymatch.service.OwnerService;
+import furrymatch.service.UserService;
 import furrymatch.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -40,12 +41,14 @@ public class OwnerResource {
     private String applicationName;
 
     private final OwnerService ownerService;
+    private final UserService userService;
 
     private final OwnerRepository ownerRepository;
 
-    public OwnerResource(OwnerService ownerService, OwnerRepository ownerRepository) {
+    public OwnerResource(OwnerService ownerService, OwnerRepository ownerRepository, UserService userService) {
         this.ownerService = ownerService;
         this.ownerRepository = ownerRepository;
+        this.userService = userService;
     }
 
     /**
@@ -174,10 +177,15 @@ public class OwnerResource {
     @DeleteMapping("/owners/{id}")
     public ResponseEntity<Void> deleteOwner(@PathVariable Long id) {
         log.debug("REST request to delete Owner : {}", id);
-        ownerService.delete(id);
-        return ResponseEntity
+
+        // ownerService.delete(id);
+        /*return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-            .build();
+            .build();*/
+        ownerService.delete(id);
+        String login = userService.getUserWithAuthorities().get().getLogin();
+        userService.deleteUser(login);
+        return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName, "userManagement.deleted", login)).build();
     }
 }

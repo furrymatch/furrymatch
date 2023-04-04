@@ -1,7 +1,11 @@
 package furrymatch.service;
 
+import furrymatch.domain.Owner;
+import furrymatch.domain.Pet;
 import furrymatch.domain.SearchCriteria;
 import furrymatch.repository.SearchCriteriaRepository;
+import furrymatch.repository.UserRepository;
+import furrymatch.security.SecurityUtils;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +25,14 @@ public class SearchCriteriaService {
 
     private final SearchCriteriaRepository searchCriteriaRepository;
 
-    public SearchCriteriaService(SearchCriteriaRepository searchCriteriaRepository) {
+    private final UserRepository userRepository;
+
+    private final PetService petService;
+
+    public SearchCriteriaService(SearchCriteriaRepository searchCriteriaRepository, UserRepository userRepository, PetService petService) {
         this.searchCriteriaRepository = searchCriteriaRepository;
+        this.userRepository = userRepository;
+        this.petService = petService;
     }
 
     /**
@@ -33,6 +43,13 @@ public class SearchCriteriaService {
      */
     public SearchCriteria save(SearchCriteria searchCriteria) {
         log.debug("Request to save SearchCriteria : {}", searchCriteria);
+        SecurityUtils
+            .getCurrentUserLogin()
+            .flatMap(userRepository::findOneByLogin)
+            .ifPresent(user -> {
+                Optional<Pet> pet = petService.findOne(Long.valueOf(user.getImageUrl()));
+                searchCriteria.setPet(pet.get());
+            });
         return searchCriteriaRepository.save(searchCriteria);
     }
 

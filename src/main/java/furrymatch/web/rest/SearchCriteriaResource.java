@@ -76,8 +76,6 @@ public class SearchCriteriaResource {
         if (searchCriteria.getId() != null) {
             throw new BadRequestAlertException("A new searchCriteria cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Optional<Pet> pet = petService.findOne(Long.valueOf(userService.getUserWithAuthorities().get().getImageUrl()));
-        searchCriteria.setPet(pet.get());
         SearchCriteria result = searchCriteriaService.save(searchCriteria);
         return ResponseEntity
             .created(new URI("/api/search-criteria/" + result.getId()))

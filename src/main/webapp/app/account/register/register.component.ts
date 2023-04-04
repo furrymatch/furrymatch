@@ -57,31 +57,40 @@ export class RegisterComponent implements AfterViewInit {
     }),
     firstName: new FormControl('', {
       nonNullable: true,
+      validators: [Validators.required],
     }),
     secondName: new FormControl('', {}),
     firstLastName: new FormControl('', {
       nonNullable: true,
+      validators: [Validators.required],
     }),
     secondLastName: new FormControl('', {
       nonNullable: true,
+      validators: [Validators.required],
     }),
     phoneNumber: new FormControl('', {
       nonNullable: true,
+      validators: [Validators.required],
     }),
     identityNumber: new FormControl('', {
       nonNullable: true,
+      validators: [Validators.required],
     }),
     address: new FormControl('', {
       nonNullable: true,
+      validators: [Validators.required],
     }),
     province: new FormControl('', {
       nonNullable: true,
+      validators: [Validators.required],
     }),
     canton: new FormControl('', {
       nonNullable: true,
+      validators: [Validators.required],
     }),
     district: new FormControl('', {
       nonNullable: true,
+      validators: [Validators.required],
     }),
   });
 

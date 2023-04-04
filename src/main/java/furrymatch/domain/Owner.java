@@ -81,7 +81,7 @@ public class Owner implements Serializable {
     @Column(name = "updated_at")
     private LocalDate updatedAt;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, mappedBy = "owner")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "photos", "firstLikees", "secondLikees", "owner", "breed", "searchCriteria" }, allowSetters = true)
     private Set<Pet> pets = new HashSet<>();

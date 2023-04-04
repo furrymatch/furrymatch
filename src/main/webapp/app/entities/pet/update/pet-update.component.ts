@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { finalize, map, takeUntil, tap } from 'rxjs/operators';
 
@@ -31,6 +31,7 @@ export class PetUpdateComponent implements OnInit {
   sexValues = Object.keys(Sex);
 
   maxPhotos = 5;
+  update = false;
 
   ownersSharedCollection: IOwner[] = [];
   breedsSharedCollection: IBreed[] = [];
@@ -50,7 +51,8 @@ export class PetUpdateComponent implements OnInit {
     protected ownerService: OwnerService,
     protected breedService: BreedService,
     protected photoService: PhotoService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
+    private router: Router
   ) {}
 
   compareOwner = (o1: IOwner | null, o2: IOwner | null): boolean => this.ownerService.compareOwner(o1, o2);
@@ -61,7 +63,7 @@ export class PetUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ pet }) => {
       this.pet = pet;
       if (pet) {
-        console.log(pet);
+        this.update = true;
         this.updateForm(pet);
       }
 
@@ -252,5 +254,35 @@ export class PetUpdateComponent implements OnInit {
     );
     console.log(this.pet?.breed);
     console.log('Breeds loaded:', this.breedsSharedCollection);
+  }
+
+  delete(): void {
+    Swal.fire({
+      title: '¿Deseás eliminar a tu mascota?',
+      text: 'Si hacés click en el botón de Sí perderás toda la información del mismo.',
+      showCancelButton: false,
+      showConfirmButton: true,
+      showDenyButton: true,
+      confirmButtonText: 'Sí',
+      denyButtonText: 'No',
+      icon: 'success',
+      confirmButtonColor: '#3381f6',
+      denyButtonColor: '#3381f6',
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        this.petService.delete(this.pet?.id).subscribe(() => {
+          this.router.navigate(['/pet']);
+          console.log('borrado');
+        });
+      } else if (result.isDenied) {
+        Swal.fire({
+          title: 'Error',
+          text: 'No se pudo borrar tu mascota. Por favor intentá nuevamente.',
+          icon: 'error',
+          confirmButtonColor: '#3381f6',
+          confirmButtonText: 'Cerrar',
+        });
+      }
+    });
   }
 }

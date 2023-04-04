@@ -46,7 +46,7 @@ export class PetService {
     return this.http.get<IPet[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
-  delete(id: number): Observable<HttpResponse<{}>> {
+  delete(id: number | undefined): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 

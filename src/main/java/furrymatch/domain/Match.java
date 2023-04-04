@@ -36,7 +36,7 @@ public class Match implements Serializable {
     @JoinColumn(unique = true)
     private Contract contract;
 
-    @OneToMany(mappedBy = "match")
+    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, mappedBy = "match")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "match" }, allowSetters = true)
     private Set<Chat> chats = new HashSet<>();

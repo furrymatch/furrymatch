@@ -10,6 +10,10 @@ import Swal from 'sweetalert2';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { LANGUAGES } from 'app/config/language.constants';
+import { LoginService } from '../../login/login.service';
+import { SessionStorageService } from 'ngx-webstorage';
+import { ProfileService } from '../../layouts/profiles/profile.service';
+import { Router } from '@angular/router';
 
 const initialAccount: Account = {} as Account;
 
@@ -93,7 +97,9 @@ export class SettingsComponent implements OnInit {
     private accountService: AccountService,
     private translateService: TranslateService,
     private registerService: RegisterService,
-    private ownerService: OwnerService
+    private ownerService: OwnerService,
+    private loginService: LoginService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -256,6 +262,8 @@ export class SettingsComponent implements OnInit {
     }).then((result: any) => {
       if (result.isConfirmed) {
         this.ownerService.delete(this.userId).subscribe(() => {
+          this.loginService.logout();
+          this.router.navigate(['']);
           console.log('borrado');
         });
       } else if (result.isDenied) {
