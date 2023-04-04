@@ -133,4 +133,10 @@ export class PetComponent implements OnInit {
       return [predicate + ',' + ascendingQueryParam];
     }
   }
+  protected selectPet(id: number): void {
+    this.petService.selectedPet(id).subscribe({
+      next: () => this.router.navigateByUrl('/search-criteria/new'),
+      error: () => console.log('error'),
+    });
+  }
 }

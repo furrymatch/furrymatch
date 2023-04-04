@@ -4,6 +4,7 @@ import furrymatch.domain.PersistentToken;
 import furrymatch.domain.User;
 import furrymatch.repository.PersistentTokenRepository;
 import furrymatch.repository.UserRepository;
+import furrymatch.security.AuthoritiesConstants;
 import furrymatch.security.SecurityUtils;
 import furrymatch.service.MailService;
 import furrymatch.service.UserService;
@@ -22,7 +23,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import tech.jhipster.web.util.HeaderUtil;
 
 /**
  * REST controller for managing the current user's account.
@@ -47,6 +50,7 @@ public class AccountResource {
     private final MailService mailService;
 
     private final PersistentTokenRepository persistentTokenRepository;
+    private String applicationName;
 
     public AccountResource(
         UserRepository userRepository,
@@ -297,5 +301,15 @@ public class AccountResource {
             password.length() < ManagedUserVM.PASSWORD_MIN_LENGTH ||
             password.length() > ManagedUserVM.PASSWORD_MAX_LENGTH
         );
+    }
+
+    @PostMapping("/account/selectedPet/{petId}")
+    public ResponseEntity<Void> updateUserPetId(@PathVariable(value = "petId", required = false) final Long petId) {
+        Long id = userService.getUserWithAuthorities().get().getId();
+        userService.updateUserSelectedPet(petId, id);
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, "user", id.toString()))
+            .build();
     }
 }

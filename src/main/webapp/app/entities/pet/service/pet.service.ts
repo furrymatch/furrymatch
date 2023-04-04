@@ -16,6 +16,7 @@ export type EntityArrayResponseType = HttpResponse<IPet[]>;
 @Injectable({ providedIn: 'root' })
 export class PetService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/pets');
+  protected accountUrl = this.applicationConfigService.getEndpointFor('api/account/selectedPet');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -72,5 +73,11 @@ export class PetService {
       return [...petsToAdd, ...petCollection];
     }
     return petCollection;
+  }
+
+  selectedPet(id: number): Observable<HttpResponse<{}>> {
+    return this.http.post<HttpResponse<{}>>(`${this.accountUrl}/${id}`, {
+      observe: 'response',
+    });
   }
 }

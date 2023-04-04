@@ -260,6 +260,10 @@ public class UserService {
             .map(AdminUserDTO::new);
     }
 
+    public void updateUserSelectedPet(Long petId, Long id) {
+        userRepository.updateUserSelectedPet(petId, id);
+    }
+
     public void deleteUser(String login) {
         userRepository
             .findOneByLogin(login)
