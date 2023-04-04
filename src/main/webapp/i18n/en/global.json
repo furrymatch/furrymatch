@@ -73,7 +73,7 @@
           "required": "Your password is required.",
           "minlength": "Your password is required to be at least 4 characters.",
           "maxlength": "Your password cannot be longer than 50 characters.",
-          "strength": "Password strength:"
+          "strength": "Seguridad de la contraseña:"
         },
         "confirmpassword": {
           "required": "Your confirmation password is required.",
