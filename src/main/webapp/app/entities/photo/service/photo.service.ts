@@ -120,4 +120,8 @@ export class PhotoService {
       body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
     });
   }
+
+  findAllPhotosByPetID(petId: number): Observable<EntityArrayResponseType> {
+    return this.http.get<IPhoto[]>(`${this.resourceUrl}/by-pet-id/${petId}`, { observe: 'response' });
+  }
 }

@@ -4,7 +4,6 @@
     <div class="profile-pic">
       <div class="profile-pic-div">
         <ngx-dropzone *ngIf="petFiles.length < maxPhotos" (change)="onSelect($event)" [multiple]="true">
-          <!--          <input type="file" accept="image/*"/>-->
           <ngx-dropzone-label>Arrastrá o seleccioná<br />una foto</ngx-dropzone-label>
 
           <ngx-dropzone-image-preview
@@ -156,7 +155,15 @@
               <jhi-alert-error></jhi-alert-error>
             </div>
             <div>
-              <button type="submit" id="save-entity" data-cy="entityCreateSaveButton" class="btn btn-blue"><span>Confirmar</span></button>
+              <button
+                type="submit"
+                id="save-entity"
+                data-cy="entityCreateSaveButton"
+                class="btn btn-blue"
+                [routerLink]="['/pet', pet?.id, 'view']"
+              >
+                <span>Confirmar</span>
+              </button>
             </div>
             <div *ngIf="update" class="delete-text">
               <span (click)="delete()">Eliminar mascota</span>
