@@ -135,6 +135,7 @@ export class PetComponent implements OnInit {
   }
   protected selectPet(id: number): void {
     this.petService.selectedPet(id).subscribe({
+      // next: () => this.router.navigateByUrl('/pet/'+id+'/view'),
       next: () => this.router.navigateByUrl('/search-criteria/new'),
       error: () => console.log('error'),
     });

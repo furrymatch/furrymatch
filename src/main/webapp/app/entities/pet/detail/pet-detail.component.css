@@ -89,6 +89,40 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: flex-start;
+}
+
+.cnt-info-pet {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start !important;
+  align-content: flex-start !important;
+}
+
+.cnt-info-pet-big {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start !important;
+}
+
+.cnt-btns-pet {
+  display: flex;
+  flex-direction: row;
+  margin-right: var(--margin-min);
+}
+
+a {
+  margin-right: var(--margin-min);
+}
+
+a[title]:hover:after {
+  content: attr(title);
+  background-color: var(--clr-white);
+  color: var(--clr-orange);
+  padding: 5px;
+  border-radius: 5px;
+  position: absolute;
+  z-index: 1;
 }
 
 .cnt-info-user {
