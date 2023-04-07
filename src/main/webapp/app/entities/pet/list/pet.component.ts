@@ -14,6 +14,7 @@ import { PetDeleteDialogComponent } from '../delete/pet-delete-dialog.component'
 @Component({
   selector: 'jhi-pet',
   templateUrl: './pet.component.html',
+  styleUrls: ['./pet.component.css'],
 })
 export class PetComponent implements OnInit {
   pets?: IPet[];
