@@ -48,6 +48,7 @@ spring:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
   mail:
+    base-url: https://furrymatch.azurewebsites.net # Modify according to your server's URL
     host: smtp.gmail.com
     port: 587
     username: furrymatchapp@gmail.com #Replace this field with your Gmail username.
