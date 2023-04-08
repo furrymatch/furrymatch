@@ -3,7 +3,7 @@
   <div>
     <div class="profile-pic">
       <div class="profile-pic-div">
-        <ngx-dropzone *ngIf="petFiles.length < maxPhotos" (change)="onSelect($event)" [multiple]="true">
+        <ngx-dropzone *ngIf="petFiles.length <= maxPhotos" (change)="onSelect($event)" [multiple]="true">
           <ngx-dropzone-label>Arrastrá o seleccioná<br />una foto</ngx-dropzone-label>
 
           <ngx-dropzone-image-preview
