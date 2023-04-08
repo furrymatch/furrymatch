@@ -42,6 +42,9 @@ export class PetUpdateComponent implements OnInit {
   petFiles: File[] = [];
   petPhotos: string[][] = Array(5).fill([]);
 
+  photoUrlToIdMap: Map<string, number> = new Map();
+  existingPhotos: IPhoto[] = [];
+
   filteredBreedsSharedCollection: IBreed[] = [];
   destroy$: Subject<void> = new Subject();
 
@@ -65,6 +68,7 @@ export class PetUpdateComponent implements OnInit {
       if (pet) {
         this.update = true;
         this.updateForm(pet);
+        this.loadExistingPetPhotos();
       }
 
       this.loadRelationshipsOptions();
@@ -80,6 +84,40 @@ export class PetUpdateComponent implements OnInit {
       });
 
     this.loadPets();
+  }
+
+  loadExistingPetPhotos(): void {
+    if (this.pet && this.pet.id) {
+      this.photoService.findAllPhotosByPetID(this.pet.id).subscribe((response: HttpResponse<any[]>) => {
+        const photos = response.body;
+        console.log('Pet object:', this.pet);
+        console.log('Pet photos:', photos);
+
+        photos?.forEach((photo: any, index: number) => {
+          if (photo.photoUrl) {
+            this.photoService.downloadImage(photo.photoUrl).subscribe((response: Blob) => {
+              const blob = new Blob([response], { type: 'image/jpeg' });
+              const file = new File([blob], `pet_photo_${index}.jpeg`, { type: 'image/jpeg' });
+              this.petFiles.push(file);
+              const photoObj: IPhoto = {
+                id: photo.id,
+                uploadDate: null,
+                photoUrl: photo.photoUrl,
+                pet: null,
+              };
+              this.existingPhotos.push(photoObj);
+
+              if (photoObj.photoUrl !== undefined && photoObj.photoUrl !== null) {
+                this.photoUrlToIdMap.set(photoObj.photoUrl, photoObj.id);
+              }
+            });
+          }
+        });
+
+        console.log('Existing photos:', this.existingPhotos);
+        console.log('photoUrlToIdMap:', this.photoUrlToIdMap); // Agregamos esta línea para verificar el contenido del mapa
+      });
+    }
   }
 
   loadPets(): void {
@@ -104,7 +142,30 @@ export class PetUpdateComponent implements OnInit {
   }
 
   onRemove(event?: any): void {
-    this.petFiles.splice(this.petFiles.indexOf(event), 1);
+    console.log('Foto eliminada');
+    const removedIndex = this.petFiles.indexOf(event);
+    console.log('id de la foto:' + removedIndex);
+    this.petFiles.splice(removedIndex, 1);
+    console.log('id de la foto 2:' + this.petFiles);
+
+    if (removedIndex !== -1) {
+      const removedPhotoUrl = this.petPhotos[removedIndex];
+      console.log('removedPhotoUrl:', removedPhotoUrl);
+
+      // if (removedPhotoUrl) {
+      //   // const removedPhotoId = this.photoUrlToIdMap.get(removedPhotoUrl);
+      //   console.log('removedPhotoId:', removedPhotoId);
+      //
+      //   // Si se trata de una foto existente, elimínela de la base de datos
+      //   if (removedPhotoId) {
+      //     this.photoService.delete(removedPhotoId).subscribe(() => {
+      //       console.log('Foto eliminada de la base de datos');
+      //     });
+      //   }
+      // }
+
+      this.petPhotos.splice(removedIndex, 1);
+    }
   }
 
   onUpload(): void {
@@ -170,6 +231,7 @@ export class PetUpdateComponent implements OnInit {
     this.isSaving = true;
     const pet = this.petFormService.getPet(this.editForm);
     console.log('Pet object:', pet);
+
     pet.photos = this.createPhotosArray();
     console.log(pet.photos.length);
     if (pet.id !== null) {
@@ -183,16 +245,28 @@ export class PetUpdateComponent implements OnInit {
     const photos: IPhoto[] = [];
 
     const flattenedPhotos = this.petPhotos.reduce((acc, val) => acc.concat(val), []);
-    let counter = 0;
+    const counter = 0;
     for (const photoUrl of flattenedPhotos) {
-      const photo: IPhoto = {
-        id: counter,
-        uploadDate: null,
-        photoUrl: photoUrl,
-        pet: null,
-      };
-      photos.push(photo);
-      counter++;
+      const photoId = this.photoUrlToIdMap.get(photoUrl);
+      if (photoId !== undefined) {
+        // Si el ID de la foto existe, crea un objeto IPhoto con el ID correcto
+        const photo: IPhoto = {
+          id: photoId,
+          uploadDate: null,
+          photoUrl: photoUrl,
+          pet: null,
+        };
+        photos.push(photo);
+      } else {
+        // Si el ID de la foto no existe, crea un nuevo objeto IPhoto sin ID
+        const photo: IPhoto = {
+          id: counter,
+          uploadDate: null,
+          photoUrl: photoUrl,
+          pet: null,
+        };
+        photos.push(photo);
+      }
     }
     return photos;
   }
