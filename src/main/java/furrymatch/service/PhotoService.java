@@ -2,6 +2,7 @@ package furrymatch.service;
 
 import furrymatch.domain.Photo;
 import furrymatch.repository.PhotoRepository;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,5 +104,12 @@ public class PhotoService {
     public void delete(Long id) {
         log.debug("Request to delete Photo : {}", id);
         photoRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Photo> findAllPhotosByPetID(Long id) {
+        log.debug("Request to get Photos : {}", id);
+        List<Photo> photos = photoRepository.findAllPhotosByPetID(id);
+        return photos;
     }
 }

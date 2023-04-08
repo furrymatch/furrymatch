@@ -39,7 +39,7 @@ public class Contract implements Serializable {
     private LocalDate contractDate;
 
     @JsonIgnoreProperties(value = { "contract", "chats", "firstLiked", "secondLiked" }, allowSetters = true)
-    @OneToOne(mappedBy = "contract")
+    @OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true, mappedBy = "contract")
     private Match match;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

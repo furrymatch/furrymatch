@@ -80,9 +80,9 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="adress">
+          <th scope="col" jhiSortBy="address">
             <div class="d-flex">
-              <span jhiTranslate="furryMatchApp.owner.adress">Adress</span>
+              <span jhiTranslate="furryMatchApp.owner.address">Address</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -104,18 +104,6 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="email">
-            <div class="d-flex">
-              <span jhiTranslate="furryMatchApp.owner.email">Email</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="userPassword">
-            <div class="d-flex">
-              <span jhiTranslate="furryMatchApp.owner.userPassword">User Password</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
           <th scope="col" jhiSortBy="otp">
             <div class="d-flex">
               <span jhiTranslate="furryMatchApp.owner.otp">Otp</span>
@@ -134,13 +122,19 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
+          <th scope="col" jhiSortBy="user.id">
+            <div class="d-flex">
+              <span jhiTranslate="furryMatchApp.owner.user">User</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let owner of owners; trackBy: trackId" data-cy="entityTable">
           <td>
-            <a [routerLink]="['/owner', owner.id, 'view']">{{ owner.id }}</a>
+            <a [routerLink]="['/owner', owner.user_id, 'view']">{{ owner.user_id }}</a>
           </td>
           <td>{{ owner.firstName }}</td>
           <td>{{ owner.secondName }}</td>
@@ -149,23 +143,34 @@
           <td>{{ owner.phoneNumber }}</td>
           <td>{{ owner.photo }}</td>
           <td>{{ owner.identityNumber }}</td>
-          <td>{{ owner.adress }}</td>
+          <td>{{ owner.address }}</td>
           <td>{{ owner.province }}</td>
           <td>{{ owner.canton }}</td>
           <td>{{ owner.district }}</td>
-          <td>{{ owner.email }}</td>
-          <td>{{ owner.userPassword }}</td>
           <td>{{ owner.otp }}</td>
           <td>{{ owner.createdAt | formatMediumDate }}</td>
           <td>{{ owner.updatedAt | formatMediumDate }}</td>
+          <td>
+            {{ owner.user?.id }}
+          </td>
           <td class="text-end">
             <div class="btn-group">
-              <button type="submit" [routerLink]="['/owner', owner.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+              <button
+                type="submit"
+                [routerLink]="['/owner', owner.user_id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
                 <fa-icon icon="eye"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
               </button>
 
-              <button type="submit" [routerLink]="['/owner', owner.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+              <button
+                type="submit"
+                [routerLink]="['/owner', owner.user_id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
               </button>

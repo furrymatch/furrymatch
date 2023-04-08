@@ -14,6 +14,7 @@ import { PetDeleteDialogComponent } from '../delete/pet-delete-dialog.component'
 @Component({
   selector: 'jhi-pet',
   templateUrl: './pet.component.html',
+  styleUrls: ['./pet.component.css'],
 })
 export class PetComponent implements OnInit {
   pets?: IPet[];
@@ -90,6 +91,7 @@ export class PetComponent implements OnInit {
     this.fillComponentAttributesFromResponseHeader(response.headers);
     const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
     this.pets = dataFromBody;
+    console.log(this.pets);
   }
 
   protected fillComponentAttributesFromResponseBody(data: IPet[] | null): IPet[] {
@@ -131,5 +133,12 @@ export class PetComponent implements OnInit {
     } else {
       return [predicate + ',' + ascendingQueryParam];
     }
+  }
+  protected selectPet(id: number): void {
+    this.petService.selectedPet(id).subscribe({
+      // next: () => this.router.navigateByUrl('/pet/'+id+'/view'),
+      next: () => this.router.navigateByUrl('/search-criteria/new'),
+      error: () => console.log('error'),
+    });
   }
 }

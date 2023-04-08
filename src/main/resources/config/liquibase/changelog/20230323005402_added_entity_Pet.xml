@@ -38,7 +38,7 @@
             <column name="desire_ammount" type="double">
                 <constraints nullable="true" />
             </column>
-            <column name="owner_id" type="bigint">
+            <column name="owner_user_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <column name="breed_id" type="bigint">

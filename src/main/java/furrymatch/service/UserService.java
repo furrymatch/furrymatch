@@ -2,8 +2,10 @@ package furrymatch.service;
 
 import furrymatch.config.Constants;
 import furrymatch.domain.Authority;
+import furrymatch.domain.Owner;
 import furrymatch.domain.User;
 import furrymatch.repository.AuthorityRepository;
+import furrymatch.repository.OwnerRepository;
 import furrymatch.repository.PersistentTokenRepository;
 import furrymatch.repository.UserRepository;
 import furrymatch.security.AuthoritiesConstants;
@@ -37,6 +39,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final OwnerRepository ownerRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final PersistentTokenRepository persistentTokenRepository;
@@ -47,6 +51,7 @@ public class UserService {
 
     public UserService(
         UserRepository userRepository,
+        OwnerRepository ownerRepository,
         PasswordEncoder passwordEncoder,
         PersistentTokenRepository persistentTokenRepository,
         AuthorityRepository authorityRepository,
@@ -57,6 +62,7 @@ public class UserService {
         this.persistentTokenRepository = persistentTokenRepository;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.ownerRepository = ownerRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -99,7 +105,21 @@ public class UserService {
             });
     }
 
-    public User registerUser(AdminUserDTO userDTO, String password) {
+    public User registerUser(
+        AdminUserDTO userDTO,
+        String password,
+        String firstName,
+        String secondName,
+        String firstLastName,
+        String secondLastName,
+        Long phoneNumber,
+        String photo,
+        String identityNumber,
+        String address,
+        String province,
+        String canton,
+        String district
+    ) {
         userRepository
             .findOneByLogin(userDTO.getLogin().toLowerCase())
             .ifPresent(existingUser -> {
@@ -129,15 +149,31 @@ public class UserService {
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
         // new user is not active
-        newUser.setActivated(false);
+        newUser.setActivated(true);
         // new user gets registration key
-        newUser.setActivationKey(RandomUtil.generateActivationKey());
+        // newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
-        this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
+
+        //Create and save the Owner entity
+        Owner owner = new Owner();
+        owner.setUser(newUser);
+        owner.setFirstName(firstName);
+        owner.setSecondName(secondName);
+        owner.setFirstLastName(firstLastName);
+        owner.setSecondLastName(secondLastName);
+        owner.setPhoneNumber(phoneNumber);
+        owner.setPhoto(photo);
+        owner.setIdentityNumber(identityNumber);
+        owner.setAddress(address);
+        owner.setProvince(province);
+        owner.setCanton(canton);
+        owner.setDistrict(district);
+        ownerRepository.save(owner);
+        this.clearUserCaches(newUser);
         return newUser;
     }
 
@@ -224,6 +260,10 @@ public class UserService {
             .map(AdminUserDTO::new);
     }
 
+    public void updateUserSelectedPet(Long petId, Long id) {
+        userRepository.updateUserSelectedPet(petId, id);
+    }
+
     public void deleteUser(String login) {
         userRepository
             .findOneByLogin(login)
@@ -243,7 +283,24 @@ public class UserService {
      * @param langKey   language key.
      * @param imageUrl  image URL of user.
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
+    public void updateUser(
+        String firstName,
+        String lastName,
+        String email,
+        String langKey,
+        String imageUrl,
+        String password,
+        String secondName,
+        String firstLastName,
+        String secondLastName,
+        Long phoneNumber,
+        String photo,
+        String identityNumber,
+        String address,
+        String province,
+        String canton,
+        String district
+    ) {
         SecurityUtils
             .getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)

@@ -3,6 +3,7 @@ package furrymatch.web.rest;
 import furrymatch.domain.Owner;
 import furrymatch.repository.OwnerRepository;
 import furrymatch.service.OwnerService;
+import furrymatch.service.UserService;
 import furrymatch.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -40,12 +41,14 @@ public class OwnerResource {
     private String applicationName;
 
     private final OwnerService ownerService;
+    private final UserService userService;
 
     private final OwnerRepository ownerRepository;
 
-    public OwnerResource(OwnerService ownerService, OwnerRepository ownerRepository) {
+    public OwnerResource(OwnerService ownerService, OwnerRepository ownerRepository, UserService userService) {
         this.ownerService = ownerService;
         this.ownerRepository = ownerRepository;
+        this.userService = userService;
     }
 
     /**
@@ -81,7 +84,9 @@ public class OwnerResource {
     @PutMapping("/owners/{id}")
     public ResponseEntity<Owner> updateOwner(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody Owner owner)
         throws URISyntaxException {
-        log.debug("REST request to update Owner : {}, {}", id, owner);
+        owner.setId(id);
+        log.debug("REST request update Owner : {}, {}", id, owner);
+        System.out.println(owner);
         if (owner.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -172,10 +177,15 @@ public class OwnerResource {
     @DeleteMapping("/owners/{id}")
     public ResponseEntity<Void> deleteOwner(@PathVariable Long id) {
         log.debug("REST request to delete Owner : {}", id);
-        ownerService.delete(id);
-        return ResponseEntity
+
+        // ownerService.delete(id);
+        /*return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-            .build();
+            .build();*/
+        ownerService.delete(id);
+        String login = userService.getUserWithAuthorities().get().getLogin();
+        userService.deleteUser(login);
+        return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName, "userManagement.deleted", login)).build();
     }
 }

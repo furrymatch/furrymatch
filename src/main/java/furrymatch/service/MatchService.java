@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service Implementation for managing {@link Match}.
+ *
  */
 @Service
 @Transactional

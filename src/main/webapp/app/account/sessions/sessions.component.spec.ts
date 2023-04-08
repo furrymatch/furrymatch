@@ -16,14 +16,26 @@ describe('SessionsComponent', () => {
   let comp: SessionsComponent;
   const sessions: Session[] = [new Session('xxxxxx==', new Date(2015, 10, 15), '0:0:0:0:0:0:0:1', 'Mozilla/5.0')];
   const account: Account = {
+    id: 0,
+    user_id: 0,
     firstName: 'John',
-    lastName: 'Doe',
+    lastName: 'Marcos',
     activated: true,
     email: 'john.doe@mail.com',
     langKey: 'en',
     login: 'john',
     authorities: [],
     imageUrl: '',
+    secondName: '',
+    firstLastName: '',
+    secondLastName: '',
+    phoneNumber: 8989989,
+    photo: '',
+    identityNumber: '',
+    address: '',
+    province: '',
+    canton: '',
+    district: '',
   };
 
   beforeEach(() => {

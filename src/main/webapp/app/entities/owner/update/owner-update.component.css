@@ -27,14 +27,6 @@
   margin-bottom: var(--margin-small);
 }
 
-.cnt-pass {
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
-  gap: var(--margin-md);
-  margin-bottom: var(--margin-md);
-}
-
 .cnt-row1,
 .cnt-row2,
 .cnt-row3 {
@@ -80,13 +72,15 @@
   margin-top: var(--margin-md-small);
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .profile-pic-div {
   display: flex;
   flex-direction: column;
-  height: 100px;
-  width: 100px;
+  height: 150px;
+  width: 150px;
   border-radius: 25%;
   cursor: pointer;
 }

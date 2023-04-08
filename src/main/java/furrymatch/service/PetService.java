@@ -1,12 +1,18 @@
 package furrymatch.service;
 
+import furrymatch.domain.Owner;
 import furrymatch.domain.Pet;
+import furrymatch.domain.Photo;
+import furrymatch.repository.OwnerRepository;
 import furrymatch.repository.PetRepository;
-import java.util.Optional;
+import furrymatch.repository.PhotoRepository;
+import furrymatch.repository.UserRepository;
+import furrymatch.security.SecurityUtils;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +27,20 @@ public class PetService {
 
     private final PetRepository petRepository;
 
-    public PetService(PetRepository petRepository) {
+    private final PhotoRepository photoRepository;
+    private final UserRepository userRepository;
+    private final OwnerRepository ownerRepository;
+
+    public PetService(
+        PetRepository petRepository,
+        PhotoRepository photoRepository,
+        UserRepository userRepository,
+        OwnerRepository ownerRepository
+    ) {
         this.petRepository = petRepository;
+        this.photoRepository = photoRepository;
+        this.userRepository = userRepository;
+        this.ownerRepository = ownerRepository;
     }
 
     /**
@@ -33,7 +51,34 @@ public class PetService {
      */
     public Pet save(Pet pet) {
         log.debug("Request to save Pet : {}", pet);
-        return petRepository.save(pet);
+
+        SecurityUtils
+            .getCurrentUserLogin()
+            .flatMap(userRepository::findOneByLogin)
+            .ifPresent(user -> {
+                Optional<Owner> optionalOwner = ownerRepository.findById(user.getId());
+                Owner owner = optionalOwner.get();
+                pet.setOwner(owner);
+                System.out.println(owner);
+                log.debug("Changed Information for User: {}", user);
+            });
+
+        petRepository.save(pet);
+
+        if (pet.getPhotos() != null) {
+            LocalDate currentDate = LocalDate.now();
+            pet
+                .getPhotos()
+                .forEach(photo -> {
+                    photo.setPet(pet);
+                    photo.setId(null);
+                    if (photo.getUploadDate() == null) {
+                        photo.setUploadDate(currentDate);
+                    }
+                    photoRepository.save(photo);
+                });
+        }
+        return pet;
     }
 
     /**
@@ -44,8 +89,53 @@ public class PetService {
      */
     public Pet update(Pet pet) {
         log.debug("Request to update Pet : {}", pet);
-        return petRepository.save(pet);
+
+        SecurityUtils
+            .getCurrentUserLogin()
+            .flatMap(userRepository::findOneByLogin)
+            .ifPresent(user -> {
+                Optional<Owner> optionalOwner = ownerRepository.findById(user.getId());
+                Owner owner = optionalOwner.get();
+                pet.setOwner(owner);
+                System.out.println(owner);
+                log.debug("Changed Information for User: {}", user);
+            });
+
+        petRepository.save(pet);
+
+        if (pet.getPhotos() != null) {
+            LocalDate currentDate = LocalDate.now();
+            pet
+                .getPhotos()
+                .forEach(photo -> {
+                    photo.setPet(pet);
+                    if (photo.getUploadDate() == null) {
+                        photo.setUploadDate(currentDate);
+                    }
+                    photoRepository.save(photo);
+                });
+        }
+        return pet;
     }
+
+    /* public Pet update(Pet pet, List<Photo> photos) {
+        log.debug("Request to update Pet : {}", pet);
+        Pet updatedPed = petRepository.save(pet);
+
+        //Create and update the Photo entity
+        // Iterate through the photos and save them
+        if (photos != null) {
+            LocalDate currentDate = LocalDate.now();
+            for (Photo photo : photos) {
+                photo.setPet(updatedPed);
+                if (photo.getUploadDate() == null){
+                    photo.setUploadDate(currentDate);
+                }
+                photoRepository.save(photo);
+            }
+        }
+        return updatedPed;
+    }*/
 
     /**
      * Partially update a pet.
@@ -92,13 +182,23 @@ public class PetService {
     /**
      * Get all the pets.
      *
-     * @param pageable the pagination information.
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<Pet> findAll(Pageable pageable) {
+    /* public Page<Pet> findAll(Pageable pageable) {
         log.debug("Request to get all Pets");
         return petRepository.findAll(pageable);
+    }*/
+    public List<Pet> findAll(Long id) {
+        log.debug("Request to get all Pets");
+        List<Pet> pets = petRepository.findAllByOwnerID(id);
+        ArrayList<Pet> newPets = new ArrayList<>();
+        pets.forEach(pet -> {
+            Set<Photo> set = new HashSet<>(photoRepository.findAllPhotosByPetID(pet.getId()));
+            pet.setPhotos(set);
+            newPets.add(pet);
+        });
+        return newPets;
     }
 
     /**

@@ -8,10 +8,10 @@
     -->
     <changeSet id="20230323005402-2" author="jhipster">
 
-        <addForeignKeyConstraint baseColumnNames="owner_id"
+        <addForeignKeyConstraint baseColumnNames="owner_user_id"
                                  baseTableName="pet"
-                                 constraintName="fk_pet__owner_id"
-                                 referencedColumnNames="id"
+                                 constraintName="fk_pet__user_id"
+                                 referencedColumnNames="user_id"
                                  referencedTableName="owner"/>
 
         <addForeignKeyConstraint baseColumnNames="breed_id"

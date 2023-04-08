@@ -1,11 +1,13 @@
 import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-
 import { PasswordResetInitService } from './password-reset-init.service';
+// @ts-ignore
+import Swal from 'sweetalert2/dist/sweetalert2.all.js';
 
 @Component({
   selector: 'jhi-password-reset-init',
   templateUrl: './password-reset-init.component.html',
+  styleUrls: ['./password-reset-init.component.scss', '../../register/register.component.css'],
 })
 export class PasswordResetInitComponent implements AfterViewInit {
   @ViewChild('email', { static: false })
@@ -25,6 +27,21 @@ export class PasswordResetInitComponent implements AfterViewInit {
   }
 
   requestReset(): void {
-    this.passwordResetInitService.save(this.resetRequestForm.get(['email'])!.value).subscribe(() => (this.success = true));
+    this.passwordResetInitService.save(this.resetRequestForm.get(['email'])!.value).subscribe(
+      () => {
+        this.success = true;
+        console.log('success email sent');
+      },
+      error => {
+        console.log(error);
+        Swal.fire({
+          title: 'Error',
+          text: 'El correo ingresado no se encuentra registrado',
+          icon: 'error',
+          confirmButtonColor: '#3381f6',
+          confirmButtonText: 'Cerrar',
+        });
+      }
+    );
   }
 }

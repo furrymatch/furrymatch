@@ -1,8 +1,11 @@
 package furrymatch.web.rest;
 
+import furrymatch.domain.Pet;
 import furrymatch.domain.SearchCriteria;
 import furrymatch.repository.SearchCriteriaRepository;
+import furrymatch.service.PetService;
 import furrymatch.service.SearchCriteriaService;
+import furrymatch.service.UserService;
 import furrymatch.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -43,9 +46,20 @@ public class SearchCriteriaResource {
 
     private final SearchCriteriaRepository searchCriteriaRepository;
 
-    public SearchCriteriaResource(SearchCriteriaService searchCriteriaService, SearchCriteriaRepository searchCriteriaRepository) {
+    private final UserService userService;
+
+    private final PetService petService;
+
+    public SearchCriteriaResource(
+        SearchCriteriaService searchCriteriaService,
+        PetService petService,
+        SearchCriteriaRepository searchCriteriaRepository,
+        UserService userService
+    ) {
         this.searchCriteriaService = searchCriteriaService;
         this.searchCriteriaRepository = searchCriteriaRepository;
+        this.userService = userService;
+        this.petService = petService;
     }
 
     /**
