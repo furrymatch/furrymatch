@@ -3,8 +3,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { RegisterService } from '../register/register.service';
 import { OwnerService } from '../../entities/owner/service/owner.service';
-
-//import Swal from 'sweetalert2/dist/sweetalert2.js';
 import Swal from 'sweetalert2';
 
 import { AccountService } from 'app/core/auth/account.service';
@@ -26,6 +24,8 @@ export class SettingsComponent implements OnInit {
   success = false;
   languages = LANGUAGES;
   files: File[] = [];
+
+  currentPhotoUrl: string | null = null;
 
   doNotMatch = false;
   error = false;
@@ -126,11 +126,25 @@ export class SettingsComponent implements OnInit {
 
         this.getCantones(Number(owner.body?.province));
         this.getDistricts(Number(owner.body?.province), Number(owner.body?.canton));
+
+        if (owner.body?.photo) {
+          this.currentPhotoUrl = String(owner.body?.photo);
+          const fileName = owner.body.photo.split('/').pop() || 'user_photo.jpeg';
+          this.loadExistingImage(this.currentPhotoUrl, fileName);
+        }
       }
     });
     this.registerService.getProvinces().subscribe((response: any) => {
       const provincesArray = Object.entries(response).map(([id, name]) => ({ id, name }));
       this.provinces = provincesArray;
+    });
+  }
+
+  loadExistingImage(url: string, fileName: string): void {
+    this.registerService.downloadImage(url).subscribe(response => {
+      const blob = new Blob([response], { type: 'image/jpeg' });
+      const file = new File([blob], fileName, { type: 'image/jpeg' });
+      this.files = [file];
     });
   }
 
@@ -191,7 +205,6 @@ export class SettingsComponent implements OnInit {
       Swal.fire({
         title: 'Error',
         text: 'Debés primero arrastrar o seleccionar una imagen.',
-        // type: 'error',
         icon: 'error',
         confirmButtonColor: '#3381f6',
         confirmButtonText: 'Cerrar',
@@ -210,7 +223,6 @@ export class SettingsComponent implements OnInit {
         Swal.fire({
           title: 'Fotografía agregada',
           text: 'Continuá registrando tus datos.',
-          // type: 'success',
           icon: 'success',
           confirmButtonColor: '#3381f6',
           confirmButtonText: 'Cerrar',
@@ -223,12 +235,17 @@ export class SettingsComponent implements OnInit {
     this.success = false;
 
     const account = this.settingsForm.getRawValue();
-    this.ownerService.update({ user_id: this.userId, ...account, photo: this.photo.value }).subscribe({
+    let photoToSave = this.photo.value;
+
+    if (this.currentPhotoUrl && this.files.length > 0 && this.files[0].name === this.currentPhotoUrl.split('/').pop()) {
+      photoToSave = this.currentPhotoUrl;
+    }
+
+    this.ownerService.update({ user_id: this.userId, ...account, photo: photoToSave }).subscribe({
       next: () => (
         Swal.fire({
           title: 'Cambio exitoso',
           text: 'Se cambiaron exitosamente tus datos.',
-          // type: 'success',
           icon: 'success',
           confirmButtonColor: '#3381f6',
           confirmButtonText: 'Cerrar',
@@ -239,7 +256,6 @@ export class SettingsComponent implements OnInit {
         Swal.fire({
           title: 'Error',
           text: 'Hubo un error cambiando tus datos; intenta nuevamente..',
-          // type: 'error',
           icon: 'error',
           confirmButtonColor: '#3381f6',
           confirmButtonText: 'Cerrar',

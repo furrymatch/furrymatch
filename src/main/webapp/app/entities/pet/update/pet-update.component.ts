@@ -141,9 +141,6 @@ export class PetUpdateComponent implements OnInit {
       });
       console.log('Fotos en onUpload ' + this.petFiles);
     });
-
-    // Vacía el array de archivos después de subir las fotos
-    this.petFiles = [];
   }
 
   previousState(): void {
@@ -169,7 +166,7 @@ export class PetUpdateComponent implements OnInit {
   photos: FormArray = new FormArray<any>([]);
 
   save(): void {
-    console.log('Save function called'); // Agrega esta línea
+    console.log('Save function called');
     this.isSaving = true;
     const pet = this.petFormService.getPet(this.editForm);
     console.log('Pet object:', pet);
@@ -197,8 +194,6 @@ export class PetUpdateComponent implements OnInit {
       photos.push(photo);
       counter++;
     }
-    console.log('Photos array:', photos); // Agrega esta línea para ver el contenido de 'photos'
-
     return photos;
   }
 
@@ -241,7 +236,7 @@ export class PetUpdateComponent implements OnInit {
     this.breedService
       .query()
       .pipe(map((res: HttpResponse<IBreed[]>) => res.body ?? []))
-      .pipe(tap((breeds: IBreed[]) => console.log('API response:', breeds))) // Agrega esta línea
+      .pipe(tap((breeds: IBreed[]) => console.log('API response:', breeds)))
       .pipe(map((breeds: IBreed[]) => this.breedService.addBreedToCollectionIfMissing<IBreed>(breeds, this.pet?.breed)))
       .subscribe((breeds: IBreed[]) => (this.breedsSharedCollection = breeds));
     console.log(

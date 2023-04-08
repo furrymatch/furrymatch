@@ -15,6 +15,10 @@ export class RegisterService {
     private authenticationService: AuthServerProvider
   ) {}
 
+  downloadImage(url: string): Observable<any> {
+    return this.http.get(url, { responseType: 'blob' });
+  }
+
   uploadImage(vals: any): Observable<any> {
     const data = vals;
     return this.http.post('https://api.cloudinary.com/v1_1/alocortesu/image/upload', data);
