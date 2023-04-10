@@ -57,9 +57,6 @@ spring:
     cache: true
   main:
     web-application-type: servlet
-  config:
-    activate:
-      on-profile:
 
 # ===================================================================
 # To enable TLS in production, generate a certificate using:
