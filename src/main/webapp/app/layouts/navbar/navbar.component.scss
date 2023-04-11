@@ -1,36 +1,123 @@
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
-
-/* ==========================================================================
-Navbar
-========================================================================== */
-
-.navbar-version {
-  font-size: 0.65em;
-  color: $navbar-dark-color;
+:host {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
 
-.profile-image {
-  height: 1.75em;
-  width: 1.75em;
+.container-fluid {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 90px;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  border-bottom: 0.5px solid var(--clr-grey);
+  background-color: var(--clr-white);
 }
 
-.navbar {
-  padding: 0.2rem 1rem;
-
-  a.nav-link {
-    font-weight: 400;
-  }
+.img-logo-index {
+  height: 20px;
+  width: auto;
 }
 
-/* ==========================================================================
-Logo styles
-========================================================================== */
-.logo-img {
-  height: 45px;
-  width: 45px;
-  display: inline-block;
-  vertical-align: middle;
-  // background: url('../../../content/images/logo-jhipster.png') no-repeat center center;
-  background-size: contain;
+.btn-icon {
+  height: 24px;
+  width: 24px;
+  color: var(--clr-grey) !important;
+}
+
+a:-webkit-any-link {
+  color: var(--clr-black) !important;
+  cursor: pointer;
+}
+
+.navbar-collapse collapse {
+  display: flex;
+  justify-content: flex-end !important;
+}
+
+.cnt-sections {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 48px;
+  background-color: var(--clr-palid-grey);
+}
+
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  width: 48px;
+  margin-left: 28px;
+}
+
+.cnt-logo {
+  //margin-left: 4%;
+}
+
+.custom-dropdown-menu-user {
+  display: none;
+  position: absolute;
+  right: 68px;
+  left: auto;
+  background-color: var(--clr-palid-grey);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  padding: 0px;
+}
+
+.custom-dropdown-menu-user a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: right;
+}
+
+.custom-dropdown-menu-user a:hover {
+  background-color: var(--clr-orange);
+  color: var(--clr-white);
+}
+
+.custom-dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: var(--clr-palid-grey);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  padding: 0px;
+}
+
+.custom-dropdown-menu a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.custom-dropdown-menu a:hover {
+  background-color: var(--clr-orange);
+}
+
+.show {
+  display: block;
+}
+
+.nav-item {
+  list-style-type: none;
+}
+
+.custom-dropdown-menu li {
+  list-style-type: none;
+}
+
+.custom-dropdown-menu-user li {
+  list-style-type: none;
 }
