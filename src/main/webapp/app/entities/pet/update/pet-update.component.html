@@ -10,7 +10,7 @@
             *ngFor="let file of petFiles; let index = index"
             [file]="file"
             [removable]="true"
-            (removed)="onRemove(file)"
+            (removed)="onRemove({ file: $event })"
           ></ngx-dropzone-image-preview>
         </ngx-dropzone>
       </div>
