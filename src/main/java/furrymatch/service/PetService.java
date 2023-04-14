@@ -112,7 +112,10 @@ public class PetService {
                     if (photo.getUploadDate() == null) {
                         photo.setUploadDate(currentDate);
                     }
-                    photoRepository.save(photo);
+                    if (photo.getId() == null || photo.getId() == 0) {
+                        photo.setId(null); // Ensure ID is null for new photos
+                    }
+                    photoRepository.save(photo); // Save photo (create or update)
                 });
         }
         return pet;

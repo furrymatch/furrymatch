@@ -42,6 +42,12 @@ export class PetUpdateComponent implements OnInit {
   petFiles: File[] = [];
   petPhotos: string[][] = Array(5).fill([]);
 
+  photoUrlToIdMap: Map<string, number> = new Map();
+  existingPhotos: IPhoto[] = [];
+  petPhotoData: { file: File; photoObj: IPhoto; customId: string }[] = [];
+
+  deletedPhotos: { id: number; url: string | null }[] = [];
+
   filteredBreedsSharedCollection: IBreed[] = [];
   destroy$: Subject<void> = new Subject();
 
@@ -65,6 +71,7 @@ export class PetUpdateComponent implements OnInit {
       if (pet) {
         this.update = true;
         this.updateForm(pet);
+        this.loadExistingPetPhotos();
       }
 
       this.loadRelationshipsOptions();
@@ -80,6 +87,38 @@ export class PetUpdateComponent implements OnInit {
       });
 
     this.loadPets();
+  }
+
+  loadExistingPetPhotos(): void {
+    if (this.pet && this.pet.id) {
+      this.photoService.findAllPhotosByPetID(this.pet.id).subscribe((response: HttpResponse<any[]>) => {
+        const photos = response.body;
+        console.log('Pet object:', this.pet);
+        console.log('Pet photos:', photos);
+
+        photos?.forEach((photo: any, index: number) => {
+          if (photo.photoUrl) {
+            this.photoService.downloadImage(photo.photoUrl).subscribe((response: Blob) => {
+              const blob = new Blob([response], { type: 'image/jpeg' });
+              const file = new File([blob], `pet_photo_${index}.jpeg`, { type: 'image/jpeg' });
+              const customId = 'custom_' + index;
+              const photoObj: IPhoto = {
+                id: photo.id,
+                uploadDate: null,
+                photoUrl: photo.photoUrl,
+                pet: null,
+                customId,
+              };
+              const parentObj = { file, photoObj, customId };
+              this.petPhotoData.push(parentObj);
+              this.petFiles.push(file);
+
+              this.photoUrlToIdMap.set(photoObj.photoUrl!, photoObj.id);
+            });
+          }
+        });
+      });
+    }
   }
 
   loadPets(): void {
@@ -103,8 +142,54 @@ export class PetUpdateComponent implements OnInit {
     this.petFiles.push(...event.addedFiles);
   }
 
-  onRemove(event?: any): void {
-    this.petFiles.splice(this.petFiles.indexOf(event), 1);
+  onRemove(parentObj: { file: File }): void {
+    console.log('Removing:', parentObj.file);
+    const fileToRemove = parentObj.file;
+
+    const photoToRemoveIndex = this.petPhotoData.findIndex(photo => photo.file === fileToRemove);
+
+    if (photoToRemoveIndex >= 0) {
+      const removedPhoto = this.petPhotoData[photoToRemoveIndex];
+
+      if (removedPhoto) {
+        const removedPhotoUrl = removedPhoto.photoObj.photoUrl;
+        console.log('removedPhotoUrl:', removedPhotoUrl);
+
+        if (removedPhotoUrl) {
+          const removedPhotoId = removedPhoto.photoObj.id;
+          console.log('removedPhotoId:', removedPhotoId);
+
+          Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción eliminará la imagen permanentemente.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+          }).then(result => {
+            if (result.value) {
+              this.petFiles.splice(photoToRemoveIndex, 1);
+              this.petPhotoData.splice(photoToRemoveIndex, 1);
+
+              // Si se trata de una foto existente, añádela a la lista de fotos eliminadas
+              if (removedPhotoId) {
+                this.deletedPhotos.push({ id: removedPhotoId, url: null });
+              }
+
+              Swal.fire({
+                title: 'Eliminada',
+                text: 'La imagen ha sido eliminada.',
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar',
+              });
+            }
+          });
+        }
+      }
+    }
   }
 
   onUpload(): void {
@@ -127,8 +212,16 @@ export class PetUpdateComponent implements OnInit {
 
       this.petService.uploadImage(data).subscribe(response => {
         if (response) {
-          const secureUrl = response.secure_url;
-          this.petPhotos.push(secureUrl);
+          // Intenta encontrar un ID de foto eliminada sin una nueva URL asignada
+          const deletedPhotoIndex = this.deletedPhotos.findIndex(photo => photo.url === null);
+
+          // Si se encontró un ID de foto eliminada, asigna la URL de la nueva foto a este ID
+          if (deletedPhotoIndex !== -1) {
+            this.deletedPhotos[deletedPhotoIndex].url = response.secure_url;
+          } else {
+            // Si no se encontró un ID de foto eliminada, agrega la nueva foto a petPhotos
+            this.petPhotos.push(response.secure_url);
+          }
 
           Swal.fire({
             title: 'Fotografía agregada',
@@ -139,7 +232,7 @@ export class PetUpdateComponent implements OnInit {
           });
         }
       });
-      console.log('Fotos en onUpload ' + this.petFiles);
+      console.log('Fotos en onUpload ' + this.petPhotos);
     });
   }
 
@@ -170,12 +263,17 @@ export class PetUpdateComponent implements OnInit {
     this.isSaving = true;
     const pet = this.petFormService.getPet(this.editForm);
     console.log('Pet object:', pet);
-    pet.photos = this.createPhotosArray();
-    console.log(pet.photos.length);
+
+    const currentPhotos = this.createPhotosArray();
+
+    console.log('Current photos:', currentPhotos);
+
+    pet.photos = currentPhotos;
+
     if (pet.id !== null) {
-      this.subscribeToSaveResponse(this.petService.update(pet));
+      this.subscribeToSaveResponse(this.petService.update(pet), 1);
     } else {
-      this.subscribeToSaveResponse(this.petService.create(pet));
+      this.subscribeToSaveResponse(this.petService.create(pet), 2);
     }
   }
 
@@ -185,28 +283,39 @@ export class PetUpdateComponent implements OnInit {
     const flattenedPhotos = this.petPhotos.reduce((acc, val) => acc.concat(val), []);
     let counter = 0;
     for (const photoUrl of flattenedPhotos) {
+      // Obtén el ID de la foto existente almacenado en deletedPhotos
+      const existingPhotoId = this.deletedPhotos.find(photo => photo.url === photoUrl)?.id || 0;
+
       const photo: IPhoto = {
-        id: counter,
+        id: existingPhotoId,
         uploadDate: null,
         photoUrl: photoUrl,
         pet: null,
+        customId: undefined,
       };
       photos.push(photo);
       counter++;
     }
+
     return photos;
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IPet>>): void {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IPet>>, num: number): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
-      next: () => this.onSaveSuccess(),
+      next: () => this.onSaveSuccess(num),
       error: () => this.onSaveError(),
     });
   }
 
-  protected onSaveSuccess(): void {
-    this.previousState();
-    console.log('exito');
+  protected onSaveSuccess(num: number): void {
+    console.log('el número si es 1 o 2 ' + num);
+    if (num == 2) {
+      this.router.navigate(['/search-criteria/new']);
+    } else {
+      this.router.navigate(['/pet/' + this.pet?.id + '/view']);
+    }
+    // this.previousState();
+    // console.log('exito');
   }
 
   protected onSaveError(): void {
