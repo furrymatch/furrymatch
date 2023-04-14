@@ -46,6 +46,8 @@ export class PetUpdateComponent implements OnInit {
   existingPhotos: IPhoto[] = [];
   petPhotoData: { file: File; photoObj: IPhoto; customId: string }[] = [];
 
+  deletedPhotos: { id: number; url: string | null }[] = [];
+
   filteredBreedsSharedCollection: IBreed[] = [];
   destroy$: Subject<void> = new Subject();
 
@@ -110,12 +112,11 @@ export class PetUpdateComponent implements OnInit {
               const parentObj = { file, photoObj, customId };
               this.petPhotoData.push(parentObj);
               this.petFiles.push(file);
+
+              this.photoUrlToIdMap.set(photoObj.photoUrl!, photoObj.id);
             });
           }
         });
-
-        console.log('Existing photos:', this.existingPhotos);
-        console.log('photoUrlToIdMap:', this.photoUrlToIdMap); // Agregamos esta línea para verificar el contenido del mapa
       });
     }
   }
@@ -172,9 +173,9 @@ export class PetUpdateComponent implements OnInit {
               this.petFiles.splice(photoToRemoveIndex, 1);
               this.petPhotoData.splice(photoToRemoveIndex, 1);
 
-              // Si se trata de una foto existente, elimínela de la base de datos
+              // Si se trata de una foto existente, añádela a la lista de fotos eliminadas
               if (removedPhotoId) {
-                this.deletePhotoFromDatabase(removedPhotoId);
+                this.deletedPhotos.push({ id: removedPhotoId, url: null });
               }
 
               Swal.fire({
@@ -189,12 +190,6 @@ export class PetUpdateComponent implements OnInit {
         }
       }
     }
-  }
-
-  deletePhotoFromDatabase(photoId: number): void {
-    this.photoService.delete(photoId).subscribe(() => {
-      console.log('Foto eliminada de la base de datos');
-    });
   }
 
   onUpload(): void {
@@ -217,15 +212,16 @@ export class PetUpdateComponent implements OnInit {
 
       this.petService.uploadImage(data).subscribe(response => {
         if (response) {
-          // const secureUrl = response.secure_url;
-          // this.petPhotos.push(secureUrl);
-          const photoObj: IPhoto = {
-            id: response.id,
-            uploadDate: null,
-            photoUrl: response.photoUrl, // Cambiado aquí
-            pet: null,
-          };
-          this.petPhotos.push(response.secure_url);
+          // Intenta encontrar un ID de foto eliminada sin una nueva URL asignada
+          const deletedPhotoIndex = this.deletedPhotos.findIndex(photo => photo.url === null);
+
+          // Si se encontró un ID de foto eliminada, asigna la URL de la nueva foto a este ID
+          if (deletedPhotoIndex !== -1) {
+            this.deletedPhotos[deletedPhotoIndex].url = response.secure_url;
+          } else {
+            // Si no se encontró un ID de foto eliminada, agrega la nueva foto a petPhotos
+            this.petPhotos.push(response.secure_url);
+          }
 
           Swal.fire({
             title: 'Fotografía agregada',
@@ -274,8 +270,6 @@ export class PetUpdateComponent implements OnInit {
 
     pet.photos = currentPhotos;
 
-    console.log(pet.photos);
-
     if (pet.id !== null) {
       this.subscribeToSaveResponse(this.petService.update(pet));
     } else {
@@ -289,8 +283,11 @@ export class PetUpdateComponent implements OnInit {
     const flattenedPhotos = this.petPhotos.reduce((acc, val) => acc.concat(val), []);
     let counter = 0;
     for (const photoUrl of flattenedPhotos) {
+      // Obtén el ID de la foto existente almacenado en deletedPhotos
+      const existingPhotoId = this.deletedPhotos.find(photo => photo.url === photoUrl)?.id || 0;
+
       const photo: IPhoto = {
-        id: counter,
+        id: existingPhotoId,
         uploadDate: null,
         photoUrl: photoUrl,
         pet: null,
@@ -299,6 +296,7 @@ export class PetUpdateComponent implements OnInit {
       photos.push(photo);
       counter++;
     }
+
     return photos;
   }
 
