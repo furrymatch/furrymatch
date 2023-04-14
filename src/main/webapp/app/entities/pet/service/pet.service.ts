@@ -80,4 +80,10 @@ export class PetService {
       observe: 'response',
     });
   }
+
+  getSelectedPet(): Observable<HttpResponse<{}>> {
+    return this.http.get<HttpResponse<{}>>(`${this.accountUrl}`, {
+      observe: 'response',
+    });
+  }
 }

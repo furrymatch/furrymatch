@@ -41,6 +41,7 @@ export class PetDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.load();
+    this.getSelectedPetId();
   }
 
   openGallery(): void {
@@ -117,5 +118,11 @@ export class PetDetailComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
+  }
+
+  getSelectedPetId(): void {
+    this.petService.getSelectedPet().subscribe(id => {
+      console.log(id.body);
+    });
   }
 }

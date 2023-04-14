@@ -4,7 +4,6 @@ import furrymatch.domain.PersistentToken;
 import furrymatch.domain.User;
 import furrymatch.repository.PersistentTokenRepository;
 import furrymatch.repository.UserRepository;
-import furrymatch.security.AuthoritiesConstants;
 import furrymatch.security.SecurityUtils;
 import furrymatch.service.MailService;
 import furrymatch.service.UserService;
@@ -23,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 
@@ -42,6 +40,8 @@ public class AccountResource {
     }
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
+
+    public String selectedPetId;
 
     private final UserRepository userRepository;
 
@@ -311,5 +311,19 @@ public class AccountResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, "user", id.toString()))
             .build();
+    }
+
+    @GetMapping("/account/selectedPet")
+    public ResponseEntity<String> getUserPetId() {
+        SecurityUtils
+            .getCurrentUserLogin()
+            .flatMap(userRepository::findOneByLogin)
+            .ifPresent(user -> {
+                selectedPetId = user.getImageUrl();
+            });
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, "petId", selectedPetId))
+            .body(selectedPetId);
     }
 }
