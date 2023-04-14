@@ -67,6 +67,8 @@ public class PetResource {
             throw new BadRequestAlertException("A new pet cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Pet result = petService.save(pet);
+        Long id = userService.getUserWithAuthorities().get().getId();
+        userService.updateUserSelectedPet(result.getId(), id);
         return ResponseEntity
             .created(new URI("/api/pets/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))

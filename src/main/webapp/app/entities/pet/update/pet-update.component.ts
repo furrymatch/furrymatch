@@ -224,8 +224,8 @@ export class PetUpdateComponent implements OnInit {
           }
 
           Swal.fire({
-            title: 'Fotografía agregada',
-            text: 'Continuá registrando tus datos.',
+            title: 'Fotografías agregadas',
+            text: 'Continuá registrando los otros datos.',
             icon: 'success',
             confirmButtonColor: '#3381f6',
             confirmButtonText: 'Cerrar',
