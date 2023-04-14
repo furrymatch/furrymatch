@@ -36,6 +36,8 @@ export class PetUpdateComponent implements OnInit {
   ownersSharedCollection: IOwner[] = [];
   breedsSharedCollection: IBreed[] = [];
 
+  petPhotoData: { file: File; photoObj: IPhoto; customId: string }[] = [];
+
   editForm: PetFormGroup = this.petFormService.createPetFormGroup();
 
   pets: IPet[] = [];
@@ -65,6 +67,7 @@ export class PetUpdateComponent implements OnInit {
       if (pet) {
         this.update = true;
         this.updateForm(pet);
+        this.loadExistingPetPhotos();
       }
 
       this.loadRelationshipsOptions();
@@ -80,6 +83,36 @@ export class PetUpdateComponent implements OnInit {
       });
 
     this.loadPets();
+  }
+
+  loadExistingPetPhotos(): void {
+    if (this.pet && this.pet.id) {
+      this.photoService.findAllPhotosByPetID(this.pet.id).subscribe((response: HttpResponse<any[]>) => {
+        const photos = response.body;
+        console.log('Pet object:', this.pet);
+        console.log('Pet photos:', photos);
+
+        photos?.forEach((photo: any, index: number) => {
+          if (photo.photoUrl) {
+            this.photoService.downloadImage(photo.photoUrl).subscribe((response: Blob) => {
+              const blob = new Blob([response], { type: 'image/jpeg' });
+              const file = new File([blob], `pet_photo_${index}.jpeg`, { type: 'image/jpeg' });
+              const customId = 'custom_' + index;
+              const photoObj: IPhoto = {
+                id: photo.id,
+                uploadDate: null,
+                photoUrl: photo.photoUrl,
+                pet: null,
+                customId,
+              };
+              const parentObj = { file, photoObj, customId };
+              this.petPhotoData.push(parentObj);
+              this.petFiles.push(file);
+            });
+          }
+        });
+      });
+    }
   }
 
   loadPets(): void {
