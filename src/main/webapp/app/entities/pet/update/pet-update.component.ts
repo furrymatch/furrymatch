@@ -271,9 +271,9 @@ export class PetUpdateComponent implements OnInit {
     pet.photos = currentPhotos;
 
     if (pet.id !== null) {
-      this.subscribeToSaveResponse(this.petService.update(pet));
+      this.subscribeToSaveResponse(this.petService.update(pet), 1);
     } else {
-      this.subscribeToSaveResponse(this.petService.create(pet));
+      this.subscribeToSaveResponse(this.petService.create(pet), 2);
     }
   }
 
@@ -300,16 +300,22 @@ export class PetUpdateComponent implements OnInit {
     return photos;
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IPet>>): void {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IPet>>, num: number): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
-      next: () => this.onSaveSuccess(),
+      next: () => this.onSaveSuccess(num),
       error: () => this.onSaveError(),
     });
   }
 
-  protected onSaveSuccess(): void {
-    this.previousState();
-    console.log('exito');
+  protected onSaveSuccess(num: number): void {
+    console.log('el número si es 1 o 2 ' + num);
+    if (num == 2) {
+      this.router.navigate(['/search-criteria/new']);
+    } else {
+      this.router.navigate(['/pet/' + this.pet?.id + '/view']);
+    }
+    // this.previousState();
+    // console.log('exito');
   }
 
   protected onSaveError(): void {

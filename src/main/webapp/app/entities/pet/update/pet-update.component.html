@@ -155,18 +155,12 @@
               <jhi-alert-error></jhi-alert-error>
             </div>
             <div>
-              <button
-                type="submit"
-                id="save-entity"
-                data-cy="entityCreateSaveButton"
-                class="btn btn-blue"
-                [routerLink]="['/pet', pet?.id, 'view']"
-              >
+              <button type="submit" id="save-entity" data-cy="entityCreateSaveButton" class="btn btn-blue">
                 <span>Confirmar</span>
               </button>
             </div>
             <div *ngIf="update" class="delete-text">
-              <span (click)="delete()">Eliminar mascota</span>
+              <span (click)="delete()">Eliminar mascota </span>
             </div>
           </div>
         </div>
