@@ -103,17 +103,16 @@ public class PetService {
 
         petRepository.save(pet);
 
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + pet.getPhotos());
         if (pet.getPhotos() != null) {
             LocalDate currentDate = LocalDate.now();
             pet
                 .getPhotos()
                 .forEach(photo -> {
                     photo.setPet(pet);
+                    System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + photo);
                     if (photo.getUploadDate() == null) {
                         photo.setUploadDate(currentDate);
-                    }
-                    if (photo.getId() == null || photo.getId() == 0) {
-                        photo.setId(null); // Ensure ID is null for new photos
                     }
                     photoRepository.save(photo); // Save photo (create or update)
                 });
