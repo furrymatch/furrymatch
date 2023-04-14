@@ -1,4 +1,4 @@
-<div>
+<div xmlns="http://www.w3.org/1999/html">
   <div class="cnt-princ">
     <div class="cnt-sec">
       <div>
@@ -9,12 +9,8 @@
     <div class="login-wrapper">
       <div class="wrapper-sec" style="max-width: 60%">
         <div *ngIf="step == 1" style="width: 100%; display: flex; flex-direction: row">
-          <div style="width: 50%">
-            <img
-              src="../content/images/faunaphotostudio_26866480_163831200914202_7130561879423844352_n.jpg"
-              class="img-objective"
-              (click)="selectObjective(2)"
-            />
+          <div style="width: 50%; margin-right: 50px">
+            <img src="../content/images/playdate-pet.png" class="img-objective" (click)="selectObjective(2)" />
             <div style="display: flex; flex-direction: column">
               <div class="objective-title">Amistad</div>
               <div class="objective-text">
@@ -23,11 +19,7 @@
             </div>
           </div>
           <div style="width: 50%">
-            <img
-              src="../content/images/faunaphotostudio_26866480_163831200914202_7130561879423844352_n.jpg"
-              class="img-objective"
-              (click)="selectObjective(1)"
-            />
+            <img src="../content/images/date-pet.png" class="img-objective" (click)="selectObjective(1)" />
             <div style="display: flex; flex-direction: column">
               <div class="objective-title">Cruzar</div>
               <div class="objective-text">
