@@ -43,6 +43,7 @@ export class PetService {
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
+    console.log('Options: ' + options);
     return this.http.get<IPet[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 

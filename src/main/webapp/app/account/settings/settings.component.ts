@@ -242,16 +242,16 @@ export class SettingsComponent implements OnInit {
     }
 
     this.ownerService.update({ user_id: this.userId, ...account, photo: photoToSave }).subscribe({
-      next: () => (
+      next: () =>
         Swal.fire({
           title: 'Cambio exitoso',
           text: 'Se cambiaron exitosamente tus datos.',
           icon: 'success',
           confirmButtonColor: '#3381f6',
           confirmButtonText: 'Cerrar',
+        }).then((result: any) => {
+          this.router.navigate(['/pet']);
         }),
-        (this.success = true)
-      ),
       error: response =>
         Swal.fire({
           title: 'Error',

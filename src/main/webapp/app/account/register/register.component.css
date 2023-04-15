@@ -24,7 +24,6 @@
 .cnt-inputs {
   display: flex;
   flex-direction: column;
-  gap: var(--margin-small);
   margin-bottom: var(--margin-small);
 }
 
@@ -158,6 +157,7 @@ input.ng-touched.ng-invalid {
   line-height: 150%;
   text-align: center;
   color: #000000;
+  width: 350px;
 }
 
 .img-objective {

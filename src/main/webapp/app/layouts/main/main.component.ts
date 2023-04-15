@@ -1,6 +1,6 @@
 import { Component, OnInit, RendererFactory2, Renderer2 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Router, ActivatedRouteSnapshot, NavigationEnd } from '@angular/router';
+import { Router, ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd } from '@angular/router';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import dayjs from 'dayjs/esm';
 
@@ -9,6 +9,7 @@ import { AccountService } from 'app/core/auth/account.service';
 @Component({
   selector: 'jhi-main',
   templateUrl: './main.component.html',
+  styleUrls: ['./main.component.css'],
 })
 export class MainComponent implements OnInit {
   private renderer: Renderer2;
@@ -16,6 +17,7 @@ export class MainComponent implements OnInit {
   constructor(
     private accountService: AccountService,
     private titleService: Title,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
     private translateService: TranslateService,
     rootRenderer: RendererFactory2
@@ -30,6 +32,7 @@ export class MainComponent implements OnInit {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.updateTitle();
+        window.scrollTo(0, 0);
       }
     });
 

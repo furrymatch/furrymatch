@@ -10,6 +10,7 @@ import { face } from '@cloudinary/url-gen/qualifiers/focusOn';
 import { focusOn } from '@cloudinary/url-gen/qualifiers/gravity';
 import { IPhoto } from '../../photo/photo.model';
 import { switchMap } from 'rxjs';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'jhi-pet-detail',
@@ -52,13 +53,15 @@ export class PetDetailComponent implements OnInit {
   }
 
   load(): void {
-    this.activatedRoute.params.pipe(switchMap(({ id }) => this.petService.query({ 'id.equals': id }))).subscribe(response => {
-      this.onSuccess(response.body);
+    this.activatedRoute.params.pipe(switchMap(({ id }) => this.petService.find(id))).subscribe(response => {
+      this.onSuccess(response);
     });
   }
 
-  protected onSuccess(data: IPet[] | null): void {
-    this.pet = data ? data[0] : null;
+  protected onSuccess(data: HttpResponse<IPet>): void {
+    console.log('data: ' + data.body?.id);
+    this.pet = data ? data.body : null;
+    console.log('el objeto de la mascota: ' + this.pet?.id);
     if (this.pet) {
       this.loadPhotosByPetId(this.pet.id);
       this.loadOwnerAndLocationData();
