@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { finalize, map, takeUntil } from 'rxjs/operators';
 
@@ -52,7 +52,8 @@ export class SearchCriteriaUpdateComponent implements OnInit {
     protected petService: PetService,
     protected activatedRoute: ActivatedRoute,
     protected registerService: RegisterService,
-    protected breedService: BreedService
+    protected breedService: BreedService,
+    private router: Router
   ) {
     this.step = 1;
     this.title = 'Mi interés es:';
@@ -114,6 +115,8 @@ export class SearchCriteriaUpdateComponent implements OnInit {
       icon: 'success',
       confirmButtonColor: '#3381f6',
       confirmButtonText: 'Cerrar',
+    }).then((result: any) => {
+      this.router.navigate(['/pet']);
     });
   }
 

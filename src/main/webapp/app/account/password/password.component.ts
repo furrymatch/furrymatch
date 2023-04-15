@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
@@ -31,7 +32,7 @@ export class PasswordComponent implements OnInit {
     }),
   });
 
-  constructor(private passwordService: PasswordService, private accountService: AccountService) {}
+  constructor(private passwordService: PasswordService, private accountService: AccountService, private router: Router) {}
 
   ngOnInit(): void {
     this.account$ = this.accountService.identity();
@@ -41,10 +42,16 @@ export class PasswordComponent implements OnInit {
     this.error = false;
     this.success = false;
     this.doNotMatch = false;
-
     const { newPassword, confirmPassword, currentPassword } = this.passwordForm.getRawValue();
     if (newPassword !== confirmPassword) {
       this.doNotMatch = true;
+      Swal.fire({
+        title: 'Error',
+        text: 'La nueva contraseña y la confirmación de la misma no coinciden.',
+        icon: 'error',
+        confirmButtonColor: '#3381f6',
+        confirmButtonText: 'Cerrar',
+      });
     } else {
       this.passwordService.save(newPassword, currentPassword).subscribe({
         next: () => {
@@ -55,19 +62,20 @@ export class PasswordComponent implements OnInit {
             icon: 'success',
             confirmButtonColor: '#3381f6',
             confirmButtonText: 'Cerrar',
-          }),
-            (this.success = true);
+          }).then((result: any) => {
+            this.router.navigate(['/account/settings']);
+            this.success = true;
+          });
         },
         error: () => {
-          if (this.doNotMatch) {
+          /* if (this.doNotMatch) {
             this.errorMessage = 'The password and its confirmation do not match!';
           } else if (this.error) {
             this.errorMessage = 'The password could not be changed.';
-          }
-          console.log(this.errorMessage);
+          }*/
           Swal.fire({
             title: 'Error',
-            text: this.errorMessage,
+            text: 'No se pudo cambiar la contraseña. Intentá nuevamente.',
             // type: 'error',
             icon: 'error',
             confirmButtonColor: '#3381f6',
