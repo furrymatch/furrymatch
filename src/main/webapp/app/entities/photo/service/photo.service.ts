@@ -124,4 +124,8 @@ export class PhotoService {
   findAllPhotosByPetID(petId: number): Observable<EntityArrayResponseType> {
     return this.http.get<IPhoto[]>(`${this.resourceUrl}/by-pet-id/${petId}`, { observe: 'response' });
   }
+
+  downloadImage(imageUrl: string): Observable<Blob> {
+    return this.http.get(imageUrl, { responseType: 'blob' });
+  }
 }

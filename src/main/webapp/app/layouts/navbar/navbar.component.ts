@@ -25,6 +25,9 @@ export class NavbarComponent implements OnInit {
   account: Account | null = null;
   entitiesNavbarItems: any[] = [];
 
+  userMenuIsOpen = false;
+  adminMenuIsOpen = false;
+
   constructor(
     private loginService: LoginService,
     private translateService: TranslateService,
@@ -48,6 +51,26 @@ export class NavbarComponent implements OnInit {
     this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
     });
+  }
+
+  toggleUserDropdown(event: MouseEvent): void {
+    event.stopPropagation();
+    this.userMenuIsOpen = !this.userMenuIsOpen;
+    this.adminMenuIsOpen = false;
+  }
+
+  toggleAdminDropdown(event: MouseEvent): void {
+    event.stopPropagation();
+    this.adminMenuIsOpen = !this.adminMenuIsOpen;
+    this.userMenuIsOpen = false;
+  }
+
+  hideUserDropdown(): void {
+    this.userMenuIsOpen = false;
+  }
+
+  hideAdminDropdown(): void {
+    this.adminMenuIsOpen = false;
   }
 
   changeLanguage(languageKey: string): void {
