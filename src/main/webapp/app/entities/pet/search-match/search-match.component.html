@@ -1,0 +1,23 @@
+<div class="cnt-princ">
+  <div>Estoy buscando:</div>
+  <div>
+    <div>
+      <div class="login-wrapper">
+        <div *ngIf="pets.length > 0 && currentPetIndex >= 0 && currentPetIndex < pets.length">
+          <div *ngFor="let photo of pets[currentPetIndex].photos; first as isFirst">
+            <div *ngIf="isFirst">
+              <img [src]="photo.photoUrl" class="img-objective" />
+              <div class="txt-pet">
+                <div class="objective-text">
+                  {{ pets[currentPetIndex].name }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <img src="../content/images/dislike.png" alt="Skip" (click)="skipPet()" />
+    <img src="../content/images/like.png" alt="Match" (click)="match()" />
+  </div>
+</div>

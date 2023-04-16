@@ -176,8 +176,9 @@ public class SearchCriteriaResource {
     @GetMapping("/search-criteria/{id}")
     public ResponseEntity<SearchCriteria> getSearchCriteria(@PathVariable Long id) {
         log.debug("REST request to get SearchCriteria : {}", id);
-        Optional<SearchCriteria> searchCriteria = searchCriteriaService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(searchCriteria);
+        SearchCriteria searchCriteria = searchCriteriaService.findOne(id);
+        log.debug("Search Criteria Result", searchCriteria);
+        return ResponseEntity.ok().body(searchCriteria);
     }
 
     /**

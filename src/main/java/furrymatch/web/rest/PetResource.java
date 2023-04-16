@@ -1,9 +1,10 @@
 package furrymatch.web.rest;
 
 import furrymatch.domain.Pet;
-import furrymatch.domain.Photo;
+import furrymatch.domain.SearchCriteria;
 import furrymatch.repository.PetRepository;
 import furrymatch.service.PetService;
+import furrymatch.service.SearchCriteriaService;
 import furrymatch.service.UserService;
 import furrymatch.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -16,15 +17,10 @@ import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
-import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
@@ -47,10 +43,18 @@ public class PetResource {
 
     private final PetRepository petRepository;
 
-    public PetResource(PetService petService, PetRepository petRepository, UserService userService) {
+    private final SearchCriteriaService searchCriteriaService;
+
+    public PetResource(
+        PetService petService,
+        PetRepository petRepository,
+        UserService userService,
+        SearchCriteriaService searchCriteriaService
+    ) {
         this.petService = petService;
         this.petRepository = petRepository;
         this.userService = userService;
+        this.searchCriteriaService = searchCriteriaService;
     }
 
     /**
@@ -74,6 +78,19 @@ public class PetResource {
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
+
+    /*
+    @PostMapping("/custom-search")
+    public ResponseEntity<List<Pet>> searchPets(@RequestBody SearchCriteria searchCriteria) throws URISyntaxException  {
+        if (searchCriteria.getId() == null) {
+            throw new BadRequestAlertException("Search Criteria ID cannot be null", ENTITY_NAME, "idexists");
+        }
+        log.debug("REST request to get a page of Pets based on search criteria");
+
+        List<Pet> pets = petService.searchPets(searchCriteria);
+        return ResponseEntity.ok().body(pets);
+    }
+*/
 
     /**
      * {@code PUT  /pets/:id} : Updates an existing pet.
@@ -157,6 +174,18 @@ public class PetResource {
         return ResponseEntity.ok().body(page);
     }
 
+    @GetMapping("/pets/search")
+    public ResponseEntity<List<Pet>> searchPets(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+        log.debug("REST request to get pets based on search criteria");
+        String petId = userService.getUserWithAuthorities().get().getImageUrl();
+        Long ownerId = userService.getUserWithAuthorities().get().getId();
+        log.debug("PET ID: ", petId);
+        SearchCriteria searchCriteria = searchCriteriaService.findOne(Long.valueOf(petId));
+        log.debug("Search Criteria: ", searchCriteria);
+        List<Pet> pets = petService.searchPets(searchCriteria, ownerId);
+        return ResponseEntity.ok().body(pets);
+    }
+
     /**
      * {@code GET  /pets/:id} : get the "id" pet.
      *
@@ -185,4 +214,32 @@ public class PetResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
+    /*
+    @GetMapping("/search")
+    public ResponseEntity<List<Pet>> searchPets(
+        @RequestParam(value = "id", required = false) String id,
+        @RequestParam(value = "filterType", required = false, defaultValue = "") String filter,
+        @RequestParam(value = "sex", required = false) Sex sex,
+        @RequestParam(value = "objective", required = false, defaultValue = "") String objective,
+        @RequestParam(value = "provice", required = false, defaultValue = "") String province,
+        @RequestParam(value = "canton", required = false, defaultValue = "") String canton,
+        @RequestParam(value = "district", required = false, defaultValue = "") String district) {
+        {
+
+
+            log.debug("REST request to get a page of Pets based on search criteria");
+
+            SearchCriteria searchCriteria = new SearchCriteria();
+            searchCriteria.setId(Long.valueOf(id));
+            searchCriteria.setFilterType(filter);
+            searchCriteria.setSex(sex);
+            searchCriteria.setObjective(objective);
+            searchCriteria.setProvice(province);
+            searchCriteria.setCanton(canton);
+            searchCriteria.setDistrict(district);
+
+            List<Pet> pets = petService.searchPets(searchCriteria);
+            return ResponseEntity.ok().body(pets);
+        } */
+
 }
