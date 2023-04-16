@@ -67,6 +67,8 @@ export class SearchCriteriaUpdateComponent implements OnInit {
       this.searchCriteria = searchCriteria;
       if (searchCriteria) {
         this.updateForm(searchCriteria);
+        this.getCantones(Number(searchCriteria.provice));
+        this.getDistricts(Number(searchCriteria.provice), Number(searchCriteria.canton));
       }
       this.registerService.getProvinces().subscribe((response: any) => {
         const provincesArray = Object.entries(response).map(([id, name]) => ({ id, name }));

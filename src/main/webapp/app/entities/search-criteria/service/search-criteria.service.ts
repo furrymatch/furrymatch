@@ -38,6 +38,10 @@ export class SearchCriteriaService {
     return this.http.get<ISearchCriteria>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  findByUser(): Observable<EntityResponseType> {
+    return this.http.get<ISearchCriteria>(`${this.resourceUrl}/user`, { observe: 'response' });
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<ISearchCriteria[]>(this.resourceUrl, { params: options, observe: 'response' });
