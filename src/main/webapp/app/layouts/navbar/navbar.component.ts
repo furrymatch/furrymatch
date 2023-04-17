@@ -11,8 +11,6 @@ import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { EntityNavbarItems } from 'app/entities/entity-navbar-items';
-import { SearchCriteriaService } from '../../entities/search-criteria/service/search-criteria.service';
-import { ISearchCriteria } from '../../entities/search-criteria/search-criteria.model';
 
 @Component({
   selector: 'jhi-navbar',
@@ -37,8 +35,7 @@ export class NavbarComponent implements OnInit {
     private sessionStorageService: SessionStorageService,
     private accountService: AccountService,
     private profileService: ProfileService,
-    private router: Router,
-    protected searchCriteriaService: SearchCriteriaService
+    private router: Router
   ) {
     if (VERSION) {
       this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : `v${VERSION}`;
@@ -98,17 +95,5 @@ export class NavbarComponent implements OnInit {
 
   toggleNavbar(): void {
     this.isNavbarCollapsed = !this.isNavbarCollapsed;
-  }
-
-  updateSearchCriteria(): void {
-    this.searchCriteriaService.findByUser().subscribe((response: HttpResponse<ISearchCriteria>) => {
-      const searchCriteria = response.body;
-      console.log(searchCriteria);
-      if (searchCriteria?.id !== null) {
-        this.router.navigate(['/search-criteria/' + searchCriteria?.id + '/edit']);
-      } else {
-        console.log('no');
-      }
-    });
   }
 }

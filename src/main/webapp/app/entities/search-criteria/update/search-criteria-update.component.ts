@@ -93,7 +93,6 @@ export class SearchCriteriaUpdateComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const searchCriteria = this.searchCriteriaFormService.getSearchCriteria(this.editForm);
-    console.log(searchCriteria);
     if (searchCriteria.id !== null) {
       this.subscribeToSaveResponse(this.searchCriteriaService.update(searchCriteria));
     } else {
@@ -152,7 +151,14 @@ export class SearchCriteriaUpdateComponent implements OnInit {
     this.breedService
       .query()
       .pipe(map((res: HttpResponse<IBreed[]>) => res.body ?? []))
-      .subscribe((breeds: IBreed[]) => (this.breedsSharedCollection = breeds));
+      .subscribe((breeds: IBreed[]) => {
+        this.breedsSharedCollection = breeds;
+        if (this.searchCriteria) {
+          this.filteredBreedsSharedCollection = this.breedsSharedCollection.filter(
+            breed => breed.breedType === this.searchCriteria?.filterType
+          );
+        }
+      });
   }
 
   selected = '';
