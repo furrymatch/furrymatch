@@ -6,6 +6,7 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IPet, NewPet } from '../pet.model';
+import { ISearchCriteria, NewSearchCriteria } from '../../search-criteria/search-criteria.model';
 import { IPhoto } from '../../photo/photo.model';
 
 export type PartialUpdatePet = Partial<IPet> & Pick<IPet, 'id'>;
@@ -81,4 +82,32 @@ export class PetService {
       observe: 'response',
     });
   }
+  search(): Observable<HttpResponse<IPet[]>> {
+    const searchUrl = `${this.resourceUrl}/search`;
+    return this.http.get<IPet[]>(searchUrl, { observe: 'response' });
+  }
+
+  /*
+search(searchCriteria: ISearchCriteria | null): Observable<HttpResponse<IPet[]>> {
+const searchUrl = `${this.resourceUrl}/search`;
+const options = createRequestOption(searchCriteria);
+console.log(options)
+console.log(searchCriteria)
+return this.http.get<IPet[]>(searchUrl, { params: options, observe: 'response' });
+}
+
+search(searchCriteria: ISearchCriteria | null): Observable<HttpResponse<IPet[]>> {
+  const searchUrl = `${this.resourceUrl}/custom-search`;
+  const searchCriteriaJson = JSON.stringify(searchCriteria);
+  console.log(searchCriteriaJson)
+  console.log(searchUrl)
+  return this.http.post<IPet[]>(searchUrl, searchCriteria, { observe: 'response' });
+}
+
+  search(searchCriteria: ISearchCriteria | null): Observable<HttpResponse<IPet[]>> {
+    const searchUrl = `${this.resourceUrl}/search`;
+    const searchCriteriaJson = JSON.stringify(searchCriteria);
+    // Pass the serialized searchCriteriaJson as a request parameter
+    return this.http.get<IPet[]>(searchUrl, { params: { searchCriteria: searchCriteriaJson }, observe: 'response' });
+  }*/
 }

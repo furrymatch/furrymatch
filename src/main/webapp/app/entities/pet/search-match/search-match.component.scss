@@ -1,0 +1,81 @@
+.login-wrapper {
+  display: flex;
+  justify-content: space-around;
+  margin: 10% 10% 3% 10%;
+}
+.objective-type {
+  position: absolute;
+  width: 52px;
+  height: 52px;
+  left: 86px;
+  top: 163px;
+}
+
+.pet-detail {
+  position: absolute;
+  width: 295px;
+  height: 586px;
+  left: 570px;
+  top: 304px;
+}
+.img-objective {
+  width: 295px;
+  height: 450px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  object-fit: cover;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.pet-breed {
+  font-weight: normal;
+  font-size: 14px;
+  text-align: left;
+}
+.objective-txt {
+  position: absolute;
+  width: 391px;
+  height: 58px;
+  left: 160px;
+  top: 19%;
+  color: #3381f6;
+  font-weight: bold;
+}
+
+.txt-pet {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 295px;
+  height: 83px;
+  background-color: var(--clr-black);
+  color: var(--clr-white);
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+.objective-text {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 150%;
+}
+
+.title-txt {
+  font: var(--typo-title-small);
+  color: var(--clr-orange);
+}
+
+.image-and-text {
+  display: inline-block;
+}
+.image-and-text img {
+  vertical-align: middle;
+}
+
+.like-btns {
+  width: 80px;
+  height: 80px;
+}

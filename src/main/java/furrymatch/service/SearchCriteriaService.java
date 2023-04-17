@@ -1,6 +1,5 @@
 package furrymatch.service;
 
-import furrymatch.domain.Owner;
 import furrymatch.domain.Pet;
 import furrymatch.domain.SearchCriteria;
 import furrymatch.repository.SearchCriteriaRepository;
@@ -133,9 +132,9 @@ public class SearchCriteriaService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<SearchCriteria> findOne(Long id) {
-        log.debug("Request to get SearchCriteria : {}", id);
-        return searchCriteriaRepository.findById(id);
+    public SearchCriteria findOne(Long id) {
+        log.debug("Request to get SearchCriteria by pet ID : {}", id);
+        return searchCriteriaRepository.findByPetId(id);
     }
 
     @Transactional(readOnly = true)
