@@ -180,6 +180,12 @@ public class SearchCriteriaResource {
         return ResponseUtil.wrapOrNotFound(searchCriteria);
     }
 
+    @GetMapping("/search-criteria/user")
+    public ResponseEntity<SearchCriteria> getSearchCriteriaUser() {
+        Optional<SearchCriteria> searchCriteria = searchCriteriaService.findByOwnerUser();
+        return ResponseUtil.wrapOrNotFound(searchCriteria);
+    }
+
     /**
      * {@code DELETE  /search-criteria/:id} : delete the "id" searchCriteria.
      *

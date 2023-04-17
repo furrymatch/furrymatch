@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { SessionStorageService } from 'ngx-webstorage';
+import { HttpResponse } from '@angular/common/http';
 
 import { VERSION } from 'app/app.constants';
 import { LANGUAGES } from 'app/config/language.constants';
