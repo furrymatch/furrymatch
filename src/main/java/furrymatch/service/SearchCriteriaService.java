@@ -28,6 +28,8 @@ public class SearchCriteriaService {
 
     private final PetService petService;
 
+    private Long selectedPet;
+
     public SearchCriteriaService(SearchCriteriaRepository searchCriteriaRepository, UserRepository userRepository, PetService petService) {
         this.searchCriteriaRepository = searchCriteriaRepository;
         this.userRepository = userRepository;
@@ -133,6 +135,17 @@ public class SearchCriteriaService {
     public SearchCriteria findOne(Long id) {
         log.debug("Request to get SearchCriteria by pet ID : {}", id);
         return searchCriteriaRepository.findByPetId(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<SearchCriteria> findByOwnerUser() {
+        SecurityUtils
+            .getCurrentUserLogin()
+            .flatMap(userRepository::findOneByLogin)
+            .ifPresent(user -> {
+                selectedPet = Long.valueOf(user.getImageUrl());
+            });
+        return searchCriteriaRepository.findByOwnerUser(selectedPet);
     }
 
     /**

@@ -67,6 +67,8 @@ export class SearchCriteriaUpdateComponent implements OnInit {
       this.searchCriteria = searchCriteria;
       if (searchCriteria) {
         this.updateForm(searchCriteria);
+        this.getCantones(Number(searchCriteria.provice));
+        this.getDistricts(Number(searchCriteria.provice), Number(searchCriteria.canton));
       }
       this.registerService.getProvinces().subscribe((response: any) => {
         const provincesArray = Object.entries(response).map(([id, name]) => ({ id, name }));
@@ -91,7 +93,6 @@ export class SearchCriteriaUpdateComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const searchCriteria = this.searchCriteriaFormService.getSearchCriteria(this.editForm);
-    console.log(searchCriteria);
     if (searchCriteria.id !== null) {
       this.subscribeToSaveResponse(this.searchCriteriaService.update(searchCriteria));
     } else {
@@ -150,7 +151,14 @@ export class SearchCriteriaUpdateComponent implements OnInit {
     this.breedService
       .query()
       .pipe(map((res: HttpResponse<IBreed[]>) => res.body ?? []))
-      .subscribe((breeds: IBreed[]) => (this.breedsSharedCollection = breeds));
+      .subscribe((breeds: IBreed[]) => {
+        this.breedsSharedCollection = breeds;
+        if (this.searchCriteria) {
+          this.filteredBreedsSharedCollection = this.breedsSharedCollection.filter(
+            breed => breed.breedType === this.searchCriteria?.filterType
+          );
+        }
+      });
   }
 
   selected = '';
