@@ -19,7 +19,8 @@ import Swal from 'sweetalert2';
 export class SearchMatchComponent implements OnInit {
   pets: IPet[] = [];
   currentPetIndex = 0;
-
+  //filters: ISearchCriteria | undefined
+  filters: ISearchCriteria | null = null;
   constructor(
     private searchCriteriaService: SearchCriteriaService,
     private accountService: AccountService,
@@ -36,6 +37,7 @@ export class SearchMatchComponent implements OnInit {
       (res: PetEntityArrayResponseType) => {
         this.pets = res.body || [];
         this.currentPetIndex = 0;
+        this.loadSearchCriteriaForCurrentUser();
       },
       error => {
         console.error('Error fetching pets based on search criteria:', error);
@@ -53,7 +55,6 @@ export class SearchMatchComponent implements OnInit {
     });
   }
 
-  /*
   loadSearchCriteriaForCurrentUser(): void {
     this.accountService.identity().subscribe(user => {
       if (user) {
@@ -62,10 +63,11 @@ export class SearchMatchComponent implements OnInit {
         console.log('PET ID: ' + petId);
         this.searchCriteriaService.find(petId).subscribe(
           (res: SearchCriteriaEntityResponseType) => {
-            const searchCriteria = res.body;
-            console.log('User Search Criteria From DB: ' + JSON.stringify(searchCriteria,null,2));
+            this.filters = res.body;
+            console.log('User Search Criteria From DB: ' + JSON.stringify(this.filters, null, 2));
+            console.log('Pet Displayed', JSON.stringify(this.pets[this.currentPetIndex], null, 2));
             // Calls the search function with the searchCriteria object
-            this.loadPets(searchCriteria);
+            //this.loadPets(searchCriteria);
           },
           error => {
             console.error('Error fetching search criteria for user:', error);
@@ -74,6 +76,7 @@ export class SearchMatchComponent implements OnInit {
       }
     });
   }
+  /*
   loadPets(searchCriteria: ISearchCriteria | null): void {
 
 
