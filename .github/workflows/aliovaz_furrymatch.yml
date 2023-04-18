@@ -20,9 +20,15 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: '17'
+          
+      - name: Build with Maven 
+        run: mvn clean install -DskipTests
+        
+      - name: Install dependencies
+        run: npm install
 
-      - name: Build with Maven
-        run: mvn clean install
+      - name: Build webapp
+        run: npm run webapp:build
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
