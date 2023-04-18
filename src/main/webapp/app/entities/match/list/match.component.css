@@ -1,0 +1,28 @@
+.cnt-princ {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start !important;
+  text-align: left;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.cnt-title,
+.cnt-dates {
+  border-bottom: 0.5px solid var(--clr-grey);
+}
+
+h1 {
+  font: var(--typo-title);
+  color: var(--clr-orange);
+}
+
+h2 {
+  font: var(--typo-title-small);
+  color: var(--clr-blue);
+  margin-top: var(--margin-md-small);
+}
+
+p {
+  font: var(--typo-global);
+}

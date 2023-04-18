@@ -145,4 +145,9 @@ public class SearchCriteriaService {
         log.debug("Request to delete SearchCriteria : {}", id);
         searchCriteriaRepository.deleteById(id);
     }
+
+    public Optional<SearchCriteria> findByPetId(Long petId) {
+        log.debug("Request to get SearchCriteria by pet id : {}", petId);
+        return searchCriteriaRepository.findOneByPetId(petId);
+    }
 }

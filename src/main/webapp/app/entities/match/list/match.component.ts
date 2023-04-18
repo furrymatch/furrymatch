@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
-import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
+import { combineLatest, filter, forkJoin, Observable, switchMap, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IMatch } from '../match.model';
@@ -10,13 +10,29 @@ import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/co
 import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
 import { EntityArrayResponseType, MatchService } from '../service/match.service';
 import { MatchDeleteDialogComponent } from '../delete/match-delete-dialog.component';
+import { AccountService } from 'app/core/auth/account.service';
+import { IPet } from '../../pet/pet.model';
+import { ISearchCriteria } from '../../search-criteria/search-criteria.model';
+import { IPhoto } from '../../photo/photo.model';
+import { PetService } from '../../pet/service/pet.service';
+import { PhotoService } from '../../photo/service/photo.service';
+import { SearchCriteriaService } from '../../search-criteria/service/search-criteria.service';
 
 @Component({
   selector: 'jhi-match',
   templateUrl: './match.component.html',
+  styleUrls: ['./match.component.css'],
 })
 export class MatchComponent implements OnInit {
   matches?: IMatch[];
+
+  currentPetId?: number;
+  // pets?: IPet[];
+  // searchCriterias?: ISearchCriteria[];
+  // photos?: IPhoto;
+
+  additionalInfo: Map<number, { pet: IPet; photo: IPhoto; searchCriteria: ISearchCriteria }> = new Map();
+
   isLoading = false;
 
   predicate = 'id';
@@ -30,13 +46,28 @@ export class MatchComponent implements OnInit {
     protected matchService: MatchService,
     protected activatedRoute: ActivatedRoute,
     public router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected petService: PetService,
+    protected photoService: PhotoService,
+    protected searchCriteriaService: SearchCriteriaService,
+    private accountService: AccountService
   ) {}
 
   trackId = (_index: number, item: IMatch): number => this.matchService.getMatchIdentifier(item);
 
   ngOnInit(): void {
+    this.loadSearchCriteriaForCurrentUser();
     this.load();
+  }
+
+  loadSearchCriteriaForCurrentUser(): void {
+    this.accountService.identity().subscribe(user => {
+      if (user) {
+        // imageUrl is pet in session
+        const petId = parseInt(user.imageUrl);
+        console.log('PET ID: ' + petId);
+      }
+    });
   }
 
   delete(match: IMatch): void {
@@ -90,6 +121,54 @@ export class MatchComponent implements OnInit {
     this.fillComponentAttributesFromResponseHeader(response.headers);
     const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
     this.matches = dataFromBody;
+
+    // Obtén los ids únicos de los pets involucrados en los matches
+    const petIds = new Set<number>();
+    this.matches.forEach(match => {
+      if (match.firstLiked?.id) {
+        petIds.add(match.firstLiked.id);
+      }
+      if (match.secondLiked?.id) {
+        petIds.add(match.secondLiked.id);
+      }
+    });
+
+    const petRequests: Observable<HttpResponse<IPet>>[] = Array.from(petIds).map(petId => this.petService.find(petId));
+    forkJoin(petRequests).subscribe(pets => {
+      const petMap = new Map<number, IPet>();
+      pets.forEach(petResponse => {
+        if (petResponse.body) {
+          petMap.set(petResponse.body.id, petResponse.body);
+        }
+      });
+
+      if (this.matches) {
+        this.matches.forEach(match => {
+          const firstPet = match.firstLiked?.id ? petMap.get(match.firstLiked.id) : undefined;
+          const secondPet = match.secondLiked?.id ? petMap.get(match.secondLiked.id) : undefined;
+
+          const otherPet = firstPet?.id === this.currentPetId ? secondPet : firstPet;
+
+          if (otherPet && otherPet.id) {
+            // Realiza las consultas a los servicios de SearchCriteria y Photo
+            forkJoin([this.searchCriteriaService.findByPetId(otherPet.id), this.photoService.findAllPhotosByPetID(otherPet.id)]).subscribe(
+              ([searchCriteriaResponse, photoResponse]) => {
+                const searchCriteria = searchCriteriaResponse.body;
+                const photo = photoResponse.body?.[0]; // Asume que solo se necesita una foto
+
+                if (searchCriteria && photo) {
+                  this.additionalInfo.set(otherPet.id, {
+                    pet: otherPet,
+                    photo: photo,
+                    searchCriteria: searchCriteria,
+                  });
+                }
+              }
+            );
+          }
+        });
+      }
+    });
   }
 
   protected fillComponentAttributesFromResponseBody(data: IMatch[] | null): IMatch[] {

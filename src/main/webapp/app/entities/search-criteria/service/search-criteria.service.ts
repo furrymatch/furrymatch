@@ -76,4 +76,8 @@ export class SearchCriteriaService {
     }
     return searchCriteriaCollection;
   }
+
+  findByPetId(petId: number): Observable<EntityResponseType> {
+    return this.http.get<ISearchCriteria>(`${this.resourceUrl}/by-pet-id/${petId}`, { observe: 'response' });
+  }
 }
