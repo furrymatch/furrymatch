@@ -176,7 +176,14 @@ public class SearchCriteriaResource {
     @GetMapping("/search-criteria/{id}")
     public ResponseEntity<SearchCriteria> getSearchCriteria(@PathVariable Long id) {
         log.debug("REST request to get SearchCriteria : {}", id);
-        Optional<SearchCriteria> searchCriteria = searchCriteriaService.findOne(id);
+        SearchCriteria searchCriteria = searchCriteriaService.findOne(id);
+        log.debug("Search Criteria Result", searchCriteria);
+        return ResponseEntity.ok().body(searchCriteria);
+    }
+
+    @GetMapping("/search-criteria/user")
+    public ResponseEntity<SearchCriteria> getSearchCriteriaUser() {
+        Optional<SearchCriteria> searchCriteria = searchCriteriaService.findByOwnerUser();
         return ResponseUtil.wrapOrNotFound(searchCriteria);
     }
 
